@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
-        <activity
             android:name=".Registreeractivity"
             android:parentActivityName=".Startactivity" />
         <activity android:name=".Startactivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".Loginactivity">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

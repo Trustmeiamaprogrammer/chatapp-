@@ -13,6 +13,7 @@ public class Startactivity extends AppCompatActivity {
 
 
     private Button regKnop;
+    private Button loginKnop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +21,7 @@ public class Startactivity extends AppCompatActivity {
         setContentView(R.layout.activity_startactivity);
 
         regKnop = (Button) findViewById(R.id.start_regKnop);
+        loginKnop = (Button) findViewById(R.id.start_loginKnop);
 
         regKnop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,6 +29,17 @@ public class Startactivity extends AppCompatActivity {
 
                 Intent regIntent = new Intent(Startactivity.this, Registreeractivity.class);
                 startActivity(regIntent);
+
+
+            }
+        });
+
+        loginKnop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent logIntent = new Intent(Startactivity.this, Loginactivity.class);
+                startActivity(logIntent);
 
 
             }

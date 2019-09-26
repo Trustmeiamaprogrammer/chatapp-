@@ -1,8 +1,5 @@
 package com.example.chatapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +7,21 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 
 public class Registreeractivity extends AppCompatActivity {
 
@@ -31,6 +35,7 @@ public class Registreeractivity extends AppCompatActivity {
 
     private ProgressDialog mRegProgress;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
 
 
@@ -40,7 +45,7 @@ public class Registreeractivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registreeractivity);
 
-        mToolbar = (Toolbar) findViewById(R.id.regitreer_toolbar) ;
+        mToolbar = (Toolbar) findViewById(R.id.registreer_toolbar) ;
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Maak account");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -91,13 +96,20 @@ public class Registreeractivity extends AppCompatActivity {
 
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
+            public void onComplete(Task<AuthResult> task) {
 
                 if (task.isSuccessful())
 
                 {
+                    FirebaseUser huidige_gebruiker = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = huidige_gebruiker.getUid();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(uid);
+
+                    Task<InstanceIdResult> task_token = FirebaseInstanceId.getInstance().getInstanceId();
+                    String token = task_token.getResult().getToken();
                     mRegProgress.dismiss();
                     Intent hoofdIntent = new Intent(Registreeractivity.this, MainActivity.class);
+                    startActivity(hoofdIntent);
                     finish();
                 }
 
