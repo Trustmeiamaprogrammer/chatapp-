@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+
+import java.util.HashMap;
 
 
 public class Registreeractivity extends AppCompatActivity {
@@ -72,18 +75,14 @@ public class Registreeractivity extends AppCompatActivity {
                 if(TextUtils.isEmpty(gebruikersnaam) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
 
                     Toast.makeText(Registreeractivity.this, "Voer de velden in.", Toast.LENGTH_LONG).show();
-
-
                 }
 
                 else
                 {
-
                     mRegProgress.setTitle("Account aanmaken");
                     mRegProgress.setMessage("Even geduld...");
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.show();
-
                     registreer_gebruiker(gebruikersnaam, email, password);
                 }
 
@@ -92,7 +91,7 @@ public class Registreeractivity extends AppCompatActivity {
 
     }
 
-    private void registreer_gebruiker(String gebruikersnaam, String email, String password) {
+    private void registreer_gebruiker(final String gebruikersnaam, String email, String password) {
 
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -101,14 +100,42 @@ public class Registreeractivity extends AppCompatActivity {
                 if (task.isSuccessful())
 
                 {
-                    FirebaseUser huidige_gebruiker = FirebaseAuth.getInstance().getCurrentUser();
-                    String uid = huidige_gebruiker.getUid();
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(uid);
-                    mRegProgress.dismiss();
-                    Intent hoofdIntent = new Intent(Registreeractivity.this, MainActivity.class);
-                    hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(hoofdIntent);
-                    finish();
+                    FirebaseUser huidigeGebruiker = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = huidigeGebruiker.getUid();
+                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(uid);
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful())
+                            {
+                                System.out.println(task.getException());
+                                return;
+                            }
+
+                            String apparaatToken = task.getResult().getToken();
+
+                            HashMap<String, String> gebruikersMap = new HashMap<>();
+                            gebruikersMap.put("Naam", gebruikersnaam);
+                            gebruikersMap.put("Status", "Hallo, ik gebruik Chatapp.");
+                            gebruikersMap.put("Afbeelding", "default");
+                            gebruikersMap.put("Afbeelding_thumb", "default");
+                            gebruikersMap.put("Apparaat_token", apparaatToken);
+                            mDatabase.setValue(gebruikersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful())
+                                    {
+                                        mRegProgress.dismiss();
+                                        Intent hoofdIntent = new Intent(Registreeractivity.this, MainActivity.class);
+                                        hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(hoofdIntent);
+                                        finish();
+                                    }
+                                }
+                            });
+                        }
+                    });
+
                 }
 
                 else

@@ -3,6 +3,7 @@ package com.example.chatapp;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -13,10 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class Loginactivity extends AppCompatActivity {
 
@@ -27,26 +32,22 @@ public class Loginactivity extends AppCompatActivity {
 
     private ProgressDialog mLogProgress;
     private FirebaseAuth mAuth;
-
-
-
+    private DatabaseReference mGebruikersDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginactivity);
 
+        mAuth = FirebaseAuth.getInstance();
+
         mToolbar = (Toolbar) findViewById(R.id.login_toolbar) ;
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Log in");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
         mLogProgress = new ProgressDialog(this);
 
-
-        mAuth = FirebaseAuth.getInstance();
-
+        mGebruikersDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
         mEmail = (TextInputLayout) findViewById(R.id.logEmail);
         mWachtwoord = (TextInputLayout) findViewById(R.id.logWachtwoord);
         mLoginKnop = (Button) findViewById(R.id.loginKnop);
@@ -54,7 +55,6 @@ public class Loginactivity extends AppCompatActivity {
         mLoginKnop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String email = mEmail.getEditText().getText().toString();
                 String password = mWachtwoord.getEditText().getText().toString();
 
@@ -64,12 +64,12 @@ public class Loginactivity extends AppCompatActivity {
 
                 else
                 {
-                    mLogProgress.setTitle("inloggen");
+                    mLogProgress.setTitle("Inloggen");
                     mLogProgress.setMessage("Even geduld...");
                     mLogProgress.setCanceledOnTouchOutside(false);
                     mLogProgress.show();
 
-                    log_gebruiker(email, password);
+                    loginGebruiker(email, password);
                 }
 
             }
@@ -77,7 +77,8 @@ public class Loginactivity extends AppCompatActivity {
 
     }
 
-    private void log_gebruiker (String email, String password) {
+    // Gebruik E-mail en password als variabelen om daarmee in te loggen.
+    private void loginGebruiker (String email, String password) {
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -87,10 +88,20 @@ public class Loginactivity extends AppCompatActivity {
 
                 {
                     mLogProgress.dismiss();
-                    Intent hoofdIntent = new Intent(Loginactivity.this, MainActivity.class);
-                    hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(hoofdIntent);
-                    finish();
+                    String huidigeGebruikersId = mAuth.getCurrentUser().getUid();
+                    String apparaatToken = FirebaseInstanceId.getInstance().getToken();
+
+                    mGebruikersDatabase.child(huidigeGebruikersId).child("Apparaat_token").setValue(apparaatToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Intent hoofdIntent = new Intent(Loginactivity.this, MainActivity.class);
+                            hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(hoofdIntent);
+                            finish();
+
+                        }
+                    });
+
                 }
 
                 else
