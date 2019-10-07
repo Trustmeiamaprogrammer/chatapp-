@@ -2,12 +2,15 @@ package com.example.chatapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -15,6 +18,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
+    private ViewPager mViewpager;
+    private SectiePagerAdapter mSectiePagerAdapter;
+    private TabLayout mTabLayout;
+
+
 
 
     @Override
@@ -27,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.mainAppBar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chat app");
+
+        mViewpager = (ViewPager) findViewById(R.id.main_view);
+        mSectiePagerAdapter = new SectiePagerAdapter(getSupportFragmentManager());
+        mViewpager.setAdapter(mSectiePagerAdapter);
+
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
+        mTabLayout.setupWithViewPager(mViewpager);
+
+
+
+
 
     }
 

@@ -104,11 +104,9 @@ public class Registreeractivity extends AppCompatActivity {
                     FirebaseUser huidige_gebruiker = FirebaseAuth.getInstance().getCurrentUser();
                     String uid = huidige_gebruiker.getUid();
                     mDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(uid);
-
-                    Task<InstanceIdResult> task_token = FirebaseInstanceId.getInstance().getInstanceId();
-                    String token = task_token.getResult().getToken();
                     mRegProgress.dismiss();
                     Intent hoofdIntent = new Intent(Registreeractivity.this, MainActivity.class);
+                    hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(hoofdIntent);
                     finish();
                 }

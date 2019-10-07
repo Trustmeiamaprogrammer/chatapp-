@@ -88,6 +88,7 @@ public class Loginactivity extends AppCompatActivity {
                 {
                     mLogProgress.dismiss();
                     Intent hoofdIntent = new Intent(Loginactivity.this, MainActivity.class);
+                    hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(hoofdIntent);
                     finish();
                 }
