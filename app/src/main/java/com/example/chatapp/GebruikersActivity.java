@@ -1,11 +1,13 @@
 package com.example.chatapp;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.widget.Toolbar;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,9 +37,27 @@ public class GebruikersActivity extends AppCompatActivity {
 
     }
 
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
 
-    }
 }
+
+    public static class GebruikersViewHolder extends RecyclerView.ViewHolder {
+
+    View mView;
+
+    public GebruikersViewHolder(View itemView)
+
+    {
+        super(itemView);
+        mView = itemView;
+    }
+
+    public void setGebruikersnaam (String name)
+    {
+        TextView gebruikersnaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
+
+    }
+
+
+    }
