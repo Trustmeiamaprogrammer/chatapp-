@@ -9,4 +9,6 @@
     <string name="wachtwoord">Wachtwoord</string>
     <string name="maak_account">Maak account</string>
     <string name="maak_nieuw_account">Maak nieuw account</string>
+    <string name="uStatus">Jouw status</string>
+    <string name="opslaan">Sla verandering op</string>
 </resources>
