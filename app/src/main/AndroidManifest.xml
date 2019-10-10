@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".GebruikersActivity"></activity>
+        <activity android:name=".GesprekActivity"></activity>
+        <activity android:name=".GebruikersActivity" />
         <activity android:name=".InstellingenActivity" />
         <activity
             android:name=".Registreeractivity"
