@@ -128,7 +128,7 @@ public class GesprekkenFrag extends Fragment {
 
                 mGebDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    public void onDataChange( DataSnapshot dataSnapshot) {
                         final String naamGeb = dataSnapshot.child("naam").getValue().toString();
                         // THUMB IMAGE REF NIET ZEKER
                         String gebThub = dataSnapshot.child("thumb_image").toString();
