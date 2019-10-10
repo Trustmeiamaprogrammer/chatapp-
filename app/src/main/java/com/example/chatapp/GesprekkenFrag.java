@@ -175,7 +175,7 @@ public class GesprekkenFrag extends Fragment {
             mView = itemView;
         }
 
-        public void setBericht(String bericht, boolean isGeien) {
+        public static void setBericht(String bericht, boolean isGeien) {
             TextView gebStatusView = (TextView) mView.findViewById(R.id.gebruikerStatus);
             gebStatusView.setText(bericht);
             if (!isGeien) {
@@ -185,17 +185,17 @@ public class GesprekkenFrag extends Fragment {
             }
         }
 
-        public void setNaam(String naam) {
+        public static void setNaam(String naam) {
             TextView gebNaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
             gebNaamView.setText(naam);
         }
 
-        public void setGebAfbeelding(String thumbImage, Context ctx) {
+        public static void setGebAfbeelding(String thumbImage, Context ctx) {
             CircleImageView gebAfbeeldingView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
             Picasso.with(ctx).load(thumbImage).placeholder(R.mipmap.ic_launcher_round).into(gebAfbeeldingView);
         }
 
-        public void setGebOnline(String onlineStatus) {
+        public static void setGebOnline(String onlineStatus) {
             ImageView gebOnlineView = (ImageView) mView.findViewById(R.id.online_icon);
 
             if (onlineStatus.equals("true")) {
