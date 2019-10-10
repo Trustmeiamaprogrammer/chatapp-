@@ -101,7 +101,7 @@ public class GesprekkenFrag extends Fragment {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         String data = dataSnapshot.child("Berichten").getValue().toString();
-                        GesprekViewHolder.setBericht(data, gesprek.isGezien())
+                        GesprekViewHolder.setBericht(data, gesprek.isGezien());
 
                     }
 
@@ -149,7 +149,7 @@ public class GesprekkenFrag extends Fragment {
                                 gesprekIntent.putExtra("geb_naam", naamGeb);
                                 startActivity(gesprekIntent);
                             }
-                        })
+                        });
                     }
 
                     @Override
@@ -167,7 +167,7 @@ public class GesprekkenFrag extends Fragment {
     }
 
     public static class GesprekViewHolder extends RecyclerView.ViewHolder {
-        View mView;
+        static View mView;
 
         public GesprekViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -192,7 +192,7 @@ public class GesprekkenFrag extends Fragment {
 
         public void setGebAfbeelding(String thumbImage, Context ctx) {
             CircleImageView gebAfbeeldingView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
-            Picasso.with(ctx).load(thumbImage).placeholder(R.drawable.default_avatar).into(gebAfbeeldingView);
+            Picasso.with(ctx).load(thumbImage).placeholder(R.mipmap.ic_launcher_round).into(gebAfbeeldingView);
         }
 
         public void setGebOnline(String onlineStatus) {
