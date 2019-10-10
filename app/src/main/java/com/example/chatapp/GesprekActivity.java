@@ -37,6 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -58,7 +59,7 @@ public class GesprekActivity extends AppCompatActivity {
     private SwipeRefreshLayout mVerversLayout;
 
     // klasse berichten aanmaken
-    private final List <Berichten> berichtenlist = new ArrayList<>();
+    private final List<Berichten> berichtenlist = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
     // Klasse BerichtenAdapter maken
     private BerichtenAdapter mAdapter;
