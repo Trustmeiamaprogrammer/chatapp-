@@ -40,24 +40,22 @@ public class GebruikersActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-}
+    }
 
     public static class GebruikersViewHolder extends RecyclerView.ViewHolder {
 
-    View mView;
+        View mView;
 
-    public GebruikersViewHolder(View itemView)
+        public GebruikersViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+        }
 
-    {
-        super(itemView);
-        mView = itemView;
-    }
+        public void setGebruikersnaam(String name) {
+            TextView gebruikersnaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
 
-    public void setGebruikersnaam (String name)
-    {
-        TextView gebruikersnaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
-
-    }
+        }
 
 
     }
+}

@@ -17,11 +17,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InstellingenActivity extends AppCompatActivity {
     private DatabaseReference mGebDatabase;
     private FirebaseUser mHuidigeGebruiker;
-    // CircleImageView werkt niet.
+
+    // CircleImageView
+    private CircleImageView mToonAfbeelding;
 
     // 2 TextView maken
     private TextView mNaam;
@@ -32,7 +38,6 @@ public class InstellingenActivity extends AppCompatActivity {
     private Button mAfbeeldingKnop;
 
     private static final int GALLERY_PICK =1;
-    // Kijken naar dependencies
     private StorageReference mAfbeeldingOpslag;
 
     private ProgressDialog mProcessDialog;
@@ -41,13 +46,13 @@ public class InstellingenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instellingen);
-        // DisplayImage
+        mToonAfbeelding = (CircleImageView) findViewById(R.id.instelling_afbeelding);
         // ID aanmaken
         mNaam = (TextView) findViewById(R.id.instellingenNaam);
         mStatus = (TextView) findViewById(R.id.intellingenStatus);
 
         // ID aanmaken
-        mStatusKnop = (Button) findViewById(R.id.instellingenStatus);
+        mStatusKnop = (Button) findViewById(R.id.instellingenStatusKnop);
         mAfbeeldingKnop = (Button) findViewById(R.id.instellingenAfbeeldingKnop);
 
         mAfbeeldingOpslag = FirebaseStorage.getInstance().getReference();

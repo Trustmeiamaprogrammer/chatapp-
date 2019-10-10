@@ -47,7 +47,7 @@ public class BerichtenFrag extends Fragment {
 
         // Inflate the layout for this fragment
         mMainView = inflater.inflate(R.layout.fragment_berichten, container, false);
-        mGesLijst = (RecyclerView) mMainView.findViewById(R.ges_list);
+        mGesLijst = (RecyclerView) mMainView.findViewById(R.id.ges_list);
         mAuth = FirebaseAuth.getInstance();
         mHuidigGebId = mAuth.getCurrentUser().getUid();
         mGesDatabase = FirebaseDatabase.getInstance().getReference().child("Gesprekken").child(mHuidigGebId);
