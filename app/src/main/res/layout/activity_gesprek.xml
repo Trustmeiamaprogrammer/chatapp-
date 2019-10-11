@@ -12,7 +12,7 @@
         layout="@layout/app_bar_layout" />
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/nericht_swipe_layout"
+        android:id="@+id/bericht_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/linearLayout"
@@ -51,7 +51,7 @@
             app:srcCompat="@android:drawable/ic_input_add" />
 
         <EditText
-            android:id="@+id/chat_message_view"
+            android:id="@+id/gesprek_berichten_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"

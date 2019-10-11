@@ -99,14 +99,14 @@ public class GesprekActivity extends AppCompatActivity {
         mLaatstGezienView = (TextView) findViewById(R.id.cus_bar_gezien);
         mProfielFoto = (CircleImageView) findViewById(R.id.cust_bar_afbeelding);
 
-        mGesVoegtoeKnop = (ImageButton) findViewById(R.id.ges_voegtoe_knop);
-        mGesZendKnop = (ImageButton) findViewById(R.id.ges_zend_knop);
-        mGesBerView = (EditText) findViewById(R.id.ges_ber_view);
+        mGesVoegtoeKnop = (ImageButton) findViewById(R.id.gesprekToevoegKnop);
+        mGesZendKnop = (ImageButton) findViewById(R.id.berichtVerzendKnop);
+        mGesBerView = (EditText) findViewById(R.id.gesprek_berichten_view);
         // Onsecuur hier!
         mAdapter = new BerichtAdapter(berichtenlist);
 
-        mBerlijst = (RecyclerView) findViewById(R.id.ges_ber_lijst);
-        mVerversLayout = (SwipeRefreshLayout) findViewById(R.id.ges_ber_swipelayout);
+        mBerlijst = (RecyclerView) findViewById(R.id.berichten_lijst);
+        mVerversLayout = (SwipeRefreshLayout) findViewById(R.id.bericht_swipe_layout);
         mLinearLayout = new LinearLayoutManager(this);
         mBerlijst.setHasFixedSize(true);
         mBerlijst.setLayoutManager(mLinearLayout);
