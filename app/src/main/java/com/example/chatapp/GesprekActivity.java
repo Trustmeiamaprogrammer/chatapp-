@@ -77,7 +77,7 @@ public class GesprekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesprek);
 
-        mGesToolbar = (Toolbar) findViewById(R.id.ges_app_bar);
+        mGesToolbar = (Toolbar) findViewById(R.id.gesprek_app_bar);
 
         setSupportActionBar(mGesToolbar);
 
@@ -91,13 +91,13 @@ public class GesprekActivity extends AppCompatActivity {
         mGesGebruiker = getIntent().getStringExtra("geb_id");
         String naamGeb = getIntent().getStringExtra("geb_naam");
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View actionBarView = inflater.inflate(R.layout.ges_cus_bar, null);
+        View actionBarView = inflater.inflate(R.layout.geprek_cus_bar, null);
 
         actionBar.setCustomView(actionBarView);
 
-        mTitelView = (TextView) findViewById(R.id.ges_cus_bar_titel);
-        mLaatstGezienView = (TextView) findViewById(R.id.ges_cus_bar_gezien);
-        mProfielFoto = (CircleImageView) findViewById(R.id.ges_cus_bar_foto);
+        mTitelView = (TextView) findViewById(R.id.cus_bar_titel);
+        mLaatstGezienView = (TextView) findViewById(R.id.cus_bar_gezien);
+        mProfielFoto = (CircleImageView) findViewById(R.id.cust_bar_afbeelding);
 
         mGesVoegtoeKnop = (ImageButton) findViewById(R.id.ges_voegtoe_knop);
         mGesZendKnop = (ImageButton) findViewById(R.id.ges_zend_knop);
@@ -227,7 +227,7 @@ public class GesprekActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 if (task.isSuccessful())
                 {
-                    String downloadUri = task.getResult().getDownloadUri().toString();
+                    String downloadUri = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
 
                     Map berichtMap = new HashMap();
                     berichtMap.put("Bericht", downloadUri);

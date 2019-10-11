@@ -17,5 +17,7 @@
     <string name="nieuwBericht">Type hier een bericht</string>
     <string name="verzoekPagina">Dit is de verzoekpagina</string>
     <string name="logIn">Log in</string>
+    <string name="laatstGezien">Laatst gezien</string>
     <string name="uEmail">Vul uw email in</string>
+
 </resources>

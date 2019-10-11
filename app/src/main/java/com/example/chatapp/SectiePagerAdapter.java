@@ -19,8 +19,8 @@ class SectiePagerAdapter extends FragmentPagerAdapter {
                 VerzoekFrag verzoekFrag = new VerzoekFrag();
                 return  verzoekFrag;
             case 1:
-                BerichtenFrag berichtenFrag = new BerichtenFrag();
-                return  berichtenFrag;
+                GesprekkenFrag gesprekkenFrag = new GesprekkenFrag();
+                return  gesprekkenFrag;
             case 2:
                 VriendenFrag vriendenFrag = new VriendenFrag();
                 return vriendenFrag;

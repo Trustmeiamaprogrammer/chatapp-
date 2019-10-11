@@ -191,13 +191,13 @@ public class InstellingenActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){
-                            final String download_url = task.getResult().getDownloadUrl.toString();
+                            final String download_url = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
                             UploadTask uploadTaak = afbeelding_pad.putBytes(thumb_byte);
 
                             uploadTaak.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
-                                    String thumb_downloadUrl = thumb_task.getResult().getDownloaderUrl.toString();
+                                    String thumb_downloadUrl = thumb_task.getResult().getMetadata().getReference().getDownloadUrl().toString();
 
                                     if(thumb_task.isSuccessful()){
 
