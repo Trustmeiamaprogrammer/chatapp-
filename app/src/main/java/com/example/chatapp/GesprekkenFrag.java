@@ -129,12 +129,12 @@ public class GesprekkenFrag extends Fragment {
                 mGebDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange( DataSnapshot dataSnapshot) {
-                        final String naamGeb = dataSnapshot.child("naam").getValue().toString();
+                        final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
                         // THUMB IMAGE REF NIET ZEKER
-                        String gebThub = dataSnapshot.child("thumb_image").toString();
+                        String gebThub = dataSnapshot.child("ThumbImage").toString();
 
-                        if (dataSnapshot.hasChild("online")) {
-                            String gebOnline = dataSnapshot.child("online").getValue().toString();
+                        if (dataSnapshot.hasChild("Online")) {
+                            String gebOnline = dataSnapshot.child("Online").getValue().toString();
                             GesprekViewHolder.setGebOnline(gebOnline);
                         }
                         GesprekViewHolder.setNaam(naamGeb);
@@ -145,8 +145,8 @@ public class GesprekkenFrag extends Fragment {
                             public void onClick(View view) {
                                 Intent gesprekIntent  = new Intent(getContext(), GesprekActivity.class);
                                 // geb_id juist???
-                                gesprekIntent.putExtra("geb_id", lijstGebId);
-                                gesprekIntent.putExtra("geb_naam", naamGeb);
+                                gesprekIntent.putExtra("GebId", lijstGebId);
+                                gesprekIntent.putExtra("GebNaam", naamGeb);
                                 startActivity(gesprekIntent);
                             }
                         });
