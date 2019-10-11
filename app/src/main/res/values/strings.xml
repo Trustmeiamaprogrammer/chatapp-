@@ -13,4 +13,9 @@
     <string name="uStatus">Jouw status</string>
     <string name="opslaan">Sla verandering op</string>
     <string name="inloggen">Inloggen</string>
+    <string name="knop">Knop</string>
+    <string name="nieuwBericht">Type hier een bericht</string>
+    <string name="verzoekPagina">Dit is de verzoekpagina</string>
+    <string name="logIn">Log in</string>
+    <string name="uEmail">Vul uw email in</string>
 </resources>

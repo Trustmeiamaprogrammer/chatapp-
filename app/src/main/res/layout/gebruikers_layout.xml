@@ -10,7 +10,6 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginStart="15dp"
-        android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
         android:src="@mipmap/ic_launcher_round" />
@@ -21,9 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/GebruikerAfbeelding"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_toEndOf="@+id/GebruikerAfbeelding"
-        android:layout_toRightOf="@id/GebruikerAfbeelding"
         android:text="@string/gebruikersnaam"
         android:textColor="@android:color/black"
         android:textSize="18sp" />
@@ -33,7 +30,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/naamGebruiker"
-        android:layout_alignLeft="@id/GebruikerAfbeelding"
         android:layout_below="@+id/naamGebruiker"
         android:layout_marginTop="10dp"
         android:text="@string/standaard_status" />
@@ -44,9 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/naamGebruiker"
         android:layout_marginStart="10dp"
-        android:layout_marginLeft="10dp"
         android:layout_toEndOf="@+id/naamGebruiker"
-        android:layout_toRightOf="@id/GebruikerAfbeelding"
         android:contentDescription="@string/online_icon"
         android:visibility="invisible"
         app:srcCompat="@android:drawable/presence_online" />
