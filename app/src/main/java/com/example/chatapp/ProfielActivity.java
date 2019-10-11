@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-class ProfielAcvtivity extends AppCompatActivity {
+class ProfielActivity extends AppCompatActivity {
 
     /// {} of () staan niet overal goed. ID's voor xml moeten aangemaakt worden.
 
@@ -60,10 +60,10 @@ class ProfielAcvtivity extends AppCompatActivity {
         notDatabase = FirebaseDatabase.getInstance().getReference().child("Notificaties");
         mHuidigGeb = FirebaseAuth.getInstance().getCurrentUser();
 
-        profielFoto = (ImageView) findViewById(R.id.GebruikerAfbeelding);
-        profielNaam = (TextView) findViewById(R.id.Profielnaam);
-        profielStatus = (TextView) findViewById(R.id.gebruikerStatus);
-        profielVriendenAantal = (TextView) findViewById(R.id.ProfielAantal);
+        profielFoto = (ImageView) findViewById(R.id.profielAfbeelding);
+        profielNaam = (TextView) findViewById(R.id.profielnaam);
+        profielStatus = (TextView) findViewById(R.id.profielStatus);
+        profielVriendenAantal = (TextView) findViewById(R.id.profielAantal);
         profielZendKnop = (Button) findViewById(R.id.ProfielZendKnop);
         profielWeigerKnop = (Button) findViewById(R.id.ProfielWeigerKnop);
 
@@ -89,7 +89,7 @@ class ProfielAcvtivity extends AppCompatActivity {
                 profielNaam.setText(gebruikersnaam);
                 profielStatus.setText(status);
 
-                Picasso.with(ProfielAcvtivity.this).load(afbeelding).placeholder(R.drawable.StanAfbeelding).into(profielFoto);
+                Picasso.with(ProfielActivity.this).load(afbeelding).placeholder(R.drawable.StanAfbeelding).into(profielFoto);
 
                 if(mHuidigGeb.getUid().equals(gebId)){
                     profielWeigerKnop.setEnabled(false);
@@ -182,7 +182,7 @@ class ProfielAcvtivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                         if (databaseError != null) {
-                            Toast.makeText(ProfielAcvtivity.this, "Verzoek versturen niet geukt.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfielActivity.this, "Verzoek versturen niet geukt.", Toast.LENGTH_SHORT).show();
                         } else {
 
                             huidigState = "VerStuurd";
@@ -236,7 +236,7 @@ class ProfielAcvtivity extends AppCompatActivity {
 
                             } else {
                                 String fout = databaseError.getMessage();
-                                Toast.makeText(ProfielAcvtivity.this, fout, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfielActivity.this, fout, Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -260,7 +260,7 @@ class ProfielAcvtivity extends AppCompatActivity {
 
                             } else {
                                 String fout = databaseError.getMessage();
-                                Toast.makeText(ProfielAcvtivity.this, fout, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfielActivity.this, fout, Toast.LENGTH_SHORT).show();
 
                             }
                             profielZendKnop.setEnabled(true);

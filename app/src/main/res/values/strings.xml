@@ -19,5 +19,8 @@
     <string name="logIn">Log in</string>
     <string name="laatstGezien">Laatst gezien</string>
     <string name="uEmail">Vul uw email in</string>
+    <string name="totaalVrienden">Totaal vrienden</string>
+    <string name="verstuurVerzoek">Verstuur verzoek</string>
+    <string name="weigerVerzoek">Weiger verzoek</string>
 
 </resources>
