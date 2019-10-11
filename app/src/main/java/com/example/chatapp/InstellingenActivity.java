@@ -192,7 +192,7 @@ public class InstellingenActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()){
                             final String download_url = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
-                            UploadTask uploadTaak = afbeelding_pad.putBytes(thumb_byte);
+                            UploadTask uploadTaak = afbeelding_path.putBytes(thumb_byte);
 
                             uploadTaak.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                 @Override
@@ -212,9 +212,6 @@ public class InstellingenActivity extends AppCompatActivity {
                                                 if(task.isSuccessful()){
                                                     mProcessDialog.dismiss();
                                                     Toast.makeText(InstellingenActivity.this, "Succesvol upload", Toast.LENGTH_LONG).show();
-
-
-
                                                 }
 
                                             }
