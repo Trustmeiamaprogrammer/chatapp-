@@ -1,0 +1,199 @@
+package com.example.chatapp;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
+
+class ProfielAcvtivity extends AppCompatActivity {
+
+    private ImageView profielFoto;
+    private TextView profielNaam, profielStatus, profielVriendenAantal;
+    private Button profielZendKnop, profielWeigerKnop;
+
+    private DatabaseReference gebDatabase;
+    private DatabaseReference verzoekDatabase;
+    private DatabaseReference vriendDatabase;
+    private DatabaseReference notDatabase;
+
+    private DatabaseReference mHuidigRef;
+    private FirebaseUser mHuidigGeb;
+
+    private String huidigState;
+
+    private ProgressDialog mProcessDialog;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profiel);
+
+        final String gebId = getIntent().getStringExtra("gebruikersId");
+        mHuidigRef = FirebaseDatabase.getInstance().getReference();
+        gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(gebId);
+        verzoekDatabase = FirebaseDatabase.getInstance().getReference().child("VriendVer");
+        vriendDatabase = FirebaseDatabase.getInstance().getReference().child("Vrienden");
+        notDatabase = FirebaseDatabase.getInstance().getReference().child("Notificaties");
+        mHuidigGeb = FirebaseAuth.getInstance().getCurrentUser();
+
+        profielFoto = (ImageView) findViewById(R.id.GebruikerAfbeelding);
+        profielNaam = (TextView) findViewById(R.id.Profielnaam);
+        profielStatus = (TextView) findViewById(R.id.gebruikerStatus);
+        profielVriendenAantal = (TextView) findViewById(R.id.ProfielAantal);
+        profielZendKnop = (Button) findViewById(R.id.ProfielZendKnop);
+        profielWeigerKnop = (Button) findViewById(R.id.ProfielWeigerKnop);
+
+        huidigState = "geen_vrienden";
+        profielWeigerKnop.setVisibility(View.INVISIBLE);
+        profielWeigerKnop.setEnabled(false);
+
+
+        mProcessDialog = new ProgressDialog(this);
+        mProcessDialog.setTitle("Laden... geb_data");
+        mProcessDialog.setMessage("Even geduld...");
+        mProcessDialog.setCanceledOnTouchOutside(false);
+        mProcessDialog.show();
+
+
+        gebDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String gebruikersnaam = dataSnapshot.child("Naam").getValue().toString();
+                String status = dataSnapshot.child("Status").getValue().toString();
+                String afbeelding = dataSnapshot.child("Afbeelding").getValue().toString();
+
+                profielNaam.setText(gebruikersnaam);
+                profielStatus.setText(status);
+
+                Picasso.with(ProfielAcvtivity.this).load(afbeelding).placeholder(R.drawable.StanAfbeelding).into(profielFoto);
+
+                if(mHuidigGeb.getUid().equals(gebId)){
+                    profielWeigerKnop.setEnabled(false);
+                    profielWeigerKnop.setVisibility(View.INVISIBLE);
+
+                    profielZendKnop.setEnabled(false);
+                    profielZendKnop.setVisibility(View.INVISIBLE);
+
+                }
+
+                verzoekDatabase.child(mHuidigGeb.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(gebId)) {
+                            String ver_type = dataSnapshot.child(gebId).child("VerType").getValue().toString();
+
+                            if (ver_type.equals("Ontvangen")) {
+                                huidigState = "VerOntvang";
+                                profielZendKnop.setText("Verzoek accepteren");
+
+                                profielWeigerKnop.setVisibility(View.VISIBLE);
+                                profielWeigerKnop.setEnabled(true);
+
+                            } else if (ver_type.equals("Verzonden")) {
+                                huidigState = "VerStuurd";
+
+                                profielZendKnop.setText("Annuleren");
+                                profielWeigerKnop.setVisibility(View.INVISIBLE);
+                                profielWeigerKnop.setEnabled(false);
+
+                            }
+                            mProcessDialog.dismiss();
+
+
+                        } else {
+                            vriendDatabase.child(mHuidigGeb.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.hasChild(gebId)) {
+
+                                        huidigState = "Vrienden";
+                                        profielZendKnop.setText("Ontvrienden");
+                                        profielWeigerKnop.setVisibility(View.INVISIBLE);
+                                        profielWeigerKnop.setEnabled(false);
+
+                                    }
+                                    mProcessDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    mProcessDialog.dismiss();
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        profielZendKnop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profielZendKnop.setEnabled(false);
+
+                DatabaseReference nNotRef = mHuidigRef.child("Notificaties").child(gebId).push();
+                String nNotId = nNotRef.getKey();
+
+                HashMap<String, String> notData = new HashMap<>();
+                notData.put("Van", mHuidigGeb.getUid());
+                notData.put("Type", "Verzoek");
+                Map verMap = new HashMap<>();
+                verMap.put("VriendVer/" + mHuidigGeb.getUid() + "/" + gebId + "/VerType", "Verzonden");
+                verMap.put("VriendVer/" + gebId + "/" + mHuidigGeb.getUid() + "/VerType", "Verzonden");
+                verMap.put("Notificaties/" + gebId + "/" + nNotId, notData);
+
+                mHuidigRef.updateChildren(verMap, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                        if (databaseError != null) {
+                            Toast.makeText(ProfielAcvtivity.this, "Verzoek versturen niet geukt.", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                            huidigState = "VerStuurd";
+                            profielZendKnop.setText("Annuleer");
+
+                        }
+                        profielZendKnop.setEnabled(true);
+
+
+                    }
+                });
+
+
+
+            }
+        });
+    }
+
+}
