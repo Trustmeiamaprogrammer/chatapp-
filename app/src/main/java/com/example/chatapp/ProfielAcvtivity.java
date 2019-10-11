@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,10 +22,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 class ProfielAcvtivity extends AppCompatActivity {
+
+    /// {} of () staan niet overal goed. ID's voor xml moeten aangemaakt worden.
 
     private ImageView profielFoto;
     private TextView profielNaam, profielStatus, profielVriendenAantal;
@@ -62,7 +67,7 @@ class ProfielAcvtivity extends AppCompatActivity {
         profielZendKnop = (Button) findViewById(R.id.ProfielZendKnop);
         profielWeigerKnop = (Button) findViewById(R.id.ProfielWeigerKnop);
 
-        huidigState = "geen_vrienden";
+        huidigState = "Geenvrienden";
         profielWeigerKnop.setVisibility(View.INVISIBLE);
         profielWeigerKnop.setEnabled(false);
 
@@ -182,18 +187,92 @@ class ProfielAcvtivity extends AppCompatActivity {
 
                             huidigState = "VerStuurd";
                             profielZendKnop.setText("Annuleer");
-
                         }
                         profielZendKnop.setEnabled(true);
-
-
                     }
                 });
 
+                if(huidigState.equals("VerStuurd")){
+                    verzoekDatabase.child(mHuidigGeb.getUid()).child(gebId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            verzoekDatabase.child(gebId).child(mHuidigGeb.getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    profielZendKnop.setEnabled(true);
+                                    huidigState = "Geenvrienden";
+                                    profielZendKnop.setText("Verzoek verstuurd");
+
+                                    profielWeigerKnop.setVisibility(View.INVISIBLE);
+                                    profielWeigerKnop.setEnabled(false);
+
+                                }
+                            });
+
+                        }
+                    });
+                }
+
+                if(huidigState.equals("VerOntvang")){
+                    final String huidigDatum = DateFormat.getDateTimeInstance().format(new Date());
+
+                    Map vriendMap = new HashMap();
+                    vriendMap.put("Vrienden/" + mHuidigGeb.getUid() + "/" + gebId + "/Datum", huidigDatum);
+                    vriendMap.put("Vrienden/" + gebId + "/" + mHuidigGeb.getUid() + "/Datum", huidigDatum);
+                    vriendMap.put("VriendVer/" + mHuidigGeb.getUid() + "/" + gebId, null);
+                    vriendMap.put("VriendVer/" + gebId + "/" + mHuidigGeb.getUid(), null);
+
+                    mHuidigRef.updateChildren(vriendMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if(databaseError == null){
+                                profielZendKnop.setEnabled(true);
+                                huidigState ="Vrienden";
+                                profielZendKnop.setText("Ontvrient");
+
+                                profielWeigerKnop.setVisibility(View.INVISIBLE);
+                                profielWeigerKnop.setEnabled(false);
 
 
+                            } else {
+                                String fout = databaseError.getMessage();
+                                Toast.makeText(ProfielAcvtivity.this, fout, Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+                }
+
+                if(huidigState.equals("Vrienden")){
+                    Map ontvriendMap = new HashMap();
+                    ontvriendMap.put("Vrienden/"+ mHuidigGeb.getUid() + "/" + gebId, null);
+                    ontvriendMap.put("Vrienden/"+ gebId + "/" + mHuidigGeb.getUid(), null);
+
+                    mHuidigRef.updateChildren(ontvriendMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if(databaseError == null){
+                                huidigState = "Geenvrienden";
+                                profielZendKnop.setText("Vriendschap verzoek");
+
+                                profielWeigerKnop.setVisibility(View.INVISIBLE);
+                                profielWeigerKnop.setEnabled(false);
+
+                            } else {
+                                String fout = databaseError.getMessage();
+                                Toast.makeText(ProfielAcvtivity.this, fout, Toast.LENGTH_SHORT).show();
+
+                            }
+                            profielZendKnop.setEnabled(true);
+                        }
+                    });
+
+                }
             }
+
+
         });
     }
+
 
 }
