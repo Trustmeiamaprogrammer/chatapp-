@@ -88,8 +88,8 @@ public class GesprekActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mHuidigeGebId = mAuth.getCurrentUser().getUid();
         // Staat goed in DB?
-        mGesGebruiker = getIntent().getStringExtra("geb_id");
-        String naamGeb = getIntent().getStringExtra("geb_naam");
+        mGesGebruiker = getIntent().getStringExtra("GebId");
+        String naamGeb = getIntent().getStringExtra("GebNaam");
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View actionBarView = inflater.inflate(R.layout.geprek_cus_bar, null);
 
@@ -114,17 +114,17 @@ public class GesprekActivity extends AppCompatActivity {
         mBerlijst.setAdapter(mAdapter);
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
-        mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
+        mHoofdRef.child("Gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(true);
 
         laadBerichten();
 
         mTitelView.setText(naamGeb);
 
-        mHoofdRef.child("gebruikers").child(mGesGebruiker).addValueEventListener(new ValueEventListener() {
+        mHoofdRef.child("Gebruikers").child(mGesGebruiker).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String online = dataSnapshot.child("online").getValue().toString();
-                String image = dataSnapshot.child("afbeelding").getValue().toString();
+                String online = dataSnapshot.child("Online").getValue().toString();
+                String image = dataSnapshot.child("Afbeelding").getValue().toString();
 
                 if (online.equals("true")) {
                     mLaatstGezienView.setText("Online");
@@ -147,24 +147,24 @@ public class GesprekActivity extends AppCompatActivity {
             }
         });
 
-        mHoofdRef.child("gesprek").child(mHuidigeGebId).addValueEventListener(new ValueEventListener() {
+        mHoofdRef.child("Gesprek").child(mHuidigeGebId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (!dataSnapshot.hasChild(mGesGebruiker)) {
                     Map gesVoegtoeMap = new HashMap();
-                    gesVoegtoeMap.put("gezien", false);
-                    gesVoegtoeMap.put("timestamp", ServerValue.TIMESTAMP);
+                    gesVoegtoeMap.put("Gezien", false);
+                    gesVoegtoeMap.put("Timestamp", ServerValue.TIMESTAMP);
 
                     Map gesGebMap = new HashMap();
-                    gesGebMap.put("gesprek/" + mHuidigeGebId + "/" + mGesGebruiker, gesVoegtoeMap);
-                    gesGebMap.put("gesprek/" + mGesGebruiker + "/" + mHuidigeGebId, gesVoegtoeMap);
+                    gesGebMap.put("Gesprek/" + mHuidigeGebId + "/" + mGesGebruiker, gesVoegtoeMap);
+                    gesGebMap.put("Gesprek/" + mGesGebruiker + "/" + mHuidigeGebId, gesVoegtoeMap);
 
                     mHoofdRef.updateChildren(gesGebMap, new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                             if (databaseError != null) {
-                                System.out.println("GESPREKLOG>>>>>>" + databaseError.getMessage());
+                                System.out.println("GESPREKLOG GESPREK ACTIVITTY >>>>>>" + databaseError.getMessage());
                             }
                         }
                     });
@@ -191,7 +191,7 @@ public class GesprekActivity extends AppCompatActivity {
                 Intent gallerijIntent = new Intent();
 
                 // KLOPT DIT OOK?
-                gallerijIntent.setType("afbeelding/*");
+                gallerijIntent.setType("Afbeelding/*");
                 gallerijIntent.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(Intent.createChooser(gallerijIntent, "SELECTEER AFBEELDING"), GALLERIJ_FOTO);
@@ -220,7 +220,7 @@ public class GesprekActivity extends AppCompatActivity {
         final String gesGebRef = "Berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
         final DatabaseReference gebGesPush = mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).push();
         final String pushId = gebGesPush.getKey();
-        StorageReference bestandpad = mAfbeeldingOplag.child("bericht_afbeelding").child(pushId + ".jpg");
+        StorageReference bestandpad = mAfbeeldingOplag.child("BerichtAfbeelding").child(pushId + ".jpg");
 
         bestandpad.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -232,8 +232,8 @@ public class GesprekActivity extends AppCompatActivity {
                     Map berichtMap = new HashMap();
                     berichtMap.put("Bericht", downloadUri);
                     berichtMap.put("Gezien", false);
-                    berichtMap.put("type", "afbeelding");
-                    berichtMap.put("tijd", ServerValue.TIMESTAMP);
+                    berichtMap.put("Type", "Afbeelding");
+                    berichtMap.put("Tijd", ServerValue.TIMESTAMP);
                     berichtMap.put("Van", mHuidigeGebId);
 
                     Map berichtGebMap = new HashMap();
@@ -247,7 +247,7 @@ public class GesprekActivity extends AppCompatActivity {
                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                             if (databaseError != null)
                             {
-                                System.out.println("FOUT >>> " + databaseError.getMessage());
+                                System.out.println("FOUT GESPREK ACTIVITY >>> " + databaseError.getMessage());
                             }
                         }
                     });
@@ -383,9 +383,9 @@ private void zendBericht()
         Map berichtMap = new HashMap();
         berichtMap.put("Bericht", bericht);
         berichtMap.put("Gezien", false);
-        berichtMap.put("type", "tekst");
-        berichtMap.put("tijd", ServerValue.TIMESTAMP);
-        berichtMap.put("van", mHuidigeGebId);
+        berichtMap.put("Type", "Tekst");
+        berichtMap.put("Tijd", ServerValue.TIMESTAMP);
+        berichtMap.put("Van", mHuidigeGebId);
 
         Map berichtGebMap = new HashMap();
         berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
@@ -403,7 +403,7 @@ private void zendBericht()
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                 if(databaseError != null)
                 {
-                    System.out.println("FOUT>>>> " + databaseError.getMessage());
+                    System.out.println("FOUT GESPREK ACTIVITY ZEND BERICHT>>>> " + databaseError.getMessage());
                 }
             }
         });
