@@ -1,6 +1,7 @@
 package com.example.chatapp;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -8,8 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.core.view.View;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -41,13 +46,15 @@ class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenVi
     public TextView gebruikersnaam;
     public ImageView berImage;
 
-    public BerichtenViewHolder(View view)
-    {
-        super();
+    public BerichtenViewHolder(View view) {
+        super(view);
 
 
         berText = (TextView) view.findViewById(R.id.berTekstLayout);
-        profielFoto = (CircleImageView) view.
+        profielFoto = (CircleImageView) view.findViewById(R.id.profielAfbeelding);
+        gebruikersnaam = (TextView) view.findViewById(R.id.naamGebruiker);
+        berImage = (ImageView) view.findViewById(R.id.berImage);
+
 
 
 
@@ -55,3 +62,46 @@ class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenVi
 
 
         }
+
+        @Override
+public void onBindViewHolder (final BerichtenViewHolder viewHolder, int i)
+        {
+            Berichten b = berLijst.get(i);
+            String vanGebruiker = b.getVan();
+            String berType = b.getType();
+
+            gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(vanGebruiker);
+            gebDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String naam = dataSnapshot.child("Naam").getValue().toString();
+                    String afbeelding = dataSnapshot.child("ThumbAfbeelding").getValue().toString();
+
+                    viewHolder.gebruikersnaam.setText(naam);
+
+                    Picasso.with(viewHolder.profielFoto.getContext()).load(afbeelding).placeholder(R.drawable.standAfb).into(viewHolder.profielFoto);
+                }
+
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            if (berType.equals("Tekst")){
+                viewHolder.berText.setText(b.getBericht());
+                viewHolder.berImage.setVisibility(View.INVISIBLE);
+            } else {
+                viewHolder.berText.setVisibility(View.INVISIBLE);
+                Picasso.with(viewHolder.profielFoto.getContext()).load(b.getBericht()).placeholder(R.drawable.stanAfb).into(viewHolder.berImage);
+            }
+        }
+
+    @Override
+    public int getItemCount() {
+        return berLijst.size();
+    }
+}
+
+
