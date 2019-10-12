@@ -65,7 +65,7 @@ public class GebruikersActivity extends AppCompatActivity {
                 gebruikersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent profielIntent = new Intent(GebruikersActivity.this, ProfielAcvtivity.class);
+                        Intent profielIntent = new Intent(GebruikersActivity.this, ProfielActivity.class);
                         profielIntent.putExtra("GebId", gebId);
                         startActivity(profielIntent);
                     }
