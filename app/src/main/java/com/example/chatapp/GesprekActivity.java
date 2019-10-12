@@ -130,10 +130,10 @@ public class GesprekActivity extends AppCompatActivity {
                     mLaatstGezienView.setText("Online");
 
                 } else {
-                    GetTimeago getTimeago = new GetTimeAgo();
+                    GetTimeAgo getTimeago = new GetTimeAgo();
                     long laatstTijd = Long.parseLong(online);
 
-                    String laatstGezienTijd = getTimeago.getTimeago(laatstTijd, getApplicationContext());
+                    String laatstGezienTijd = getTimeago.getTimeAgo(laatstTijd, getApplicationContext());
 
                     mLaatstGezienView.setText(laatstGezienTijd);
 

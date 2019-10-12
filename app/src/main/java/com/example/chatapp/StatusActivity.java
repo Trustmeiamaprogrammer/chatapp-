@@ -42,7 +42,7 @@ public class StatusActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Account Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String status_value = getIntent().getStringExtra("status_value");
+        String status_value = getIntent().getStringExtra("StatusWaarde");
         mStatus = (TextInputLayout) findViewById(R.id.status_invoer);
         mOpslaanKnop = (Button) findViewById(R.id.status_opslaan_knop);
 
@@ -58,7 +58,7 @@ public class StatusActivity extends AppCompatActivity {
 
                 String status = mStatus.getEditText().getText().toString();
 
-                mStatusDatabase.child("status").setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
+                mStatusDatabase.child("Status").setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
