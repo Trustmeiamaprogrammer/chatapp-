@@ -162,7 +162,7 @@ mVriendenLijst.setAdapter(vriendenRecyclerViewAdapter);
 
         public void setGebAfbeelding (String thumbAfb, Context ctx) {
             CircleImageView gebImageView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
-            Picasso.with(ctx).load(thumbAfb).placeholder(R.drawable.standAfb).into(gebImageView);
+            Picasso.with(ctx).load(thumbAfb).placeholder(R.drawable.ic_launcher_background).into(gebImageView);
         }
 
         public void setGebOnline(String onlineStatus){
