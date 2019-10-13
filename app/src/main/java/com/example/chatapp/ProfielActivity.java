@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-class ProfielActivity extends AppCompatActivity {
+public class ProfielActivity extends AppCompatActivity {
 
     /// {} of () staan niet overal goed. ID's voor xml moeten aangemaakt worden.
 
@@ -52,7 +52,7 @@ class ProfielActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profiel);
 
-        final String gebId = getIntent().getStringExtra("gebruikersId");
+        final String gebId = getIntent().getStringExtra("GebId");
         mHuidigRef = FirebaseDatabase.getInstance().getReference();
         gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(gebId);
         verzoekDatabase = FirebaseDatabase.getInstance().getReference().child("VriendVer");
