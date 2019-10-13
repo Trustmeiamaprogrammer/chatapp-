@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
     tools:context=".ProfielActivity">
 
     <ImageView
@@ -25,7 +26,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="26dp"
         android:text="@string/gebruikersnaam"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="24sp" />
 
     <TextView
@@ -35,8 +36,8 @@
         android:layout_below="@+id/profielnaam"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
-        android:text="@string/standaard_status"
-        android:textColor="@android:color/white"
+        android:text="@string/status"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp" />
 
     <TextView
@@ -47,7 +48,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="12dp"
         android:text="@string/totaalVrienden"
-        android:textColor="@android:color/white"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp" />
 
     <Button

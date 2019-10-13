@@ -29,7 +29,6 @@ import java.util.Map;
 
 public class ProfielActivity extends AppCompatActivity {
 
-    /// {} of () staan niet overal goed. ID's voor xml moeten aangemaakt worden.
 
     private ImageView profielFoto;
     private TextView profielNaam, profielStatus, profielVriendenAantal;
@@ -166,31 +165,34 @@ public class ProfielActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 profielZendKnop.setEnabled(false);
+                if(huidigState.equals("Geenvrienden")) {
 
-                DatabaseReference nNotRef = mHuidigRef.child("Notificaties").child(gebId).push();
-                String nNotId = nNotRef.getKey();
+                    DatabaseReference nNotRef = mHuidigRef.child("Notificaties").child(gebId).push();
+                    String nNotId = nNotRef.getKey();
 
-                HashMap<String, String> notData = new HashMap<>();
-                notData.put("Van", mHuidigGeb.getUid());
-                notData.put("Type", "Verzoek");
-                Map verMap = new HashMap<>();
-                verMap.put("VriendVer/" + mHuidigGeb.getUid() + "/" + gebId + "/VerType", "Verzonden");
-                verMap.put("VriendVer/" + gebId + "/" + mHuidigGeb.getUid() + "/VerType", "Verzonden");
-                verMap.put("Notificaties/" + gebId + "/" + nNotId, notData);
+                    HashMap<String, String> notData = new HashMap<>();
+                    notData.put("Van", mHuidigGeb.getUid());
+                    notData.put("Type", "Verzoek");
+                    Map verMap = new HashMap<>();
+                    verMap.put("VriendVer/" + mHuidigGeb.getUid() + "/" + gebId + "/VerType", "Verzonden");
+                    verMap.put("VriendVer/" + gebId + "/" + mHuidigGeb.getUid() + "/VerType", "Ontvangen");
+                    verMap.put("Notificaties/" + gebId + "/" + nNotId, notData);
 
-                mHuidigRef.updateChildren(verMap, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                        if (databaseError != null) {
-                            Toast.makeText(ProfielActivity.this, "Verzoek versturen niet geukt.", Toast.LENGTH_SHORT).show();
-                        } else {
+                    mHuidigRef.updateChildren(verMap, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                            if (databaseError != null) {
+                                Toast.makeText(ProfielActivity.this, "Verzoek versturen niet geukt.", Toast.LENGTH_SHORT).show();
+                            } else {
 
-                            huidigState = "VerStuurd";
-                            profielZendKnop.setText("Annuleer");
+                                huidigState = "VerStuurd";
+                                profielZendKnop.setText("Annuleer");
+                            }
+                            profielZendKnop.setEnabled(true);
+
                         }
-                        profielZendKnop.setEnabled(true);
-                    }
-                });
+                    });
+                }
 
                 if(huidigState.equals("VerStuurd")){
                     verzoekDatabase.child(mHuidigGeb.getUid()).child(gebId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {

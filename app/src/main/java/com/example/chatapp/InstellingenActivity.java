@@ -85,11 +85,9 @@ public class InstellingenActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 String naam = dataSnapshot.child("Naam").getValue().toString();
-                // Afbeelding moet nog
                 final String afbeelding = dataSnapshot.child("Afbeelding").getValue().toString();
                 String status = dataSnapshot.child("Status").getValue().toString();
-                // thumb_afbeelding moet nog
-                String thumb_afbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
+                String thumbAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
 
                 mNaam.setText(naam);
                 mStatus.setText(status);

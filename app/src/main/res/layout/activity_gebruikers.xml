@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".GebruikersActivity">
 
-    <include layout="@layout/app_bar_layout" android:id="@+id/gebruikersAppBar" />
+    <include layout="@layout/app_bar_layout"
+        android:id="@+id/gebruikersAppBar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gebruikersLijst"

@@ -3,14 +3,13 @@
     <string name="welkom">Welkom bij de app</string>
     <string name="gebruikersnaam">Gebruikersnaam</string>
     <string name="online_icon">online icon</string>
-    <string name="standaard_status">Standaard status gebruiker</string>
     <string name="verander_afbeelding">Verander afbeelding</string>
     <string name="verander_status">Verander status</string>
     <string name="email">E-mail</string>
     <string name="wachtwoord">Wachtwoord</string>
     <string name="maak_account">Maak account</string>
     <string name="maak_nieuw_account">Maak nieuw account</string>
-    <string name="uStatus">Jouw status</string>
+    <string name="status">Jouw status</string>
     <string name="opslaan">Sla verandering op</string>
     <string name="inloggen">Inloggen</string>
     <string name="knop">Knop</string>

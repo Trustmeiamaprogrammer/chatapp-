@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GebruikersActivity extends AppCompatActivity {
@@ -55,12 +56,12 @@ public class GebruikersActivity extends AppCompatActivity {
                 gebruikersRef
         ) {
             @Override
-            protected void populateViewHolder(GebruikersViewHolder gebruikersViewHolder, Gebruikers gebruikers, int i) {
+            protected void populateViewHolder(GebruikersViewHolder gebruikersViewHolder, Gebruikers gebruikers, int position) {
                 gebruikersViewHolder.setGebruikersnaam(gebruikers.getNaam());
                 gebruikersViewHolder.setGebStatus(gebruikers.getStatus());
                 gebruikersViewHolder.setGebAfbeelding(gebruikers.getThumbAfbeelding(), getApplicationContext());
 
-                final String gebId = getRef(i).getKey();
+                final String gebId = getRef(position).getKey();
 
                 gebruikersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -88,6 +89,7 @@ mGebruikerslijst.setAdapter(firebaseRecyclerAdapter);
 
         public void setGebruikersnaam(String naam) {
             TextView gebruikersnaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
+            gebruikersnaamView.setText(naam);
 
         }
         public void setGebStatus(String status){

@@ -78,14 +78,14 @@ public class VriendenFrag extends Fragment {
             vriendenDatabase
             ) {
             @Override
-            protected void populateViewHolder(final VriendenViewHolder vriendenViewHolder, final Vrienden vrienden, int i) {
+            protected void populateViewHolder( final VriendenViewHolder vriendenViewHolder, final Vrienden vrienden, int i) {
                 vriendenViewHolder.setDatum(vrienden.getDatum());
                 final String lijstGebId = getRef(i).getKey();
                 gebruikersRef.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
-                        String gebThumb = dataSnapshot.child("ThumbImage").getValue().toString();
+                        String gebThumb = dataSnapshot.child("ThumbAfb").getValue().toString();
 
                         if (dataSnapshot.hasChild("Online"))
                         {

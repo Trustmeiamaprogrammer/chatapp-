@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         else
         {
-            mGebruikerRef.child("online").setValue("true");
+            mGebruikerRef.child("Online").setValue("true");
         }
     }
 
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(huidigeGebruiker != null)
         {
-            mGebruikerRef.child("online").setValue(ServerValue.TIMESTAMP);
+            mGebruikerRef.child("Online").setValue(ServerValue.TIMESTAMP);
         }
 
     }
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.mainLoguitKnop)
         {
-            mGebruikerRef.child("online").setValue(ServerValue.TIMESTAMP);
+            mGebruikerRef.child("Online").setValue(ServerValue.TIMESTAMP);
             FirebaseAuth.getInstance().signOut();
             sendToStart();
         }

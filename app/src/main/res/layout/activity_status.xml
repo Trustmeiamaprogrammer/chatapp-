@@ -20,7 +20,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="40dp"
-        android:hint="@string/uStatus" >
+        android:hint="@string/status" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
