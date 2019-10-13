@@ -110,13 +110,13 @@ public class VriendenFrag extends Fragment {
                                         if(i == 0)
                                         {
                                             Intent profielIntent = new Intent(getContext(), ProfielActivity.class);
-                                            profielIntent.putExtra("gebruikersId", lijstGebId);
+                                            profielIntent.putExtra("GebId", lijstGebId);
                                             startActivity(profielIntent);
                                         }
 
                                         if (i == 1){
                                             Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
-                                            gesIntent.putExtra("gebruikersId", lijstGebId);
+                                            gesIntent.putExtra("GebId", lijstGebId);
                                             startActivity(gesIntent);
                                         }
 
