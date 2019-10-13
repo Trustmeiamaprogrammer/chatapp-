@@ -51,7 +51,7 @@ class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenVi
 
 
         berText = (TextView) view.findViewById(R.id.berTekstLayout);
-        profielFoto = (CircleImageView) view.findViewById(R.id.profielAfbeelding);
+        profielFoto = (CircleImageView) view.findViewById(R.id.IdVoorDeze);
         gebruikersnaam = (TextView) view.findViewById(R.id.naamGebruiker);
         berImage = (ImageView) view.findViewById(R.id.berImage);
 

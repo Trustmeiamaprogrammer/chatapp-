@@ -5,8 +5,7 @@ import android.view.View;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-// Extends veranderd naar implements
-public abstract class EndlessRecyclerOnScrollListener implements View.OnClickListener {
+public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
     private int vorigAantal = 0;
@@ -23,10 +22,10 @@ public abstract class EndlessRecyclerOnScrollListener implements View.OnClickLis
     }
 
     @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-        super.onScrolled(recyclerView, dx, dy);
+    public void onScrolled(RecyclerView Recyclerview, int dx, int dy){
+        super.onScrolled(Recyclerview, dx, dy);
 
-        zichtbaarItemCount = recyclerView.getChildCount();
+        zichtbaarItemCount = Recyclerview.getChildCount();
         totaalItemCount = linearLayoutManager.getItemCount();
 
         eersteZichtbaarItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
@@ -38,12 +37,14 @@ public abstract class EndlessRecyclerOnScrollListener implements View.OnClickLis
             }
         }
 
-        if (!laden && (totaalItemCount - zichtbaarItemCount) <= (eersteZichtbaarItem + zichtbaarThreshold) {
+        if (!laden && (totaalItemCount - zichtbaarItemCount)
+                <= (eersteZichtbaarItem + zichtbaarThreshold)){
+
             huidigPag ++;
-            laadMeer(huidigPag);
+            onlaadMeer(huidigPag);
             laden = true;
 
         }
     }
-    public abstract void laadMeer(int huidigPag);
+    public abstract void onlaadMeer(int huidigPag);
 }
