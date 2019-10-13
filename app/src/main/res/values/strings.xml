@@ -22,5 +22,6 @@
     <string name="totaalVrienden">Totaal vrienden</string>
     <string name="verstuurVerzoek">Verstuur verzoek</string>
     <string name="weigerVerzoek">Weiger verzoek</string>
+    <string name="tijd">00:00</string>
 
 </resources>

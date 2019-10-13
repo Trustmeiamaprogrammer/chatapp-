@@ -99,7 +99,7 @@ mGebruikerslijst.setAdapter(firebaseRecyclerAdapter);
 
         public void setGebAfbeelding (String thumbAfbeelding, Context ctx) {
             CircleImageView gebImageView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
-            Picasso.with(ctx).load(thumbAfbeelding).placeholder(R.drawable.StandFoto).into(gebImageView);
+            Picasso.with(ctx).load(thumbAfbeelding).placeholder(R.drawable.ic_launcher_foreground).into(gebImageView);
 
         }
 

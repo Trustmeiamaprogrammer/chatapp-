@@ -34,7 +34,7 @@ class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenVi
     @NonNull
     @Override
     public BerichtenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.ber_layout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.berichten_layout, parent, false);
 
         return new BerichtenViewHolder(v);
     }
@@ -50,10 +50,10 @@ class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenVi
         super(view);
 
 
-        berText = (TextView) view.findViewById(R.id.berTekstLayout);
-        profielFoto = (CircleImageView) view.findViewById(R.id.IdVoorDeze);
-        gebruikersnaam = (TextView) view.findViewById(R.id.naamGebruiker);
-        berImage = (ImageView) view.findViewById(R.id.berImage);
+        berText = (TextView) view.findViewById(R.id.berichttekst);
+        profielFoto = (CircleImageView) view.findViewById(R.id.bericht_profiel);
+        gebruikersnaam = (TextView) view.findViewById(R.id.naamtekst);
+        berImage = (ImageView) view.findViewById(R.id.bericht_afbeelding);
 
 
 
@@ -79,7 +79,7 @@ public void onBindViewHolder (final BerichtenViewHolder viewHolder, int i)
 
                     viewHolder.gebruikersnaam.setText(naam);
 
-                    Picasso.with(viewHolder.profielFoto.getContext()).load(afbeelding).placeholder(R.drawable.standAfb).into(viewHolder.profielFoto);
+                    Picasso.with(viewHolder.profielFoto.getContext()).load(afbeelding).placeholder(R.drawable.ic_launcher_foreground).into(viewHolder.profielFoto);
                 }
 
 
@@ -94,7 +94,7 @@ public void onBindViewHolder (final BerichtenViewHolder viewHolder, int i)
                 viewHolder.berImage.setVisibility(View.INVISIBLE);
             } else {
                 viewHolder.berText.setVisibility(View.INVISIBLE);
-                Picasso.with(viewHolder.profielFoto.getContext()).load(b.getBericht()).placeholder(R.drawable.stanAfb).into(viewHolder.berImage);
+                Picasso.with(viewHolder.profielFoto.getContext()).load(b.getBericht()).placeholder(R.drawable.ic_launcher_foreground).into(viewHolder.berImage);
             }
         }
 

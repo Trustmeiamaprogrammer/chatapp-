@@ -89,7 +89,7 @@ class ProfielActivity extends AppCompatActivity {
                 profielNaam.setText(gebruikersnaam);
                 profielStatus.setText(status);
 
-                Picasso.with(ProfielActivity.this).load(afbeelding).placeholder(R.drawable.StanAfbeelding).into(profielFoto);
+                Picasso.with(ProfielActivity.this).load(afbeelding).placeholder(R.drawable.ic_launcher_foreground).into(profielFoto);
 
                 if(mHuidigGeb.getUid().equals(gebId)){
                     profielWeigerKnop.setEnabled(false);

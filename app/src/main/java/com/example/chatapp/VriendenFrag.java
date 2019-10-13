@@ -109,7 +109,7 @@ public class VriendenFrag extends Fragment {
 
                                         if(i == 0)
                                         {
-                                            Intent profielIntent = new Intent(getContext(), ProfielAcvtivity.class);
+                                            Intent profielIntent = new Intent(getContext(), ProfielActivity.class);
                                             profielIntent.putExtra("gebruikersId", lijstGebId);
                                             startActivity(profielIntent);
                                         }
