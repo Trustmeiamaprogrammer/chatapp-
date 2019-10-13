@@ -11,7 +11,7 @@
         android:id="@+id/gesprek_app_bar"
         layout="@layout/app_bar_layout" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/bericht_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +27,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/gesprek_app_bar"> </android.support.v7.widget.RecyclerView>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
