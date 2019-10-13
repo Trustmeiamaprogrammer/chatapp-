@@ -206,6 +206,8 @@ public class ProfielActivity extends AppCompatActivity {
                                     profielWeigerKnop.setVisibility(View.INVISIBLE);
                                     profielWeigerKnop.setEnabled(false);
 
+
+
                                 }
                             });
 
