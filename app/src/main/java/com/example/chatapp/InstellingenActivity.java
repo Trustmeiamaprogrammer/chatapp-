@@ -84,12 +84,12 @@ public class InstellingenActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String naam = dataSnapshot.child("name").getValue().toString();
+                String naam = dataSnapshot.child("Naam").getValue().toString();
                 // Afbeelding moet nog
-                final String afbeelding = dataSnapshot.child("image").getValue().toString();
-                String status = dataSnapshot.child("status").getValue().toString();
+                final String afbeelding = dataSnapshot.child("Afbeelding").getValue().toString();
+                String status = dataSnapshot.child("Status").getValue().toString();
                 // thumb_afbeelding moet nog
-                String thumb_afbeelding = dataSnapshot.child("thumb_image").getValue().toString();
+                String thumb_afbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
 
                 mNaam.setText(naam);
                 mStatus.setText(status);
@@ -130,7 +130,7 @@ public class InstellingenActivity extends AppCompatActivity {
             String statusInhoud = mStatus.getText().toString();
             // Statusklasse aanmaken
             Intent statusIntent = new Intent(InstellingenActivity.this, StatusActivity.class);
-            statusIntent.putExtra("statusInhoud", statusInhoud);
+            statusIntent.putExtra("StatusInhoud", statusInhoud);
             startActivity(statusIntent);
         }
     });
@@ -139,7 +139,7 @@ public class InstellingenActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Intent gallerijIntet = new Intent();
-            gallerijIntet.setType("afbeelding/*");
+            gallerijIntet.setType("Afbeelding/*");
             gallerijIntet.setAction(Intent.ACTION_GET_CONTENT);
 
             startActivityForResult(Intent.createChooser(gallerijIntet, "Selecteer afbeelding"), GALLERY_PICK);
@@ -183,8 +183,8 @@ public class InstellingenActivity extends AppCompatActivity {
                 final byte[] thumb_byte = baos.toByteArray();
 
                 //Nederlands?
-                StorageReference bestandpad = mAfbeeldingOpslag.child("profile_images").child(huidigeGebId + ".jpg");
-                final StorageReference afbeelding_path = mAfbeeldingOpslag.child("profile_images").child("thumbs").child(huidigeGebId + ".jpg");
+                StorageReference bestandpad = mAfbeeldingOpslag.child("ProfielFotos").child(huidigeGebId + ".jpg");
+                final StorageReference afbeelding_path = mAfbeeldingOpslag.child("ProfielFotos").child("Thumbs").child(huidigeGebId + ".jpg");
 
                 bestandpad.putFile(resultaatUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -201,8 +201,8 @@ public class InstellingenActivity extends AppCompatActivity {
                                     if(thumb_task.isSuccessful()){
 
                                         Map update_hashMap = new HashMap();
-                                        update_hashMap.put("afbeelding", download_url);
-                                        update_hashMap.put("thumb_afbeelding", thumb_downloadUrl);
+                                        update_hashMap.put("Afbeelding", download_url);
+                                        update_hashMap.put("ThumbAfb", thumb_downloadUrl);
 
                                         mGebDatabase.updateChildren(update_hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override

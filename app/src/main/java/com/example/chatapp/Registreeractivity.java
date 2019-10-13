@@ -118,8 +118,8 @@ public class Registreeractivity extends AppCompatActivity {
                             gebruikersMap.put("Naam", gebruikersnaam);
                             gebruikersMap.put("Status", "Hallo, ik gebruik Chatapp.");
                             gebruikersMap.put("Afbeelding", "default");
-                            gebruikersMap.put("Afbeelding_thumb", "default");
-                            gebruikersMap.put("Apparaat_token", apparaatToken);
+                            gebruikersMap.put("ThumbAfb", "default");
+                            gebruikersMap.put("AppTkn", apparaatToken);
                             mDatabase.setValue(gebruikersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
