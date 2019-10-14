@@ -3,15 +3,19 @@ package com.example.chatapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
@@ -21,12 +25,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GebruikersActivity extends AppCompatActivity {
 
-    // ID van XML nog
+
 
     private Toolbar mToolbar;
     private RecyclerView mGebruikerslijst;
     private DatabaseReference gebruikersRef;
     private LinearLayoutManager mLayoutManager;
+
 
 
     @Override
@@ -48,15 +53,22 @@ public class GebruikersActivity extends AppCompatActivity {
 
     protected void onStart() {
         super.onStart();
+        FirebaseRecyclerOptions<Gebruikers> options=
+                new FirebaseRecyclerOptions.Builder<Gebruikers>()
+                .setQuery(gebruikersRef, Gebruikers.class)
+                .setLifecycleOwner(this)
+                .build();
 
-        FirebaseRecyclerAdapter<Gebruikers, GebruikersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Gebruikers, GebruikersViewHolder>(
-                Gebruikers.class,
-                R.layout.gebruikers_layout,
-                GebruikersViewHolder.class,
-                gebruikersRef
-        ) {
+
+        FirebaseRecyclerAdapter firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Gebruikers, GebruikersViewHolder>(options) {
+            @NonNull
             @Override
-            protected void populateViewHolder(GebruikersViewHolder gebruikersViewHolder, Gebruikers gebruikers, int position) {
+            public GebruikersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+                return new GebruikersViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.gebruikers_layout, parent, false));
+            }
+            @Override
+            protected void onBindViewHolder(@NonNull GebruikersViewHolder gebruikersViewHolder,int position, @NonNull Gebruikers gebruikers) {
                 gebruikersViewHolder.setGebruikersnaam(gebruikers.getNaam());
                 gebruikersViewHolder.setGebStatus(gebruikers.getStatus());
                 gebruikersViewHolder.setGebAfbeelding(gebruikers.getThumbAfbeelding(), getApplicationContext());
@@ -87,7 +99,7 @@ mGebruikerslijst.setAdapter(firebaseRecyclerAdapter);
             mView = itemView;
         }
 
-        public void setGebruikersnaam(String naam) {
+        public void setGebruikersnaam(String naam){
             TextView gebruikersnaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
             gebruikersnaamView.setText(naam);
 

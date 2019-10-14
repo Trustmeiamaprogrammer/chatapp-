@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -85,16 +86,27 @@ public class GesprekkenFrag extends Fragment {
 
     public void onStart() {
         super.onStart();
+
+        FirebaseRecyclerOptions<Gesprek> options =
+                new FirebaseRecyclerOptions.Builder<Gesprek>()
+                .setQuery(mGesDatabase,Gesprek.class)
+                .setLifecycleOwner(this)
+                .build();
+
+
         Query gesprekkenQuery = mGesDatabase.orderByChild("timestamp");
-        FirebaseRecyclerAdapter<Gesprek, GesprekViewHolder> gespAdapter = new FirebaseRecyclerAdapter<Gesprek, GesprekViewHolder>(
-                Gesprek.class,
-                R.layout.gebruikers_layout,
-                GesprekViewHolder.class,
-                gesprekkenQuery
-        ) {
+        FirebaseRecyclerAdapter gespAdapter = new FirebaseRecyclerAdapter<Gesprek, GesprekViewHolder>(options) {
+
+            @NonNull
             @Override
-            protected void populateViewHolder(final GesprekViewHolder gesprekViewHolder, final Gesprek gesprek, int i) {
-                final String lijstGebId = getRef(i).getKey();
+            public GesprekViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+                return new GesprekViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.gebruikers_layout, parent, false));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull final GesprekViewHolder gesprekViewHolder, int position, @NonNull final Gesprek gesprek) {
+                final String lijstGebId = getRef(position).getKey();
                 Query laatstBerichtQuery = mBerDatabase.child(lijstGebId).limitToLast(1);
 
                 laatstBerichtQuery.addChildEventListener(new ChildEventListener() {

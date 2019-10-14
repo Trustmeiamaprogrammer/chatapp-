@@ -7,9 +7,11 @@
     tools:context=".VerzoekFrag">
 
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/verzoeklijst"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/verzoekPagina" />
+        android:layout_height="match_parent">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </FrameLayout>

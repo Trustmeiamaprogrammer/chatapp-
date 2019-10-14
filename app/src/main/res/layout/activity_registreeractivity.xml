@@ -85,6 +85,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="@string/maak_account"
+        android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/regWachtwoord"

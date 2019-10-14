@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -71,16 +72,26 @@ public class VriendenFrag extends Fragment {
     public void onStart()
     {
         super.onStart();
-        FirebaseRecyclerAdapter<Vrienden, VriendenViewHolder> vriendenRecyclerViewAdapter = new FirebaseRecyclerAdapter<Vrienden, VriendenViewHolder>(
-            Vrienden.class,
-            R.layout.gebruikers_layout,
-            VriendenViewHolder.class,
-            vriendenDatabase
-            ) {
+
+        FirebaseRecyclerOptions<Vrienden> options=
+                new FirebaseRecyclerOptions.Builder<Vrienden>()
+                .setQuery(vriendenDatabase, Vrienden.class)
+                .setLifecycleOwner(this)
+                .build();
+
+        FirebaseRecyclerAdapter vriendenRecyclerViewAdapter = new FirebaseRecyclerAdapter<Vrienden, VriendenViewHolder>(options) {
+
+            @NonNull
             @Override
-            protected void populateViewHolder( final VriendenViewHolder vriendenViewHolder, final Vrienden vrienden, int i) {
+            public VriendenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+                return new VriendenViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.gebruikers_layout, parent, false));
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull final VriendenViewHolder vriendenViewHolder, int position,  @NonNull final Vrienden vrienden) {
                 vriendenViewHolder.setDatum(vrienden.getDatum());
-                final String lijstGebId = getRef(i).getKey();
+                final String lijstGebId = getRef(position).getKey();
                 gebruikersRef.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -30,7 +30,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
     implementation 'com.google.firebase:firebase-core:17.2.0'
     implementation 'com.google.firebase:firebase-storage:16.0.3'
-    implementation 'com.firebaseui:firebase-ui-database:1.2.0'
+    implementation 'com.firebaseui:firebase-ui-database:4.3.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
@@ -41,6 +41,7 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.5.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
     implementation 'id.zelory:compressor:2.0.0'
+
 
 }
 apply plugin: 'com.google.gms.google-services'

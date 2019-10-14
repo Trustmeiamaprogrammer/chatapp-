@@ -1,8 +1,9 @@
 package com.example.chatapp;
 
+import android.app.Application;
 import android.content.Context;
 
-class GetTimeAgo {
+class GetTimeAgo extends Application {
 
     private static final int milliSeconden = 1000;
     private static final int milliMinuut = 60 * milliSeconden;

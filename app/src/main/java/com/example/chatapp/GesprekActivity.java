@@ -102,7 +102,7 @@ public class GesprekActivity extends AppCompatActivity {
         mGesVoegtoeKnop = (ImageButton) findViewById(R.id.gesprekToevoegKnop);
         mGesZendKnop = (ImageButton) findViewById(R.id.berichtVerzendKnop);
         mGesBerView = (EditText) findViewById(R.id.gesprek_berichten_view);
-        // Onsecuur hier!
+
         mAdapter = new BerichtenAdapter(berichtenlist);
 
         mBerlijst = (RecyclerView) findViewById(R.id.berichten_lijst);
