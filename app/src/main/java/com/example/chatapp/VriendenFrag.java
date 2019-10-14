@@ -128,6 +128,7 @@ public class VriendenFrag extends Fragment {
                                         if (i == 1){
                                             Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
                                             gesIntent.putExtra("GebId", lijstGebId);
+                                            gesIntent.putExtra("GebNaam", naamGeb);
                                             startActivity(gesIntent);
                                         }
 

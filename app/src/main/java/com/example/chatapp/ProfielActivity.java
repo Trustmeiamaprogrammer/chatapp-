@@ -80,7 +80,7 @@ public class ProfielActivity extends AppCompatActivity {
 
         gebDatabase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String gebruikersnaam = dataSnapshot.child("Naam").getValue().toString();
                 String status = dataSnapshot.child("Status").getValue().toString();
                 String afbeelding = dataSnapshot.child("Afbeelding").getValue().toString();

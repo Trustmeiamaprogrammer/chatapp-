@@ -83,6 +83,7 @@ public class GesprekActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         mHoofdRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -122,7 +123,7 @@ public class GesprekActivity extends AppCompatActivity {
 
         mHoofdRef.child("Gebruikers").child(mGesGebruiker).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 String online = dataSnapshot.child("Online").getValue().toString();
                 String image = dataSnapshot.child("Afbeelding").getValue().toString();
 

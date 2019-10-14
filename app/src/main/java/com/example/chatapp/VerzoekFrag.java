@@ -94,14 +94,14 @@ FirebaseRecyclerOptions<Verzoeken> options =
             mGebruikerDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    final String gebruikersnaam = dataSnapshot.child("Naam").getValue().toString();
+                    final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
                     String gebAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
 
                     if (dataSnapshot.hasChild("Online")) {
                         String gebOnline = dataSnapshot.child("Online").getValue().toString();
                         verzoekViewHolder.setGebruikerOnline(gebOnline);
                     }
-                    verzoekViewHolder.setGebruikersnaam(gebruikersnaam);
+                    verzoekViewHolder.setGebruikersnaam(naamGeb);
                     verzoekViewHolder.setAfbeelding(gebAfbeelding, getContext());
 
                     verzoekViewHolder.mView.setOnClickListener(new View.OnClickListener() {
