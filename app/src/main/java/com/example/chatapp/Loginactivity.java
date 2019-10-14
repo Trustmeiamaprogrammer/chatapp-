@@ -91,7 +91,7 @@ public class Loginactivity extends AppCompatActivity {
                     String huidigeGebruikersId = mAuth.getCurrentUser().getUid();
                     String apparaatToken = FirebaseInstanceId.getInstance().getToken();
 
-                    mGebruikersDatabase.child(huidigeGebruikersId).child("Apparaat_token").setValue(apparaatToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mGebruikersDatabase.child(huidigeGebruikersId).child("AppTkn").setValue(apparaatToken).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Intent hoofdIntent = new Intent(Loginactivity.this, MainActivity.class);
@@ -108,7 +108,7 @@ public class Loginactivity extends AppCompatActivity {
                 {
                     System.out.println( "DE FOUT IS: >>>>>>>>> " + task.getException());
                     mLogProgress.hide();
-                    Toast.makeText(Loginactivity.this, "Fouuut", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Loginactivity.this, "Het inloggen is mislukt", Toast.LENGTH_LONG).show();
                 }
             }
         });

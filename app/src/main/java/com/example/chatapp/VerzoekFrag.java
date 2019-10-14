@@ -108,7 +108,7 @@ FirebaseRecyclerOptions<Verzoeken> options =
                         @Override
                         public void onClick(View view) {
                             Intent profielIntent = new Intent(getContext(), ProfielActivity.class);
-                            profielIntent.putExtra("gebId", lijstGebId);
+                            profielIntent.putExtra("GebId", lijstGebId);
                             startActivity(profielIntent);
                         }
 

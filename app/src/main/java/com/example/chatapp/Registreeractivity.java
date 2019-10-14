@@ -37,8 +37,9 @@ public class Registreeractivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
     private ProgressDialog mRegProgress;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference mDatabase = database.getReference();
 
 
 
@@ -120,6 +121,7 @@ public class Registreeractivity extends AppCompatActivity {
                             gebruikersMap.put("Afbeelding", "default");
                             gebruikersMap.put("ThumbAfb", "default");
                             gebruikersMap.put("AppTkn", apparaatToken);
+                            gebruikersMap.put("Online", "true");
                             mDatabase.setValue(gebruikersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -141,7 +143,7 @@ public class Registreeractivity extends AppCompatActivity {
                 else
                 {
                     mRegProgress.hide();
-                    Toast.makeText(Registreeractivity.this, "Fout", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Registreeractivity.this, "Mislukt", Toast.LENGTH_LONG).show();
                 }
             }
         });
