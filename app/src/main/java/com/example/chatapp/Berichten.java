@@ -1,6 +1,6 @@
 package com.example.chatapp;
 
-class Berichten {
+public class Berichten {
 
     private String bericht, type;
     private long tijd;
