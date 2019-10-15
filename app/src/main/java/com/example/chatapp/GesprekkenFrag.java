@@ -143,7 +143,7 @@ public class GesprekkenFrag extends Fragment {
                     public void onDataChange( DataSnapshot dataSnapshot) {
                         final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
                         // THUMB IMAGE REF NIET ZEKER
-                        String gebThub = dataSnapshot.child("ThumbImage").toString();
+                        String gebThub = dataSnapshot.child("ThumbAfb").toString();
 
                         if (dataSnapshot.hasChild("Online")) {
                             String gebOnline = dataSnapshot.child("Online").getValue().toString();
@@ -158,7 +158,7 @@ public class GesprekkenFrag extends Fragment {
                                 Intent gesprekIntent  = new Intent(getContext(), GesprekActivity.class);
                                 // geb_id juist???
                                 gesprekIntent.putExtra("GebId", lijstGebId);
-                                gesprekIntent.putExtra("GebNaam", naamGeb);
+                                gesprekIntent.putExtra("Naam", naamGeb);
                                 startActivity(gesprekIntent);
                             }
                         });

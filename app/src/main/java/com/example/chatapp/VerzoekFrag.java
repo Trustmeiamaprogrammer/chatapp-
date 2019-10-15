@@ -72,7 +72,7 @@ public class VerzoekFrag extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-FirebaseRecyclerOptions<Verzoeken> options =
+        FirebaseRecyclerOptions<Verzoeken> options =
         new FirebaseRecyclerOptions.Builder<Verzoeken>()
         .setQuery(mVerzoekDatabase, Verzoeken.class)
         .setLifecycleOwner(this)

@@ -16,8 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.squareup.picasso.Picasso;
 
 
@@ -26,11 +29,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GebruikersActivity extends AppCompatActivity {
 
 
-
+    private FirebaseAuth mAuth;
     private Toolbar mToolbar;
     private RecyclerView mGebruikerslijst;
+    private FirebaseUser mHuidigeGebruiker;
     private DatabaseReference gebruikersRef;
-    private LinearLayoutManager mLayoutManager;
+    private DatabaseReference mGebruikerData;
+
 
 
 
@@ -39,20 +44,31 @@ public class GebruikersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gebruikers);
 
+        mAuth = FirebaseAuth.getInstance();
+        mHuidigeGebruiker = mAuth.getCurrentUser();
+        String huidigeId = mHuidigeGebruiker.getUid();
+        mGebruikerData = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidigeId);
+
         mToolbar = (Toolbar) findViewById(R.id.gebruikersAppBar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Gebruikers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         gebruikersRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
-        mLayoutManager = new LinearLayoutManager(this);
-        mGebruikerslijst = (RecyclerView) findViewById(R.id.gebruikersLijst);
+
+        mGebruikerslijst = findViewById(R.id.gebruikersLijst);
         mGebruikerslijst.setHasFixedSize(true);
-        mGebruikerslijst.setLayoutManager(mLayoutManager);
+        mGebruikerslijst.setLayoutManager(new LinearLayoutManager(this));
 
     }
-
+    @Override
     protected void onStart() {
         super.onStart();
+        if (mHuidigeGebruiker == null){
+            sendToStart();
+        } else{
+            mGebruikerData.child("Online").setValue("true");
+        }
+
         FirebaseRecyclerOptions<Gebruikers> options=
                 new FirebaseRecyclerOptions.Builder<Gebruikers>()
                 .setQuery(gebruikersRef, Gebruikers.class)
@@ -90,22 +106,37 @@ mGebruikerslijst.setAdapter(firebaseRecyclerAdapter);
 
     }
 
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        if(mHuidigeGebruiker != null){
+            gebruikersRef.child("Online").setValue(ServerValue.TIMESTAMP);
+        }
+    }
+
+    private void sendToStart(){
+        Intent startIntent = new Intent(GebruikersActivity.this, Startactivity.class);
+        startActivity(startIntent);
+        finish();
+    }
+
     public static class GebruikersViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
 
-        public GebruikersViewHolder(View itemView) {
+        public GebruikersViewHolder(@NonNull View itemView) {
             super(itemView);
             mView = itemView;
         }
 
         public void setGebruikersnaam(String naam){
-            TextView gebruikersnaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
+            TextView gebruikersnaamView = mView.findViewById(R.id.naamGebruiker);
             gebruikersnaamView.setText(naam);
 
         }
         public void setGebStatus(String status){
-            TextView gebStatusView = (TextView) mView.findViewById(R.id.gebruikerStatus);
+            TextView gebStatusView =  mView.findViewById(R.id.gebruikerStatus);
             gebStatusView.setText(status);
 
 
