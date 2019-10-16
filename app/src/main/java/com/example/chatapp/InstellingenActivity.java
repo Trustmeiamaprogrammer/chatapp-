@@ -35,6 +35,7 @@ import id.zelory.compressor.Compressor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -94,7 +95,6 @@ public class InstellingenActivity extends AppCompatActivity {
 
                 mNaam.setText(naam);
                 mStatus.setText(status);
-                //klopt "default?"
                 if(!afbeelding.equals("default")) {
 
                     //Picasso.with(InstellingenActivity.this).load(afbeelding).placeholder(R.mipmap.ic_launcher_round).into(mToonAfbeelding);
@@ -196,89 +196,83 @@ public class InstellingenActivity extends AppCompatActivity {
 
                 try {
 
-                Uri resultaatUri = resultaat.getUri();
-                final File afbeelding_pad = new File(resultaatUri.getPath());
-                String huidigeGebId = mHuidigeGebruiker.getUid();
+                    Uri resultaatUri = resultaat.getUri();
+                    final File afbeelding_pad = new File(resultaatUri.getPath());
+                    String huidigeGebId = mHuidigeGebruiker.getUid();
 
-                Bitmap thumb_bitmap = new Compressor(this)
-                        .setMaxWidth(200)
-                        .setMaxHeight(200)
-                        .setQuality(75)
-                        .compressToBitmap(afbeelding_pad);
+                    Bitmap thumb_bitmap = new Compressor(this)
+                            .setMaxWidth(200)
+                            .setMaxHeight(200)
+                            .setQuality(75)
+                            .compressToBitmap(afbeelding_pad);
 
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                final byte[] thumb_byte = baos.toByteArray();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    final byte[] thumb_byte = baos.toByteArray();
 
-                //Nederlands?
-                final StorageReference bestandpad = mAfbeeldingOpslag.child("ProfielFotos").child(huidigeGebId + ".jpg");
-                final StorageReference afbeelding_path = mAfbeeldingOpslag.child("ProfielFotos").child("Thumbs").child(huidigeGebId + ".jpg");
 
-                final UploadTask uploadTask = bestandpad.putFile(resultaatUri);
+                    final StorageReference bestandpad = mAfbeeldingOpslag.child("ProfielFotos").child(huidigeGebId + ".jpg");
+                    final StorageReference afbeelding_path = mAfbeeldingOpslag.child("ProfielFotos").child("Thumbs").child(huidigeGebId + ".jpg");
 
-                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                final String downloadURL = uri.toString();
-                                final UploadTask uploadTask1 = afbeelding_path.putBytes(thumb_byte);
-                            }
+                    final UploadTask uploadTask = bestandpad.putFile(resultaatUri);
 
-                            }
-                        });
-                    }
-                })
-
-                bestandpad.putFile(resultaatUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if(task.isSuccessful()){
-                            final String download_url = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
-                            UploadTask uploadTaak = afbeelding_path.putBytes(thumb_byte);
-
-                            uploadTaak.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
-                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task) {
-                                    String thumb_downloadUrl = thumb_task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+                                public void onSuccess(Uri uri) {
+                                    final String downloadURL = uri.toString();
+                                    final UploadTask uploadTask1 = afbeelding_path.putBytes(thumb_byte);
 
-                                    if(thumb_task.isSuccessful()){
+                                    uploadTask1.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot thumbTask) {
 
-                                        Map update_hashMap = new HashMap();
-                                        update_hashMap.put("Afbeelding", download_url);
-                                        update_hashMap.put("ThumbAfb", thumb_downloadUrl);
+                                            thumbTask.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri thumbUri) {
 
-                                        mGebDatabase.updateChildren(update_hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
+                                                    String thumbDownloadUrl = thumbUri.toString();
 
-                                                if(task.isSuccessful()){
-                                                    mProcessDialog.dismiss();
-                                                    Toast.makeText(InstellingenActivity.this, "Succesvol upload", Toast.LENGTH_LONG).show();
+                                                    Map updateHashMap = new HashMap();
+                                                    updateHashMap.put("Afbeelding", downloadURL);
+                                                    updateHashMap.put("Thumb", thumbDownloadUrl);
+
+                                                    mGebDatabase.updateChildren(updateHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                mProcessDialog.dismiss();
+
+                                                                Toast.makeText(InstellingenActivity.this, "Succesvolle upload", Toast.LENGTH_LONG).show();
+                                                            } else {
+                                                                mProcessDialog.dismiss();
+                                                                Toast.makeText(InstellingenActivity.this, "Fout bij uploaden", Toast.LENGTH_SHORT).show();
+                                                            }
+
+                                                        }
+                                                    });
                                                 }
-
-                                            }
-                                        });
-
-                                    } else {
-                                        Toast.makeText(InstellingenActivity.this, "Error in uploading thumnail", Toast.LENGTH_LONG).show();
-                                        mProcessDialog.dismiss();
-                                    }
+                                            });
+                                        }
+                                    });
                                 }
                             });
-                        } else {
-                            Toast.makeText(InstellingenActivity.this, "Error in uploading", Toast.LENGTH_LONG).show();
-                            mProcessDialog.dismiss();
                         }
-                    }
-                });
-            } else if (resultaatCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = resultaat.getError();
-
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }
-    }
+            else if (resultaatCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception fout = resultaat.getError();
+            }
+
+        }}
+
+
+
     public static String random(){
         Random generator = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();
