@@ -93,8 +93,8 @@ public class InstellingenActivity extends AppCompatActivity {
                 String status = dataSnapshot.child("Status").getValue().toString();
                 String thumbAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
 
-                mNaam.setText(naam);
-                mStatus.setText(status);
+               mNaam.setText(naam);
+               mStatus.setText(status);
                 if(!afbeelding.equals("default")) {
 
                     //Picasso.with(InstellingenActivity.this).load(afbeelding).placeholder(R.mipmap.ic_launcher_round).into(mToonAfbeelding);

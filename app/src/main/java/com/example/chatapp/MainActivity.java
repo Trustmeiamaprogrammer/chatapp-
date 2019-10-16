@@ -45,12 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
         huidigGeb = mAuth.getCurrentUser();
 
-        String huidigGebId = huidigGeb.getUid();
+
 
         if (mAuth.getCurrentUser() != null)
         {
+            String huidigGebId = huidigGeb.getUid();
             mGebruikerRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidigGebId);
         }
+
+
 
         // Tabbladen
         mViewpager =  findViewById(R.id.main_view);

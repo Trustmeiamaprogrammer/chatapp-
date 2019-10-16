@@ -42,11 +42,13 @@ class Gebruikers {
         this.status = status;
     }
 
+    public void setThumbAfbeelding(String thumbAfbeelding) {
+        this.thumbAfbeelding = thumbAfbeelding;
+    }
+
     public String getThumbAfbeelding() {
         return thumbAfbeelding;
     }
 
-    public void setThumbAfbeelding(String thumbAfbeelding) {
-        this.thumbAfbeelding = thumbAfbeelding;
-    }
+
 }
