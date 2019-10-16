@@ -134,7 +134,7 @@ public class GesprekActivity extends AppCompatActivity {
                 final String image = dataSnapshot.child("Afbeelding").getValue().toString();
 
                 if(!image.equals("default")){
-                    Picasso.with(GesprekActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.StanAfb)
+                    Picasso.with(GesprekActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.ic_launcher_foreground)
                      .into(mProfielFoto, new Callback() {
                          @Override
                          public void onSuccess() {
@@ -144,7 +144,7 @@ public class GesprekActivity extends AppCompatActivity {
                          @Override
                          public void onError() {
                              Picasso.with(GesprekActivity.this).load(image)
-                                     .placeholder(R.drawable.StanAfb).into(mProfielFoto);
+                                     .placeholder(R.drawable.ic_launcher_foreground).into(mProfielFoto);
                          }
                      });           //Of StandAfb
                 }

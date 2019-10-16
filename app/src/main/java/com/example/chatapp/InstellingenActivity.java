@@ -226,10 +226,14 @@ public class InstellingenActivity extends AppCompatActivity {
                                 final UploadTask uploadTask1 = afbeelding_path.putBytes(thumb_byte);
                             }
 
-                            }
-                        });
-                    }
-                })
+                            });
+                        }
+                });
+
+                    } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
                 bestandpad.putFile(resultaatUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -278,7 +282,7 @@ public class InstellingenActivity extends AppCompatActivity {
 
             }
         }
-    }
+
     public static String random(){
         Random generator = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();
