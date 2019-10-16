@@ -169,7 +169,6 @@ public class VriendenFrag extends Fragment {
         }
         public void setDatum(String datum) {
             TextView gebStatusView =  mView.findViewById(R.id.gebruikerStatus);
-            gebStatusView.setText(datum);
         }
 
         public void setNaam(String naam){
