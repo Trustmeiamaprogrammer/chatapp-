@@ -29,11 +29,11 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
     private DatabaseReference berDatabase;
     private FirebaseAuth mAuth;
 
-//    private LinearLayout layout;
-//
-//    public TextView berText;
-//    public TextView gebruikersnaam;
-//    public ImageView berImage;
+private LinearLayout layout;
+public TextView berText;
+public CircleImageView profielFoto;
+public TextView gebruikersnaam;
+public ImageView berImage;
 
 
 
@@ -52,7 +52,7 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
 
     public class BerichtenViewHolder extends RecyclerView.ViewHolder {
 
-        //public CircleImageView profielFoto;
+        public CircleImageView profielFoto;
 
        public LinearLayout linksBerichtLayout;
        public LinearLayout rechtsBerichtLayout;
@@ -87,9 +87,9 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
 
             mAuth = FirebaseAuth.getInstance();
             final String gebId = mAuth.getCurrentUser().getUid();
-            final Berichten b = berLijst.get(position);
-            String vanGebruiker = b.getVan();
-            final String berType = b.getType();
+            final Berichten berDN = berLijst.get(position);
+            String vanGebruiker = berDN.getVan();
+            final String berType = berDN.getType();
 
             gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(vanGebruiker);
             gebDatabase.addValueEventListener(new ValueEventListener() {
@@ -105,8 +105,8 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                     if (dataSnapshot.getKey().equals(gebId)) {
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.VISIBLE);
 
-                        if (berType.equals("Text")) {
-                            viewHolder.rechtsBerichtTextview.setText(b.getBericht());
+                        if (berType.equals("Tekst")) {
+                            viewHolder.rechtsBerichtTextview.setText(berDN.getBericht());
 
                         }
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.GONE);

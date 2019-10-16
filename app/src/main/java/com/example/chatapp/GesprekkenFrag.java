@@ -63,24 +63,17 @@ public class GesprekkenFrag extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        // Inflate the layout for this fragment
         mMainView = inflater.inflate(R.layout.fragment_berichten, container, false);
         mGesLijst = (RecyclerView) mMainView.findViewById(R.id.ges_list);
         mAuth = FirebaseAuth.getInstance();
         mHuidigGebId = mAuth.getCurrentUser().getUid();
-        mGesDatabase = FirebaseDatabase.getInstance().getReference().child("Gesprekken").child(mHuidigGebId);
+        mGesDatabase = FirebaseDatabase.getInstance().getReference().child("Gesprek").child(mHuidigGebId);
         mGesDatabase.keepSynced(true);
         mGebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
-
-        mBerDatabase = FirebaseDatabase.getInstance().getReference().child("Berichten").child(mHuidigGebId);
         mGebDatabase.keepSynced(true);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
-
         mGesLijst.setHasFixedSize(true);
-        mGesLijst.setLayoutManager(linearLayoutManager);
+        mGesLijst.setLayoutManager(new LinearLayoutManager(getContext()));
         return mMainView;
     }
 
@@ -89,77 +82,49 @@ public class GesprekkenFrag extends Fragment {
 
         FirebaseRecyclerOptions<Gesprek> options =
                 new FirebaseRecyclerOptions.Builder<Gesprek>()
-                .setQuery(mGesDatabase,Gesprek.class)
-                .setLifecycleOwner(this)
-                .build();
+                        .setQuery(mGesDatabase, Gesprek.class)
+                        .setLifecycleOwner(this)
+                        .build();
 
 
-        Query gesprekkenQuery = mGesDatabase.orderByChild("timestamp");
         FirebaseRecyclerAdapter gespAdapter = new FirebaseRecyclerAdapter<Gesprek, GesprekViewHolder>(options) {
-
             @NonNull
             @Override
-            public GesprekViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+            public GesprekViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 return new GesprekViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.gebruikers_layout, parent, false));
+                        .inflate(R.layout.gebruikers_layout, parent, false));
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final GesprekViewHolder gesprekViewHolder, int position, @NonNull final Gesprek gesprek) {
+
+                gesprekViewHolder.setDatum(gesprek.getDatum());
                 final String lijstGebId = getRef(position).getKey();
-                Query laatstBerichtQuery = mBerDatabase.child(lijstGebId).limitToLast(1);
-
-                laatstBerichtQuery.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        String data = dataSnapshot.child("Berichten").getValue().toString();
-                        GesprekViewHolder.setBericht(data, gesprek.isGezien());
-
-                    }
-
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
 
                 mGebDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange( DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
-                        // THUMB IMAGE REF NIET ZEKER
-                        String gebThub = dataSnapshot.child("ThumbAfb").toString();
+                        String gebThumb = dataSnapshot.child("ThumbAfb").getValue().toString();
 
                         if (dataSnapshot.hasChild("Online")) {
                             String gebOnline = dataSnapshot.child("Online").getValue().toString();
-                            GesprekViewHolder.setGebOnline(gebOnline);
-                        }
-                        GesprekViewHolder.setNaam(naamGeb);
-                        GesprekViewHolder.setGebAfbeelding(gebThub, getContext());
 
-                        GesprekViewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            gesprekViewHolder.setGebOnline(gebOnline);
+                        }
+
+                        gesprekViewHolder.setNaam(naamGeb);
+                        gesprekViewHolder.setGebAfbeelding(gebThumb, getContext());
+
+
+                        gesprekViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View view) {
-                                Intent gesprekIntent  = new Intent(getContext(), GesprekActivity.class);
-                                // geb_id juist???
-                                gesprekIntent.putExtra("GebId", lijstGebId);
-                                gesprekIntent.putExtra("Naam", naamGeb);
-                                startActivity(gesprekIntent);
+                            public void onClick(View v) {
+                                Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
+
+                                gesIntent.putExtra("GebId", lijstGebId);
+                                gesIntent.putExtra("NaamGeb", naamGeb);
+                                startActivity(gesIntent);
                             }
                         });
                     }
@@ -171,31 +136,27 @@ public class GesprekkenFrag extends Fragment {
                 });
 
             }
-
-
         };
 
         mGesLijst.setAdapter(gespAdapter);
     }
 
-    public static class GesprekViewHolder extends RecyclerView.ViewHolder {
-        static View mView;
+    public interface OnFragmentInteractionListener {
 
+    }
+
+    public static class GesprekViewHolder extends RecyclerView.ViewHolder {
+        private static View mView;
         public GesprekViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mView = itemView;
         }
 
-        public static void setBericht(String bericht, boolean isGeien) {
-            TextView gebStatusView = (TextView) mView.findViewById(R.id.gebruikerStatus);
-            gebStatusView.setText(bericht);
-            if (!isGeien) {
-                gebStatusView.setTypeface(gebStatusView.getTypeface(), Typeface.BOLD);
-            } else {
-                gebStatusView.setTypeface(gebStatusView.getTypeface(), Typeface.NORMAL);
-            }
+        public void setDatum(String datum) {
+            TextView gebStatusView = mView.findViewById(R.id.gebruikerStatus);
         }
+
 
         public static void setNaam(String naam) {
             TextView gebNaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
@@ -203,21 +164,18 @@ public class GesprekkenFrag extends Fragment {
         }
 
         public static void setGebAfbeelding(String thumbImage, Context ctx) {
-            CircleImageView gebAfbeeldingView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
+            CircleImageView gebAfbeeldingView = mView.findViewById(R.id.GebruikerAfbeelding);
             Picasso.with(ctx).load(thumbImage).placeholder(R.mipmap.ic_launcher_round).into(gebAfbeeldingView);
         }
 
         public static void setGebOnline(String onlineStatus) {
-            ImageView gebOnlineView = (ImageView) mView.findViewById(R.id.online_icon);
+            ImageView gebOnlineView = mView.findViewById(R.id.online_icon);
 
             if (onlineStatus.equals("true")) {
                 gebOnlineView.setVisibility(View.VISIBLE);
             } else {
                 gebOnlineView.setVisibility(View.INVISIBLE);
-
-
             }
         }
-
     }
 }

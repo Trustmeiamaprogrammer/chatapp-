@@ -2,8 +2,8 @@ package com.example.chatapp;
 
 public class Berichten {
 
-    public final static String MSG_TYPE_SENT = "MSG_TYPE_SENT";
-    public final static String MSG_TYPE_RECEIVED = "MSG_TYPE_RECEIVED";
+    public final static String MSG_TYPE_SENT = "Verzonden";
+    public final static String MSG_TYPE_RECEIVED = "Ontvangen";
 
     private String bericht, type;
     private long tijd;
@@ -11,30 +11,34 @@ public class Berichten {
 
     private String van;
 
-    public Berichten (String van)
+    public Berichten(String van)
     {
         this.van = van;
     }
-    public String getVan() {
 
+    public String getVan() {
         return van;
     }
 
     public void setVan(String van) {
-
         this.van = van;
     }
 
-    public Berichten()
-    {
+    public Berichten(){
 
     }
+
+
+
     public Berichten(String bericht, String type, long tijd, boolean gezien) {
         this.bericht = bericht;
         this.type = type;
         this.tijd = tijd;
         this.gezien = gezien;
     }
+
+
+
 
     public String getBericht() {
         return bericht;
@@ -67,10 +71,6 @@ public class Berichten {
     public void setGezien(boolean gezien) {
         this.gezien = gezien;
     }
-
-
-
-
 
 
 

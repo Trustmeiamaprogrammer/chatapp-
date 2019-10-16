@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,6 +42,8 @@ import java.util.Random;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InstellingenActivity extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
     private DatabaseReference mGebDatabase;
     private FirebaseUser mHuidigeGebruiker;
 
@@ -64,15 +68,14 @@ public class InstellingenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instellingen);
         mToonAfbeelding = (CircleImageView) findViewById(R.id.instelling_afbeelding);
-        // ID aanmaken
         mNaam = (TextView) findViewById(R.id.instellingenNaam);
         mStatus = (TextView) findViewById(R.id.intellingenStatus);
 
-        // ID aanmaken
         mStatusKnop = (Button) findViewById(R.id.instellingenStatusKnop);
         mAfbeeldingKnop = (Button) findViewById(R.id.instellingenAfbeeldingKnop);
 
         mAfbeeldingOpslag = FirebaseStorage.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
         mHuidigeGebruiker = FirebaseAuth.getInstance().getCurrentUser();
 
         String huidigeGebUid = mHuidigeGebruiker.getUid();
@@ -126,7 +129,6 @@ public class InstellingenActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             String statusInhoud = mStatus.getText().toString();
-            // Statusklasse aanmaken
             Intent statusIntent = new Intent(InstellingenActivity.this, StatusActivity.class);
             statusIntent.putExtra("StatusInhoud", statusInhoud);
             startActivity(statusIntent);
@@ -143,6 +145,32 @@ public class InstellingenActivity extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(gallerijIntet, "Selecteer afbeelding"), GALLERY_PICK);
         }
     });
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if (mHuidigeGebruiker == null){
+            sendToStart();
+        }
+
+        else{
+            mGebDatabase.child("Online").setValue("true");
+        }
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if(mHuidigeGebruiker != null){
+            mGebDatabase.child("Online").setValue(ServerValue.TIMESTAMP);
+        }
+    }
+
+    private void sendToStart(){
+        Intent startIntent = new Intent(InstellingenActivity.this, Startactivity.class);
+        startActivity(startIntent);
+        finish();
     }
     @Override
     protected void onActivityResult(int verzoekCode, int resultaatCode, Intent data)
@@ -166,6 +194,8 @@ public class InstellingenActivity extends AppCompatActivity {
                 mProcessDialog.setCanceledOnTouchOutside(false);
                 mProcessDialog.show();
 
+                try {
+
                 Uri resultaatUri = resultaat.getUri();
                 final File afbeelding_pad = new File(resultaatUri.getPath());
                 String huidigeGebId = mHuidigeGebruiker.getUid();
@@ -181,8 +211,25 @@ public class InstellingenActivity extends AppCompatActivity {
                 final byte[] thumb_byte = baos.toByteArray();
 
                 //Nederlands?
-                StorageReference bestandpad = mAfbeeldingOpslag.child("ProfielFotos").child(huidigeGebId + ".jpg");
+                final StorageReference bestandpad = mAfbeeldingOpslag.child("ProfielFotos").child(huidigeGebId + ".jpg");
                 final StorageReference afbeelding_path = mAfbeeldingOpslag.child("ProfielFotos").child("Thumbs").child(huidigeGebId + ".jpg");
+
+                final UploadTask uploadTask = bestandpad.putFile(resultaatUri);
+
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                final String downloadURL = uri.toString();
+                                final UploadTask uploadTask1 = afbeelding_path.putBytes(thumb_byte);
+                            }
+
+                            }
+                        });
+                    }
+                })
 
                 bestandpad.putFile(resultaatUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override

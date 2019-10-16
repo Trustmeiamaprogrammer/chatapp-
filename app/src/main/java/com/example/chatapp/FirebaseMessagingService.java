@@ -25,9 +25,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(notTitel)
-                .setContentText(notBericht);
+                .setContentText(notBericht)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
         Intent resultIntent = new Intent(actie);
         resultIntent.putExtra("GebId", vanGebId);
+
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
                 resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(resultPendingIntent);

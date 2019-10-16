@@ -122,9 +122,7 @@ public class VerzoekFrag extends Fragment {
                 }
             });
         }
-    }
-
-    ;
+    };
     mVerzoeklijst.setAdapter(firebaseRecyclerAdapter);
 }
 public interface OnFragmentInteractionListener {

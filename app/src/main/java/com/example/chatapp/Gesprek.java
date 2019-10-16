@@ -2,34 +2,17 @@ package com.example.chatapp;
 
 public class Gesprek {
 
-    public boolean gezien;
-    public long timestamp;
+    public String datum;
 
-    public Gesprek()
-    {
+    public Gesprek() {
 
     }
 
-    public boolean isGezien()
-    {
-        return gezien;
+    public String getDatum(){
+        return datum;
     }
 
-    public void setGezien(boolean gezien) {
-        this.gezien = gezien;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Gesprek(boolean gezien, long timestamp)
-    {
-        this.gezien = gezien;
-        this.timestamp = timestamp;
+    public void setDatum (String datum){
+        this.datum = datum;
     }
 }

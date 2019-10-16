@@ -41,8 +41,8 @@ public class Chatapp extends Application {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null){
-                        gebDatabase.child("Online").onDisconnect().setValue(ServerValue.TIMESTAMP);
 
+                        gebDatabase.child("Online").onDisconnect().setValue(ServerValue.TIMESTAMP);
                     }
                 }
 

@@ -33,8 +33,10 @@ public class ProfielActivity extends AppCompatActivity {
 
 
     private ImageView profielFoto;
-    private TextView profielNaam, profielStatus, profielVriendenAantal;
+    private TextView profielNaam, profielStatus, profielVriendenCount;
     private Button profielZendKnop, profielWeigerKnop;
+
+    private FirebaseAuth mAuth;
 
     private DatabaseReference gebDatabase;
     private DatabaseReference verzoekDatabase;
@@ -54,6 +56,7 @@ public class ProfielActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profiel);
 
         final String gebId = getIntent().getStringExtra("GebId");
+
         mHuidigRef = FirebaseDatabase.getInstance().getReference();
         gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(gebId);
         verzoekDatabase = FirebaseDatabase.getInstance().getReference().child("VriendVer");
@@ -61,14 +64,16 @@ public class ProfielActivity extends AppCompatActivity {
         notDatabase = FirebaseDatabase.getInstance().getReference().child("Notificaties");
         mHuidigGeb = FirebaseAuth.getInstance().getCurrentUser();
 
+        mAuth = FirebaseAuth.getInstance();
+
         profielFoto = findViewById(R.id.profielAfbeelding);
         profielNaam = findViewById(R.id.profielnaam);
         profielStatus =  findViewById(R.id.profielStatus);
-        profielVriendenAantal = findViewById(R.id.profielAantal);
+        profielVriendenCount = findViewById(R.id.profielAantal);
         profielZendKnop = findViewById(R.id.ProfielZendKnop);
         profielWeigerKnop =  findViewById(R.id.ProfielWeigerKnop);
 
-        huidigState = "Geenvrienden";
+        huidigState = "GeenVrienden";
         profielWeigerKnop.setVisibility(View.INVISIBLE);
         profielWeigerKnop.setEnabled(false);
 
@@ -119,7 +124,7 @@ public class ProfielActivity extends AppCompatActivity {
 
                                 } else if (ver_type.equals("Verzonden")) {
                                     huidigState = "verStuurd";
-                                    profielZendKnop.setText("Cancel verzoek");
+                                    profielZendKnop.setText("Annuleer verzoek");
                                     profielWeigerKnop.setVisibility(View.INVISIBLE);
                                     profielWeigerKnop.setEnabled(false);
                                 }
@@ -166,7 +171,7 @@ public class ProfielActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 profielZendKnop.setEnabled(false);
-                if(huidigState.equals("Geenvrienden")) {
+                if(huidigState.equals("GeenVrienden")) {
 
                     DatabaseReference nNotRef = mHuidigRef.child("Notificaties").child(gebId).push();
                     String nNotId = nNotRef.getKey();
@@ -189,7 +194,7 @@ public class ProfielActivity extends AppCompatActivity {
                                 huidigState = "VerStuurd";
                                 profielZendKnop.setText("Annuleer");
 
-                            profielZendKnop.setEnabled(true);
+                                profielZendKnop.setEnabled(true);
 
                         }
                     });
@@ -203,7 +208,7 @@ public class ProfielActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     profielZendKnop.setEnabled(true);
-                                    huidigState = "Geenvrienden";
+                                    huidigState = "GeenVrienden";
                                     profielZendKnop.setText("Verzoek verstuurd");
 
                                     profielWeigerKnop.setVisibility(View.INVISIBLE);
@@ -257,7 +262,7 @@ public class ProfielActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                             if(databaseError == null){
-                                huidigState = "Geenvrienden";
+                                huidigState = "GeenVrienden";
                                 profielZendKnop.setText("Vriendschap verzoek");
 
                                 profielWeigerKnop.setVisibility(View.INVISIBLE);

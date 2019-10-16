@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -41,15 +42,16 @@ public class Registreeractivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference mDatabase = database.getReference();
 
+    private DatabaseReference gebDatabase;
 
-
+    private FirebaseUser huigGeb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registreeractivity);
 
-        mToolbar = (Toolbar) findViewById(R.id.registreer_toolbar) ;
+        mToolbar = findViewById(R.id.registreer_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Maak account");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -65,87 +67,82 @@ public class Registreeractivity extends AppCompatActivity {
         mWachtwoord = (TextInputLayout) findViewById(R.id.regWachtwoord);
         mRegMaakKnop = (Button) findViewById(R.id.regMaakKnop);
 
+        gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+
         mRegMaakKnop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                String gebruikersnaam = mGebruikersnaam.getEditText().getText().toString();
+                final String gebruikersnaam = mGebruikersnaam.getEditText().getText().toString();
                 String email = mEmail.getEditText().getText().toString();
                 String password = mWachtwoord.getEditText().getText().toString();
 
-                if(TextUtils.isEmpty(gebruikersnaam) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+                if (TextUtils.isEmpty(gebruikersnaam) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
 
                     Toast.makeText(Registreeractivity.this, "Voer de velden in.", Toast.LENGTH_LONG).show();
-                }
-
-                else
-                {
+                } else {
                     mRegProgress.setTitle("Account aanmaken");
                     mRegProgress.setMessage("Even geduld...");
                     mRegProgress.setCanceledOnTouchOutside(false);
                     mRegProgress.show();
-                    registreer_gebruiker(gebruikersnaam, email, password);
-                }
 
-            }
-        });
 
-    }
-
-    private void registreer_gebruiker(final String gebruikersnaam, String email, String password) {
-
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(Task<AuthResult> task) {
-
-                if (task.isSuccessful())
-
-                {
-                    FirebaseUser huidigeGebruiker = FirebaseAuth.getInstance().getCurrentUser();
-                    String uid = huidigeGebruiker.getUid();
-                    mDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(uid);
-                    FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                            if (!task.isSuccessful())
-                            {
-                                System.out.println(task.getException());
-                                return;
-                            }
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
 
-                            String apparaatToken = task.getResult().getToken();
+                                try {
+                                    huigGeb = mAuth.getCurrentUser();
+                                    String gebId = huigGeb.getUid();
 
-                            HashMap<String, String> gebruikersMap = new HashMap<>();
-                            gebruikersMap.put("Naam", gebruikersnaam);
-                            gebruikersMap.put("Status", "Hallo, ik gebruik Chatapp.");
-                            gebruikersMap.put("Afbeelding", "default");
-                            gebruikersMap.put("ThumbAfb", "default");
-                            gebruikersMap.put("AppTkn", apparaatToken);
-                            gebruikersMap.put("Online", "true");
-                            mDatabase.setValue(gebruikersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful())
-                                    {
-                                        mRegProgress.dismiss();
-                                        Intent hoofdIntent = new Intent(Registreeractivity.this, MainActivity.class);
-                                        hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(hoofdIntent);
-                                        finish();
-                                    }
+                                    String appTkn = FirebaseInstanceId.getInstance().getToken();
+
+                                    HashMap<String, String> gebMap = new HashMap<>();
+
+                                    gebMap.put("Naam", gebruikersnaam);
+                                    gebMap.put("Status", "Hallo! Ik gebruik ChatApp");
+                                    gebMap.put("Afbeelding", "default");
+                                    gebMap.put("ThumbAfb", "default");
+                                    gebMap.put("AppTkn", appTkn);
+                                    gebMap.put("Online", "true");
+
+                                    gebDatabase.child(gebId).setValue(gebMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            mRegProgress.dismiss();
+                                            String huidigGebId = mAuth.getCurrentUser().getUid();
+
+                                            String appTkn = FirebaseInstanceId.getInstance().getToken();
+
+                                            gebDatabase.child(huidigGebId).child("AppTkn").setValue(appTkn).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Intent hoofdIntent = new Intent(Registreeractivity.this, MainActivity.class);
+                                                    hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(hoofdIntent);
+                                                    finish();
+                                                }
+                                            });
+                                        }
+                                    });
+                                } catch (NullPointerException e) {
+                                    e.printStackTrace();
                                 }
-                            });
+
+                            } else {
+                                mRegProgress.hide();
+                                Toast.makeText(Registreeractivity.this, "Niet gelukt registreren", Toast.LENGTH_LONG).show();
+                            }
                         }
+
                     });
 
                 }
 
-                else
-                {
-                    mRegProgress.hide();
-                    Toast.makeText(Registreeractivity.this, "Mislukt", Toast.LENGTH_LONG).show();
-                }
+
             }
         });
     }
 }
+

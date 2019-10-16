@@ -21,6 +21,7 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -34,6 +35,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,21 +52,23 @@ public class GesprekActivity extends AppCompatActivity {
     private String mGesGebruiker;
     private Toolbar mGesToolbar;
     private DatabaseReference mHoofdRef;
+
     private TextView mTitelView;
     private TextView mLaatstGezienView;
     private CircleImageView mProfielFoto;
     private FirebaseAuth mAuth;
     private String mHuidigeGebId;
+
     private ImageButton mGesVoegtoeKnop;
     private ImageButton mGesZendKnop;
     private EditText mGesBerView;
+
     private RecyclerView mBerlijst;
     private SwipeRefreshLayout mVerversLayout;
 
-    // klasse berichten aanmaken
     private final List<Berichten> berichtenlist = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
-    // Klasse BerichtenAdapter maken
+
     private BerichtenAdapter mAdapter;
     private static final int AANTAL_ITEMS_LADEN = 10;
     private int mHuidigePag = 1;
@@ -69,6 +76,7 @@ public class GesprekActivity extends AppCompatActivity {
     private StorageReference mAfbeeldingOplag;
 
     private int itemPos = 0;
+
     private String mLaatstKey = "";
     private String mVorigKey = "";
 
@@ -78,7 +86,6 @@ public class GesprekActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gesprek);
 
         mGesToolbar = (Toolbar) findViewById(R.id.gesprek_app_bar);
-
         setSupportActionBar(mGesToolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -88,7 +95,6 @@ public class GesprekActivity extends AppCompatActivity {
         mHoofdRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mHuidigeGebId = mAuth.getCurrentUser().getUid();
-        // Staat goed in DB?
         mGesGebruiker = getIntent().getStringExtra("GebId");
         String naamGeb = getIntent().getStringExtra("GebNaam");
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -125,8 +131,23 @@ public class GesprekActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String online = dataSnapshot.child("Online").getValue().toString();
-                String image = dataSnapshot.child("Afbeelding").getValue().toString();
+                final String image = dataSnapshot.child("Afbeelding").getValue().toString();
 
+                if(!image.equals("default")){
+                    Picasso.with(GesprekActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.StanAfb)
+                     .into(mProfielFoto, new Callback() {
+                         @Override
+                         public void onSuccess() {
+
+                         }
+
+                         @Override
+                         public void onError() {
+                             Picasso.with(GesprekActivity.this).load(image)
+                                     .placeholder(R.drawable.StanAfb).into(mProfielFoto);
+                         }
+                     });           //Of StandAfb
+                }
                 if (online.equals("true")) {
                     mLaatstGezienView.setText("Online");
 
@@ -181,7 +202,6 @@ public class GesprekActivity extends AppCompatActivity {
         mGesZendKnop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Misschien toch de Engelse sendMessage()?
                 zendBericht();
             }
         });
@@ -191,7 +211,6 @@ public class GesprekActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent gallerijIntent = new Intent();
 
-                // KLOPT DIT OOK?
                 gallerijIntent.setType("Afbeelding/*");
                 gallerijIntent.setAction(Intent.ACTION_GET_CONTENT);
 
@@ -204,64 +223,67 @@ public class GesprekActivity extends AppCompatActivity {
             public void onRefresh() {
                 mHuidigePag++;
                 itemPos = 0;
-                // NIET IN ENGELS?
                 laadMeerBerichten();
             }
         });
     }
 @Override
-        protected void onActivityResult(int verzoekCode, int resultaatCode, Intent data)
-{
+        protected void onActivityResult(int verzoekCode, int resultaatCode, Intent data) {
     super.onActivityResult(verzoekCode, resultaatCode, data);
-    if (verzoekCode == GALLERIJ_FOTO && resultaatCode == RESULT_OK)
-    {
+    if (verzoekCode == GALLERIJ_FOTO && resultaatCode == RESULT_OK) {
         Uri imageUri = data.getData();
 
-        final String huidigGebRef = "Berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
-        final String gesGebRef = "Berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
-        final DatabaseReference gebGesPush = mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).push();
-        final String pushId = gebGesPush.getKey();
-        StorageReference bestandpad = mAfbeeldingOplag.child("BerichtAfbeelding").child(pushId + ".jpg");
+        if (verzoekCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-        bestandpad.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful())
-                {
-                    String downloadUri = task.getResult().getMetadata().getReference().getDownloadUrl().toString();
+            if (resultaatCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
 
-                    Map berichtMap = new HashMap();
-                    berichtMap.put("Bericht", downloadUri);
-                    berichtMap.put("Gezien", false);
-                    berichtMap.put("Type", "Afbeelding");
-                    berichtMap.put("Tijd", ServerValue.TIMESTAMP);
-                    berichtMap.put("Van", mHuidigeGebId);
+                final String huidigGebRef = "Berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
+                final String gesGebRef = "Berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
+                final DatabaseReference gebGesPush = mHoofdRef.child("Berichten")
+                        .child(mHuidigeGebId).child(mGesGebruiker).push();
+                final String pushId = gebGesPush.getKey();
+                StorageReference bestandpad = mAfbeeldingOplag.child("BerichtAfbeelding").child(pushId + ".jpg");
 
-                    Map berichtGebMap = new HashMap();
-                    berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
-                    berichtGebMap.put(gebGesPush + "/" + pushId, berichtMap);
+                final UploadTask uploadTask = bestandpad.putFile(resultUri);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String downloadUri = uri.toString();
 
-                    mGesBerView.setText("");
+                                Map berichtMap = new HashMap();
+                                berichtMap.put("Bericht", downloadUri);
+                                berichtMap.put("Gezien", false);
+                                berichtMap.put("Type", "Afbeelding");
+                                berichtMap.put("Tijd", ServerValue.TIMESTAMP);
+                                berichtMap.put("Van", mHuidigeGebId);
 
-                    mHoofdRef.updateChildren(berichtGebMap, new DatabaseReference.CompletionListener() {
-                        @Override
-                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                            if (databaseError != null)
-                            {
-                                System.out.println("FOUT GESPREK ACTIVITY >>> " + databaseError.getMessage());
+                                Map berichtGebMap = new HashMap();
+                                berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
+                                berichtGebMap.put(gebGesPush + "/" + pushId, berichtMap);
+
+                                mGesBerView.setText("");
+
+                                mHoofdRef.updateChildren(berichtGebMap, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                        if (databaseError != null) {
+                                            System.out.println("FOUT GESPREK ACTIVITY >>> " + databaseError.getMessage());
+                                        }
+                                    }
+                                });
                             }
-                        }
-                    });
+                        });
+                    }
+                });
 
-
-
-                }
             }
-        });
-
+        }
     }
-
-
 }
 
 private void laadMeerBerichten()
@@ -331,7 +353,9 @@ private void laadBerichten()
     berQuery.addChildEventListener(new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             Berichten bericht = dataSnapshot.getValue(Berichten.class);
+
             itemPos ++;
             if (itemPos == 1)
             {
@@ -373,8 +397,7 @@ private void zendBericht()
 {
     String bericht = mGesBerView.getText().toString();
 
-    if(!TextUtils.isEmpty(bericht))
-    {
+    if(!TextUtils.isEmpty(bericht)) {
         String huidigGebRef = "Berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
         String gesGebRef = "Berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
         DatabaseReference huidigGesPush = mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).push();
@@ -402,14 +425,12 @@ private void zendBericht()
         mHoofdRef.updateChildren(berichtGebMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
-                if(databaseError != null)
-                {
+                if (databaseError != null) {
                     System.out.println("FOUT GESPREK ACTIVITY ZEND BERICHT>>>> " + databaseError.getMessage());
                 }
             }
         });
-
+        }
     }
 }
-    }
 

@@ -66,7 +66,7 @@ public class GebruikersActivity extends AppCompatActivity {
         if (mHuidigeGebruiker == null){
             sendToStart();
         } else{
-            mGebruikerData.child("Online").setValue("true");
+            mGebruikerData.child("Online").setValue(true);
         }
 
         FirebaseRecyclerOptions<Gebruikers> options=

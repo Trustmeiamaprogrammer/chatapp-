@@ -58,7 +58,8 @@ public class VriendenFrag extends Fragment {
         mVriendenLijst = (RecyclerView) mMainView.findViewById(R.id.vriendenLijst);
         mAuth = FirebaseAuth.getInstance();
         huidigeGebruikerId = mAuth.getCurrentUser().getUid();
-        vriendenDatabase = FirebaseDatabase.getInstance().getReference().child("Vrienden").child(huidigeGebruikerId);
+        vriendenDatabase = FirebaseDatabase.getInstance().getReference()
+                .child("Vrienden").child(huidigeGebruikerId);
         vriendenDatabase.keepSynced(true);
         gebruikersRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
         gebruikersRef.keepSynced(true);
@@ -69,27 +70,26 @@ public class VriendenFrag extends Fragment {
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
 
-        FirebaseRecyclerOptions<Vrienden> options=
+        FirebaseRecyclerOptions<Vrienden> options =
                 new FirebaseRecyclerOptions.Builder<Vrienden>()
-                .setQuery(vriendenDatabase, Vrienden.class)
-                .setLifecycleOwner(this)
-                .build();
+                        .setQuery(vriendenDatabase, Vrienden.class)
+                        .setLifecycleOwner(this)
+                        .build();
 
         FirebaseRecyclerAdapter vriendenRecyclerViewAdapter = new FirebaseRecyclerAdapter<Vrienden, VriendenViewHolder>(options) {
 
             @NonNull
             @Override
-            public VriendenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+            public VriendenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 return new VriendenViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.gebruikers_layout, parent, false));
+                        .inflate(R.layout.gebruikers_layout, parent, false));
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull final VriendenViewHolder vriendenViewHolder, int position,  @NonNull final Vrienden vrienden) {
+            protected void onBindViewHolder(@NonNull final VriendenViewHolder vriendenViewHolder, int position, @NonNull final Vrienden vrienden) {
                 vriendenViewHolder.setDatum(vrienden.getDatum());
                 final String lijstGebId = getRef(position).getKey();
                 gebruikersRef.child(lijstGebId).addValueEventListener(new ValueEventListener() {
@@ -98,8 +98,7 @@ public class VriendenFrag extends Fragment {
                         final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
                         String gebThumb = dataSnapshot.child("ThumbAfb").getValue().toString();
 
-                        if (dataSnapshot.hasChild("Online"))
-                        {
+                        if (dataSnapshot.hasChild("Online")) {
                             String gebOnline = dataSnapshot.child("Online").getValue().toString();
                             vriendenViewHolder.setGebOnline(gebOnline);
                         }
@@ -113,19 +112,19 @@ public class VriendenFrag extends Fragment {
                                 CharSequence opties[] = new CharSequence[]{"Open profiel", "Zend bericht"};
                                 final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
+
                                 builder.setTitle("Selecteer opties");
                                 builder.setItems(opties, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                                        if(i == 0)
-                                        {
+                                        if (i == 0) {
                                             Intent profielIntent = new Intent(getContext(), ProfielActivity.class);
                                             profielIntent.putExtra("GebId", lijstGebId);
                                             startActivity(profielIntent);
                                         }
 
-                                        if (i == 1){
+                                        if (i == 1) {
                                             Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
                                             gesIntent.putExtra("GebId", lijstGebId);
                                             gesIntent.putExtra("GebNaam", naamGeb);
@@ -143,16 +142,22 @@ public class VriendenFrag extends Fragment {
                     }
 
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                }
-            });
+                    }
+                });
 
-        }
-    };
-mVriendenLijst.setAdapter(vriendenRecyclerViewAdapter);
-}
+            }
+        };
+        mVriendenLijst.setAdapter(vriendenRecyclerViewAdapter);
+
+    }
+
+    public interface OnFragmentInteractionListener {
+    }
+
+
 
     public static class VriendenViewHolder extends RecyclerView.ViewHolder {
         static View mView;
@@ -163,22 +168,22 @@ mVriendenLijst.setAdapter(vriendenRecyclerViewAdapter);
             mView = itemView;
         }
         public void setDatum(String datum) {
-            TextView gebStatusView = (TextView) mView.findViewById(R.id.gebruikerStatus);
+            TextView gebStatusView =  mView.findViewById(R.id.gebruikerStatus);
             gebStatusView.setText(datum);
         }
 
         public void setNaam(String naam){
-            TextView gebNaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
+            TextView gebNaamView =  mView.findViewById(R.id.naamGebruiker);
             gebNaamView.setText(naam);
         }
 
         public void setGebAfbeelding (String thumbAfb, Context ctx) {
-            CircleImageView gebImageView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
+            CircleImageView gebImageView =  mView.findViewById(R.id.GebruikerAfbeelding);
             Picasso.with(ctx).load(thumbAfb).placeholder(R.drawable.ic_launcher_background).into(gebImageView);
         }
 
         public void setGebOnline(String onlineStatus){
-            ImageView gebOnlineView = (ImageView) mView.findViewById(R.id.online_icon);
+            ImageView gebOnlineView =  mView.findViewById(R.id.online_icon);
 
             if(onlineStatus.equals("true")){
                 gebOnlineView.setVisibility(View.VISIBLE);
@@ -189,8 +194,6 @@ mVriendenLijst.setAdapter(vriendenRecyclerViewAdapter);
 
             }
         }
-
-
 
 
 
