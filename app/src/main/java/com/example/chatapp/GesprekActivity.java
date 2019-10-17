@@ -121,7 +121,7 @@ public class GesprekActivity extends AppCompatActivity {
         mBerlijst.setAdapter(mAdapter);
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
-        mHoofdRef.child("Gesprek").child(mHuidigeGebId).child("Gezien").setValue(true);
+        mHoofdRef.child("Gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(true);
 
         laadBerichten();
 
