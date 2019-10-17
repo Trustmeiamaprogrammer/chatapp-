@@ -1,6 +1,6 @@
 package com.example.chatapp;
 
-class Gebruikers {
+public class Gebruikers {
 
     public String naam;
     public String afbeelding;
@@ -17,30 +17,37 @@ class Gebruikers {
         this.thumbAfbeelding = thumbAfbeelding;
     }
 
-    public String getNaam() {
-        return naam;
-    }
-
     public void setNaam(String naam) {
 
         this.naam = naam;
-    }
-
-    public String getAfbeelding() {
-        return afbeelding;
     }
 
     public void setAfbeelding(String afbeelding) {
         this.afbeelding = afbeelding;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getNaam() {
+        return naam;
+    }
+
+
+
+    public String getAfbeelding() {
+        return afbeelding;
+    }
+
+
+
     public String getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+
+
 
     public void setThumbAfbeelding(String thumbAfbeelding) {
         this.thumbAfbeelding = thumbAfbeelding;

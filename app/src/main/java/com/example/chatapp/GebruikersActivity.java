@@ -47,13 +47,13 @@ public class GebruikersActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mHuidigeGebruiker = mAuth.getCurrentUser();
         String huidigeId = mHuidigeGebruiker.getUid();
-        mGebruikerData = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidigeId);
+        gebruikersRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidigeId);
 
-        mToolbar = (Toolbar) findViewById(R.id.gebruikersAppBar);
+        mToolbar = findViewById(R.id.gebruikersAppBar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Gebruikers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        gebruikersRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+        mGebruikerData= FirebaseDatabase.getInstance().getReference().child("Gebruikers");
 
         mGebruikerslijst = findViewById(R.id.gebruikersLijst);
         mGebruikerslijst.setHasFixedSize(true);
@@ -66,12 +66,12 @@ public class GebruikersActivity extends AppCompatActivity {
         if (mHuidigeGebruiker == null){
             sendToStart();
         } else{
-            mGebruikerData.child("Online").setValue("true");
+            gebruikersRef.child("Online").setValue("true");
         }
 
         FirebaseRecyclerOptions<Gebruikers> options=
                 new FirebaseRecyclerOptions.Builder<Gebruikers>()
-                .setQuery(gebruikersRef, Gebruikers.class)
+                .setQuery(mGebruikerData, Gebruikers.class)
                 .setLifecycleOwner(this)
                 .build();
 
@@ -85,9 +85,9 @@ public class GebruikersActivity extends AppCompatActivity {
             }
             @Override
             protected void onBindViewHolder(@NonNull GebruikersViewHolder gebruikersViewHolder,int position, @NonNull Gebruikers gebruikers) {
-                gebruikersViewHolder.setGebruikersnaam(gebruikers.getNaam());
-                gebruikersViewHolder.setGebStatus(gebruikers.getStatus());
-                gebruikersViewHolder.setGebAfbeelding(gebruikers.getThumbAfbeelding(), getApplicationContext());
+                gebruikersViewHolder.setNaam(gebruikers.getNaam());
+                gebruikersViewHolder.setStatus(gebruikers.getStatus());
+                gebruikersViewHolder.setAfbeelding(gebruikers.getThumbAfbeelding(), getApplicationContext());
 
                 final String gebId = getRef(position).getKey();
 
@@ -130,19 +130,19 @@ mGebruikerslijst.setAdapter(firebaseRecyclerAdapter);
             mView = itemView;
         }
 
-        public void setGebruikersnaam(String naam){
+        public void setNaam(String naam){
             TextView gebruikersnaamView = mView.findViewById(R.id.naamGebruiker);
             gebruikersnaamView.setText(naam);
 
         }
-        public void setGebStatus(String status){
+        public void setStatus(String status){
             TextView gebStatusView =  mView.findViewById(R.id.gebruikerStatus);
             gebStatusView.setText(status);
 
 
         }
 
-        public void setGebAfbeelding (String thumbAfbeelding, Context ctx) {
+        public void setAfbeelding (String thumbAfbeelding, Context ctx) {
             CircleImageView gebImageView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
             Picasso.with(ctx).load(thumbAfbeelding).placeholder(R.drawable.ic_launcher_foreground).into(gebImageView);
 

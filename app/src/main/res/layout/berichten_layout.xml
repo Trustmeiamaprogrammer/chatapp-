@@ -18,6 +18,7 @@
             android:id="@+id/gesprek_links_bericht_tekst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/berichtballon_layout"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="5dp"
@@ -50,6 +51,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
+            android:background="@drawable/berichtballon_layout"
             android:padding="10dp" />
 
         <TextView
@@ -63,59 +65,5 @@
 
     </LinearLayout>
 
-
-    <!--    <de.hdodenhof.circleimageview.CircleImageView-->
-<!--        android:id="@+id/bericht_profiel"-->
-<!--        android:layout_width="36dp"-->
-<!--        android:layout_height="36dp"-->
-<!--        android:layout_weight="0"-->
-<!--        android:src="@mipmap/ic_launcher_round" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/berichttekst"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_below="@+id/naamtekst"-->
-<!--        android:layout_marginStart="10dp"-->
-<!--        android:layout_toEndOf="@+id/bericht_profiel"-->
-<!--        android:padding="0dp"-->
-<!--        android:text="@string/nieuwBericht"-->
-<!--        android:textColor="#444444"-->
-<!--        android:textSize="14sp" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/naamtekst"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_marginStart="10dp"-->
-<!--        android:layout_toEndOf="@+id/bericht_profiel"-->
-<!--        android:text="Display Name"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textStyle="bold" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tijdtekst"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_marginStart="10dp"-->
-<!--        android:layout_marginTop="2dp"-->
-<!--        android:layout_toEndOf="@+id/naamtekst"-->
-<!--        android:text="@string/tijd"-->
-<!--        android:textSize="12sp" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/bericht_afbeelding"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignStart="@+id/berichttekst"-->
-<!--        android:layout_below="@+id/berichttekst"-->
-<!--        android:layout_marginStart="0dp"-->
-<!--        android:layout_toEndOf="@+id/bericht_profiel"-->
-<!--        android:padding="0dp"-->
-<!--        android:scaleType="centerCrop" />-->
 
 </LinearLayout>

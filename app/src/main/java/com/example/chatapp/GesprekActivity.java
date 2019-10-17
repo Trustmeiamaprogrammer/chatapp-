@@ -85,7 +85,7 @@ public class GesprekActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gesprek);
 
-        mGesToolbar = (Toolbar) findViewById(R.id.gesprek_app_bar);
+        mGesToolbar = findViewById(R.id.gesprek_app_bar);
         setSupportActionBar(mGesToolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -102,18 +102,18 @@ public class GesprekActivity extends AppCompatActivity {
 
         actionBar.setCustomView(actionBarView);
 
-        mTitelView = (TextView) findViewById(R.id.cus_bar_titel);
-        mLaatstGezienView = (TextView) findViewById(R.id.cus_bar_gezien);
-        mProfielFoto = (CircleImageView) findViewById(R.id.cust_bar_afbeelding);
+        mTitelView = findViewById(R.id.cus_bar_titel);
+        mLaatstGezienView =  findViewById(R.id.cus_bar_gezien);
+        mProfielFoto = findViewById(R.id.cust_bar_afbeelding);
 
-        mGesVoegtoeKnop = (ImageButton) findViewById(R.id.gesprekToevoegKnop);
-        mGesZendKnop = (ImageButton) findViewById(R.id.berichtVerzendKnop);
-        mGesBerView = (EditText) findViewById(R.id.gesprek_berichten_view);
+        mGesVoegtoeKnop = findViewById(R.id.gesprekToevoegKnop);
+        mGesZendKnop =  findViewById(R.id.berichtVerzendKnop);
+        mGesBerView =  findViewById(R.id.gesprek_berichten_view);
 
         mAdapter = new BerichtenAdapter(berichtenlist);
 
-        mBerlijst = (RecyclerView) findViewById(R.id.berichten_lijst);
-        mVerversLayout = (SwipeRefreshLayout) findViewById(R.id.bericht_swipe_layout);
+        mBerlijst =  findViewById(R.id.berichten_lijst);
+        mVerversLayout = findViewById(R.id.bericht_swipe_layout);
         mLinearLayout = new LinearLayoutManager(this);
         mBerlijst.setHasFixedSize(true);
         mBerlijst.setLayoutManager(mLinearLayout);
@@ -121,7 +121,7 @@ public class GesprekActivity extends AppCompatActivity {
         mBerlijst.setAdapter(mAdapter);
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
-        mHoofdRef.child("Gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(true);
+        mHoofdRef.child("Gesprek").child(mHuidigeGebId).child("Gezien").setValue(true);
 
         laadBerichten();
 
@@ -164,14 +164,14 @@ public class GesprekActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled( DatabaseError databaseError) {
 
             }
         });
 
         mHoofdRef.child("Gesprek").child(mHuidigeGebId).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange( DataSnapshot dataSnapshot) {
 
                 if (!dataSnapshot.hasChild(mGesGebruiker)) {
                     Map gesVoegtoeMap = new HashMap();
@@ -194,7 +194,7 @@ public class GesprekActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
@@ -292,7 +292,7 @@ private void laadMeerBerichten()
     Query berQuery = berRef.orderByKey().endAt(mLaatstKey).limitToLast(10);
     berQuery.addChildEventListener(new ChildEventListener() {
         @Override
-        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildAdded( DataSnapshot dataSnapshot, String s) {
             Berichten bericht = dataSnapshot.getValue(Berichten.class);
             String berichtKey = dataSnapshot.getKey();
 
@@ -352,7 +352,7 @@ private void laadBerichten()
     Query berQuery = berRef.limitToLast(mHuidigePag * AANTAL_ITEMS_LADEN);
     berQuery.addChildEventListener(new ChildEventListener() {
         @Override
-        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildAdded(DataSnapshot dataSnapshot,  String s) {
 
             Berichten bericht = dataSnapshot.getValue(Berichten.class);
 
@@ -370,6 +370,9 @@ private void laadBerichten()
 
             mVerversLayout.setRefreshing(false);
         }
+
+
+
 
         @Override
         public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
