@@ -90,13 +90,14 @@ public class VriendenFrag extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull final VriendenViewHolder vriendenViewHolder, int position, @NonNull final Vrienden vrienden) {
-                vriendenViewHolder.setDatum(vrienden.getDatum());
+
                 final String lijstGebId = getRef(position).getKey();
                 gebruikersRef.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
                         String gebThumb = dataSnapshot.child("ThumbAfb").getValue().toString();
+                        String gebStatus = dataSnapshot.child("Status").getValue().toString();
 
                         if (dataSnapshot.hasChild("Online")) {
                             String gebOnline = dataSnapshot.child("Online").getValue().toString();
@@ -105,6 +106,7 @@ public class VriendenFrag extends Fragment {
 
                         vriendenViewHolder.setNaam(naamGeb);
                         vriendenViewHolder.setGebAfbeelding(gebThumb, getContext());
+                        vriendenViewHolder.setStatus(gebStatus);
 
                         vriendenViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -167,8 +169,9 @@ public class VriendenFrag extends Fragment {
 
             mView = itemView;
         }
-        public void setDatum(String datum) {
+        public void setStatus(String status) {
             TextView gebStatusView =  mView.findViewById(R.id.gebruikerStatus);
+            gebStatusView.setText(status);
         }
 
         public void setNaam(String naam){

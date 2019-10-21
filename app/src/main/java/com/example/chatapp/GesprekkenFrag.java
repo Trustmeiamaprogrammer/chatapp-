@@ -98,7 +98,7 @@ public class GesprekkenFrag extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final GesprekViewHolder gesprekViewHolder, int position, @NonNull final Gesprek gesprek) {
 
-                gesprekViewHolder.setDatum(gesprek.getDatum());
+
                 final String lijstGebId = getRef(position).getKey();
 
                 mGebDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
@@ -106,6 +106,7 @@ public class GesprekkenFrag extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
                         String gebThumb = dataSnapshot.child("ThumbAfb").getValue().toString();
+                        String gebStatus = dataSnapshot.child("Status").getValue().toString();
 
                         if (dataSnapshot.hasChild("Online")) {
                             String gebOnline = dataSnapshot.child("Online").getValue().toString();
@@ -115,6 +116,7 @@ public class GesprekkenFrag extends Fragment {
 
                         gesprekViewHolder.setNaam(naamGeb);
                         gesprekViewHolder.setGebAfbeelding(gebThumb, getContext());
+                        gesprekViewHolder.setStatus(gebStatus);
 
 
                         gesprekViewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -153,8 +155,9 @@ public class GesprekkenFrag extends Fragment {
             mView = itemView;
         }
 
-        public void setDatum(String datum) {
+        public void setStatus(String status) {
             TextView gebStatusView = mView.findViewById(R.id.gebruikerStatus);
+            gebStatusView.setText(status);
         }
 
 

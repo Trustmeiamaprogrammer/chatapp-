@@ -88,14 +88,14 @@ public class VerzoekFrag extends Fragment {
         }
         @Override
         protected void onBindViewHolder ( @NonNull final VerzoekViewHolder verzoekViewHolder,
-        int position, @NonNull Verzoeken verzoeken){
-            verzoekViewHolder.setDatum(verzoeken.getDatum());
+        int position, @NonNull final Verzoeken verzoeken){
             final String lijstGebId = getRef(position).getKey();
             mGebruikerDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
                     String gebAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
+                    String gebStatus = dataSnapshot.child("Status").getValue().toString();
 
                     if (dataSnapshot.hasChild("Online")) {
                         String gebOnline = dataSnapshot.child("Online").getValue().toString();
@@ -103,6 +103,8 @@ public class VerzoekFrag extends Fragment {
                     }
                     verzoekViewHolder.setGebruikersnaam(naamGeb);
                     verzoekViewHolder.setAfbeelding(gebAfbeelding, getContext());
+                    verzoekViewHolder.setStatus(gebStatus);
+
 
                     verzoekViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -137,9 +139,9 @@ public static class VerzoekViewHolder extends RecyclerView.ViewHolder{
         mView = itemView;
     }
 
-    public void setDatum(String datum){
+    public void setStatus(String status){
         TextView gebStatusView = mView.findViewById(R.id.gebruikerStatus);
-        gebStatusView.setText(datum);
+        gebStatusView.setText(status);
     }
 
     public void setGebruikersnaam(String gebruikersnaam){

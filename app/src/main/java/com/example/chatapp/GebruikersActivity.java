@@ -1,5 +1,6 @@
 package com.example.chatapp;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,13 +19,20 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 
+import java.security.AccessControlContext;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static java.security.AccessController.getContext;
 
 public class GebruikersActivity extends AppCompatActivity {
 
@@ -84,12 +92,31 @@ public class GebruikersActivity extends AppCompatActivity {
                 .inflate(R.layout.gebruikers_layout, parent, false));
             }
             @Override
-            protected void onBindViewHolder(@NonNull GebruikersViewHolder gebruikersViewHolder,int position, @NonNull Gebruikers gebruikers) {
-                gebruikersViewHolder.setNaam(gebruikers.getNaam());
-                gebruikersViewHolder.setStatus(gebruikers.getStatus());
-                gebruikersViewHolder.setAfbeelding(gebruikers.getThumbAfbeelding(), getApplicationContext());
+            protected void onBindViewHolder(@NonNull final GebruikersViewHolder gebruikersViewHolder, int position, @NonNull Gebruikers gebruikers) {
 
                 final String gebId = getRef(position).getKey();
+
+                mGebruikerData.child(gebId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
+                        String gebAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
+                        String gebStatus = dataSnapshot.child("Status").getValue().toString();
+
+                        gebruikersViewHolder.setNaam(naamGeb);
+                        gebruikersViewHolder.setAfbeelding(gebAfbeelding, getApplicationContext());
+                        gebruikersViewHolder.setStatus((gebStatus));
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
 
                 gebruikersViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -143,8 +170,8 @@ mGebruikerslijst.setAdapter(firebaseRecyclerAdapter);
         }
 
         public void setAfbeelding (String thumbAfbeelding, Context ctx) {
-            CircleImageView gebImageView = (CircleImageView) mView.findViewById(R.id.GebruikerAfbeelding);
-            Picasso.with(ctx).load(thumbAfbeelding).placeholder(R.drawable.ic_launcher_foreground).into(gebImageView);
+            CircleImageView gebImageView =  mView.findViewById(R.id.GebruikerAfbeelding);
+            Picasso.with(ctx).load(thumbAfbeelding).placeholder(R.drawable.ic_launcher_background).into(gebImageView);
 
         }
 
