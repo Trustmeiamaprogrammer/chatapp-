@@ -17,9 +17,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
         String notBericht = remoteMessage.getNotification().getBody();
         String notTitel = remoteMessage.getNotification().getTitle();
+        String actie = remoteMessage.getNotification().getClickAction();
         String vanGebId = remoteMessage.getData().get("from_user_id");
 
-        String actie = remoteMessage.getNotification().getClickAction();
+
 
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
@@ -28,7 +29,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setContentText(notBericht)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        Intent resultIntent = new Intent(actie);
+        Intent resultIntent = new Intent();
         resultIntent.putExtra("GebId", vanGebId);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,

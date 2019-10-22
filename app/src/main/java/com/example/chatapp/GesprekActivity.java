@@ -209,9 +209,9 @@ public class GesprekActivity extends AppCompatActivity {
         mGesVoegtoeKnop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent gallerijIntent = new Intent();
+                Intent gallerijIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                gallerijIntent.setType("Afbeelding/*");
+                //gallerijIntent.setType("Afbeelding/*");
                 gallerijIntent.setAction(Intent.ACTION_GET_CONTENT);
 
                 startActivityForResult(Intent.createChooser(gallerijIntent, "SELECTEER AFBEELDING"), GALLERIJ_FOTO);
@@ -324,22 +324,22 @@ private void laadMeerBerichten()
 
 
         @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildChanged( DataSnapshot dataSnapshot, String s) {
 
         }
 
         @Override
-        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+        public void onChildRemoved( DataSnapshot dataSnapshot) {
 
         }
 
         @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
         }
 
         @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
+        public void onCancelled(DatabaseError databaseError) {
 
         }
     });
@@ -356,7 +356,7 @@ private void laadBerichten()
 
             Berichten bericht = dataSnapshot.getValue(Berichten.class);
 
-            itemPos ++;
+            itemPos++;
             if (itemPos == 1)
             {
                 String berichtKey = dataSnapshot.getKey();
@@ -375,7 +375,7 @@ private void laadBerichten()
 
 
         @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
 
         }
 
@@ -385,7 +385,7 @@ private void laadBerichten()
         }
 
         @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
         }
 
