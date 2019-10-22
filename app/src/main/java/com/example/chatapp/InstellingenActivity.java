@@ -237,7 +237,7 @@ public class InstellingenActivity extends AppCompatActivity {
 
                                                     Map updateHashMap = new HashMap();
                                                     updateHashMap.put("Afbeelding", downloadURL);
-                                                    updateHashMap.put("Thumb", thumbDownloadUrl);
+                                                    updateHashMap.put("ThumbAfb", thumbDownloadUrl);
 
                                                     mGebDatabase.updateChildren(updateHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
