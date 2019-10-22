@@ -42,7 +42,7 @@ public class StatusActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Account Status");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String status_value = getIntent().getStringExtra("StatusWaarde");
+        String status_value = getIntent().getStringExtra("StatusInhoud");
         mStatus = (TextInputLayout) findViewById(R.id.status_invoer);
         mOpslaanKnop = (Button) findViewById(R.id.status_opslaan_knop);
 

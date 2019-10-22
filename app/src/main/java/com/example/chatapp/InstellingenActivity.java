@@ -155,7 +155,7 @@ public class InstellingenActivity extends AppCompatActivity {
         }
 
         else{
-            mGebDatabase.child("Online").setValue("true");
+            mGebDatabase.child("Online").setValue(true);
         }
     }
 

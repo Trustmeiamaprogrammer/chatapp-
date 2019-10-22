@@ -45,6 +45,7 @@ public class Registreeractivity extends AppCompatActivity {
     private DatabaseReference gebDatabase;
 
     private FirebaseUser huigGeb;
+    private Object NullPointerException;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,11 +129,13 @@ public class Registreeractivity extends AppCompatActivity {
                                     });
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
+                                    System.out.println(">>>>>>>" + e.toString());
                                 }
 
                             } else {
                                 mRegProgress.hide();
                                 Toast.makeText(Registreeractivity.this, "Niet gelukt registreren", Toast.LENGTH_LONG).show();
+                                System.out.println(NullPointerException);
                             }
                         }
 

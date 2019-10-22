@@ -5,16 +5,16 @@ public class Gebruikers {
     public String naam;
     public String afbeelding;
     public String status;
-    public String thumbAfbeelding;
+    public String thumbAfb;
 
     public Gebruikers() {
     }
 
-    public Gebruikers(String naam, String afbeelding, String status, String thumbAfbeelding) {
+    public Gebruikers(String naam, String afbeelding, String status, String thumbAfb) {
         this.naam = naam;
         this.afbeelding = afbeelding;
         this.status = status;
-        this.thumbAfbeelding = thumbAfbeelding;
+        this.thumbAfb = thumbAfb;
     }
 
     public void setNaam(String naam) {
@@ -49,12 +49,12 @@ public class Gebruikers {
 
 
 
-    public void setThumbAfbeelding(String thumbAfbeelding) {
-        this.thumbAfbeelding = thumbAfbeelding;
+    public void setThumbAfb(String thumbAfb) {
+        this.thumbAfb = thumbAfb;
     }
 
-    public String getThumbAfbeelding() {
-        return thumbAfbeelding;
+    public String getThumbAfb() {
+        return thumbAfb;
     }
 
 

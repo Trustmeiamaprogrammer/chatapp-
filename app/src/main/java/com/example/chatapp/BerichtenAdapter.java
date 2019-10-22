@@ -88,11 +88,13 @@ public ImageView berImage;
             mAuth = FirebaseAuth.getInstance();
             final String gebId = mAuth.getCurrentUser().getUid();
             final Berichten berDN = berLijst.get(position);
+
             String vanGebruiker = berDN.getVan();
             final String berType = berDN.getType();
 
-            gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(vanGebruiker);
-            gebDatabase.addValueEventListener(new ValueEventListener() {
+            gebDatabase = FirebaseDatabase.getInstance().getReference();
+            System.out.println("??????????" + vanGebruiker);
+            gebDatabase.child("Gebruikers").child(vanGebruiker).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     berDatabase = FirebaseDatabase.getInstance().getReference().child("Berichten");

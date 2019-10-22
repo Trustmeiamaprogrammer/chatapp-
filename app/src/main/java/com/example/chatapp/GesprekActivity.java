@@ -349,51 +349,19 @@ private void laadBerichten()
 {
     DatabaseReference berRef = mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker);
 
-    Query berQuery = berRef.limitToLast(mHuidigePag * AANTAL_ITEMS_LADEN);
-    berQuery.addChildEventListener(new ChildEventListener() {
+    ValueEventListener eventListener = new ValueEventListener() {
         @Override
-        public void onChildAdded(DataSnapshot dataSnapshot,  String s) {
-
-            Berichten bericht = dataSnapshot.getValue(Berichten.class);
-
-            itemPos++;
-            if (itemPos == 1)
-            {
-                String berichtKey = dataSnapshot.getKey();
-                mLaatstKey = berichtKey;
-                mVorigKey = berichtKey;
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                Berichten berichten = ds.getValue(Berichten.class);
             }
-
-            berichtenlist.add(bericht);
-            mAdapter.notifyDataSetChanged();
-            mBerlijst.scrollToPosition(berichtenlist.size() - 1);
-
-            mVerversLayout.setRefreshing(false);
-        }
-
-
-
-
-        @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
-
-        }
-
-        @Override
-        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-        }
-
-        @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
-
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
 
         }
-    });
+    };
 }
 
 private void zendBericht()
