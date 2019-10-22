@@ -59,7 +59,7 @@ public class InstellingenActivity extends AppCompatActivity {
     private Button mStatusKnop;
     private Button mAfbeeldingKnop;
 
-    private static final int GALLERY_PICK =1;
+    private static final int GALLERY_PICK = 1;
     private StorageReference mAfbeeldingOpslag;
 
     private ProgressDialog mProcessDialog;
@@ -138,8 +138,8 @@ public class InstellingenActivity extends AppCompatActivity {
     mAfbeeldingKnop.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent gallerijIntet = new Intent();
-            gallerijIntet.setType("Afbeelding/*");
+            Intent gallerijIntet = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            //gallerijIntet.setType("Afbeelding/*");
             gallerijIntet.setAction(Intent.ACTION_GET_CONTENT);
 
             startActivityForResult(Intent.createChooser(gallerijIntet, "Selecteer afbeelding"), GALLERY_PICK);
