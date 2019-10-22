@@ -353,9 +353,15 @@ private void laadBerichten()
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             for(DataSnapshot ds : dataSnapshot.getChildren()){
-                Berichten berichten = ds.getValue(Berichten.class);
+                Berichten bericht = ds.getValue(Berichten.class);
+                berichtenlist.add(bericht);
             }
+
+            mAdapter.notifyDataSetChanged();
+            mBerlijst.scrollToPosition(berichtenlist.size());
+            mVerversLayout.setRefreshing(false);
         }
+
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
