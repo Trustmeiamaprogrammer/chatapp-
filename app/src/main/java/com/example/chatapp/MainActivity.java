@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null)
         {
             String huidigGebId = huidigGeb.getUid();
-            mGebruikerRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidigGebId);
+            mGebruikerRef = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigGebId);
         }
 
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         else
         {
-            mGebruikerRef.child("Online").setValue("true");
+            mGebruikerRef.child("online").setValue("true");
         }
     }
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(huidigeGebruiker != null)
         {
-            mGebruikerRef.child("Online").setValue(ServerValue.TIMESTAMP);
+            mGebruikerRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
 
     }

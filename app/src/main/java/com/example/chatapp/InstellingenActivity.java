@@ -88,10 +88,10 @@ public class InstellingenActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                String naam = dataSnapshot.child("Naam").getValue().toString();
-                final String afbeelding = dataSnapshot.child("Afbeelding").getValue().toString();
-                String status = dataSnapshot.child("Status").getValue().toString();
-                String thumbAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
+                String naam = dataSnapshot.child("naam").getValue().toString();
+                final String afbeelding = dataSnapshot.child("afbeelding").getValue().toString();
+                String status = dataSnapshot.child("status").getValue().toString();
+                String thumbAfbeelding = dataSnapshot.child("thumbAfb").getValue().toString();
 
                mNaam.setText(naam);
                mStatus.setText(status);
@@ -155,7 +155,7 @@ public class InstellingenActivity extends AppCompatActivity {
         }
 
         else{
-            mGebDatabase.child("Online").setValue(true);
+            mGebDatabase.child("online").setValue(true);
         }
     }
 
@@ -163,7 +163,7 @@ public class InstellingenActivity extends AppCompatActivity {
     protected void onStop(){
         super.onStop();
         if(mHuidigeGebruiker != null){
-            mGebDatabase.child("Online").setValue(ServerValue.TIMESTAMP);
+            mGebDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 
@@ -211,8 +211,8 @@ public class InstellingenActivity extends AppCompatActivity {
                     final byte[] thumb_byte = baos.toByteArray();
 
 
-                    final StorageReference bestandpad = mAfbeeldingOpslag.child("ProfielFotos").child(huidigeGebId + ".jpg");
-                    final StorageReference afbeelding_path = mAfbeeldingOpslag.child("ProfielFotos").child("Thumbs").child(huidigeGebId + ".jpg");
+                    final StorageReference bestandpad = mAfbeeldingOpslag.child("profielFotos").child(huidigeGebId + ".jpg");
+                    final StorageReference afbeelding_path = mAfbeeldingOpslag.child("profielFotos").child("thumbs").child(huidigeGebId + ".jpg");
 
                     final UploadTask uploadTask = bestandpad.putFile(resultaatUri);
 
@@ -236,8 +236,8 @@ public class InstellingenActivity extends AppCompatActivity {
                                                     String thumbDownloadUrl = thumbUri.toString();
 
                                                     Map updateHashMap = new HashMap();
-                                                    updateHashMap.put("Afbeelding", downloadURL);
-                                                    updateHashMap.put("ThumbAfb", thumbDownloadUrl);
+                                                    updateHashMap.put("afbeelding", downloadURL);
+                                                    updateHashMap.put("thumbAfb", thumbDownloadUrl);
 
                                                     mGebDatabase.updateChildren(updateHashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override

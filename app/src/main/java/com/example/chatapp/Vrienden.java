@@ -1,7 +1,7 @@
 package com.example.chatapp;
 
 public class Vrienden {
-public String datum;
+private String datum;
 
     public Vrienden() {
     }

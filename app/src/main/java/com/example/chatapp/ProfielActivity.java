@@ -58,10 +58,10 @@ public class ProfielActivity extends AppCompatActivity {
         final String gebId = getIntent().getStringExtra("GebId");
 
         mHuidigRef = FirebaseDatabase.getInstance().getReference();
-        gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(gebId);
-        verzoekDatabase = FirebaseDatabase.getInstance().getReference().child("VriendVer");
-        vriendDatabase = FirebaseDatabase.getInstance().getReference().child("Vrienden");
-        notDatabase = FirebaseDatabase.getInstance().getReference().child("Notificaties");
+        gebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(gebId);
+        verzoekDatabase = FirebaseDatabase.getInstance().getReference().child("vriendVer");
+        vriendDatabase = FirebaseDatabase.getInstance().getReference().child("vrienden");
+        notDatabase = FirebaseDatabase.getInstance().getReference().child("notificaties");
         mHuidigGeb = FirebaseAuth.getInstance().getCurrentUser();
 
         mAuth = FirebaseAuth.getInstance();
@@ -88,9 +88,9 @@ public class ProfielActivity extends AppCompatActivity {
         gebDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
-                String gebruikersnaam = dataSnapshot.child("Naam").getValue().toString();
-                String status = dataSnapshot.child("Status").getValue().toString();
-                String afbeelding = dataSnapshot.child("Afbeelding").getValue().toString();
+                String gebruikersnaam = dataSnapshot.child("naam").getValue().toString();
+                String status = dataSnapshot.child("status").getValue().toString();
+                String afbeelding = dataSnapshot.child("afbeelding").getValue().toString();
 
                 profielNaam.setText(gebruikersnaam);
                 profielStatus.setText(status);
@@ -112,7 +112,7 @@ public class ProfielActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                             if (dataSnapshot.hasChild(gebId)) {
-                                String ver_type = dataSnapshot.child(gebId).child("VerType").getValue().toString();
+                                String ver_type = dataSnapshot.child(gebId).child("verType").getValue().toString();
 
                                 if (ver_type.equals("Ontvangen")) {
 
@@ -173,16 +173,16 @@ public class ProfielActivity extends AppCompatActivity {
                 profielZendKnop.setEnabled(false);
                 if(huidigState.equals("GeenVrienden")) {
 
-                    DatabaseReference nNotRef = mHuidigRef.child("Notificaties").child(gebId).push();
+                    DatabaseReference nNotRef = mHuidigRef.child("notificaties").child(gebId).push();
                     String nNotId = nNotRef.getKey();
 
                     HashMap<String, String> notData = new HashMap<>();
-                    notData.put("Van", mHuidigGeb.getUid());
-                    notData.put("Type", "Verzoek");
+                    notData.put("van", mHuidigGeb.getUid());
+                    notData.put("type", "Verzoek");
                     Map verMap = new HashMap<>();
-                    verMap.put("VriendVer/" + mHuidigGeb.getUid() + "/" + gebId + "/VerType", "Verzonden");
-                    verMap.put("VriendVer/" + gebId + "/" + mHuidigGeb.getUid() + "/VerType", "Ontvangen");
-                    verMap.put("Notificaties/" + gebId + "/" + nNotId, notData);
+                    verMap.put("vriendVer/" + mHuidigGeb.getUid() + "/" + gebId + "/verType", "Verzonden");
+                    verMap.put("vriendVer/" + gebId + "/" + mHuidigGeb.getUid() + "/verType", "Ontvangen");
+                    verMap.put("notificaties/" + gebId + "/" + nNotId, notData);
 
                     mHuidigRef.updateChildren(verMap, new DatabaseReference.CompletionListener() {
                         @Override
@@ -227,10 +227,10 @@ public class ProfielActivity extends AppCompatActivity {
                     final String huidigDatum = DateFormat.getDateTimeInstance().format(new Date());
 
                     Map vriendMap = new HashMap();
-                    vriendMap.put("Vrienden/" + mHuidigGeb.getUid() + "/" + gebId + "/Datum", huidigDatum);
-                    vriendMap.put("Vrienden/" + gebId + "/" + mHuidigGeb.getUid() + "/Datum", huidigDatum);
-                    vriendMap.put("VriendVer/" + mHuidigGeb.getUid() + "/" + gebId, null);
-                    vriendMap.put("VriendVer/" + gebId + "/" + mHuidigGeb.getUid(), null);
+                    vriendMap.put("vrienden/" + mHuidigGeb.getUid() + "/" + gebId + "/datum", huidigDatum);
+                    vriendMap.put("vrienden/" + gebId + "/" + mHuidigGeb.getUid() + "/datum", huidigDatum);
+                    vriendMap.put("vriendVer/" + mHuidigGeb.getUid() + "/" + gebId, null);
+                    vriendMap.put("vriendVer/" + gebId + "/" + mHuidigGeb.getUid(), null);
 
                     mHuidigRef.updateChildren(vriendMap, new DatabaseReference.CompletionListener() {
                         @Override
@@ -255,8 +255,8 @@ public class ProfielActivity extends AppCompatActivity {
 
                 if(huidigState.equals("Vrienden")){
                     Map ontvriendMap = new HashMap();
-                    ontvriendMap.put("Vrienden/"+ mHuidigGeb.getUid() + "/" + gebId, null);
-                    ontvriendMap.put("Vrienden/"+ gebId + "/" + mHuidigGeb.getUid(), null);
+                    ontvriendMap.put("vrienden/"+ mHuidigGeb.getUid() + "/" + gebId, null);
+                    ontvriendMap.put("vrienden/"+ gebId + "/" + mHuidigGeb.getUid(), null);
 
                     mHuidigRef.updateChildren(ontvriendMap, new DatabaseReference.CompletionListener() {
                         @Override

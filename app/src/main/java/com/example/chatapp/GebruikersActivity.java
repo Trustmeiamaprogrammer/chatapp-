@@ -55,13 +55,13 @@ public class GebruikersActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mHuidigeGebruiker = mAuth.getCurrentUser();
         String huidigeId = mHuidigeGebruiker.getUid();
-        gebruikersRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidigeId);
+        gebruikersRef = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigeId);
 
         mToolbar = findViewById(R.id.gebruikersAppBar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Gebruikers");
+        getSupportActionBar().setTitle("gebruikers");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mGebruikerData= FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+        mGebruikerData= FirebaseDatabase.getInstance().getReference().child("gebruikers");
 
         mGebruikerslijst = findViewById(R.id.gebruikersLijst);
         mGebruikerslijst.setHasFixedSize(true);
@@ -74,7 +74,7 @@ public class GebruikersActivity extends AppCompatActivity {
         if (mHuidigeGebruiker == null){
             sendToStart();
         } else{
-            gebruikersRef.child("Online").setValue(true);
+            gebruikersRef.child("online").setValue(true);
         }
 
         FirebaseRecyclerOptions<Gebruikers> options=
@@ -99,9 +99,9 @@ public class GebruikersActivity extends AppCompatActivity {
                 mGebruikerData.child(gebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
-                        String gebAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
-                        String gebStatus = dataSnapshot.child("Status").getValue().toString();
+                        final String naamGeb = dataSnapshot.child("naam").getValue().toString();
+                        String gebAfbeelding = dataSnapshot.child("thumbAfb").getValue().toString();
+                        String gebStatus = dataSnapshot.child("status").getValue().toString();
 
                         gebruikersViewHolder.setNaam(naamGeb);
                         gebruikersViewHolder.setAfbeelding(gebAfbeelding, getApplicationContext());
@@ -138,7 +138,7 @@ mGebruikerslijst.setAdapter(firebaseRecyclerAdapter);
         super.onStop();
 
         if(mHuidigeGebruiker != null){
-            gebruikersRef.child("Online").setValue(ServerValue.TIMESTAMP);
+            gebruikersRef.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 

@@ -59,9 +59,9 @@ public class VriendenFrag extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         huidigeGebruikerId = mAuth.getCurrentUser().getUid();
         vriendenDatabase = FirebaseDatabase.getInstance().getReference()
-                .child("Vrienden").child(huidigeGebruikerId);
+                .child("vrienden").child(huidigeGebruikerId);
         vriendenDatabase.keepSynced(true);
-        gebruikersRef = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+        gebruikersRef = FirebaseDatabase.getInstance().getReference().child("gebruikers");
         gebruikersRef.keepSynced(true);
 
         mVriendenLijst.setHasFixedSize(true);
@@ -95,12 +95,12 @@ public class VriendenFrag extends Fragment {
                 gebruikersRef.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
-                        String gebThumb = dataSnapshot.child("ThumbAfb").getValue().toString();
-                        String gebStatus = dataSnapshot.child("Status").getValue().toString();
+                        final String naamGeb = dataSnapshot.child("naam").getValue().toString();
+                        String gebThumb = dataSnapshot.child("thumbAfb").getValue().toString();
+                        String gebStatus = dataSnapshot.child("status").getValue().toString();
 
-                        if (dataSnapshot.hasChild("Online")) {
-                            String gebOnline = dataSnapshot.child("Online").getValue().toString();
+                        if (dataSnapshot.hasChild("online")) {
+                            String gebOnline = dataSnapshot.child("online").getValue().toString();
                             vriendenViewHolder.setGebOnline(gebOnline);
                         }
 
@@ -129,7 +129,7 @@ public class VriendenFrag extends Fragment {
                                         if (i == 1) {
                                             Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
                                             gesIntent.putExtra("GebId", lijstGebId);
-                                            gesIntent.putExtra("GebNaam", naamGeb);
+                                            gesIntent.putExtra("NaamGeb", naamGeb);
                                             startActivity(gesIntent);
                                         }
 

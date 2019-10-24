@@ -68,7 +68,7 @@ public class Registreeractivity extends AppCompatActivity {
         mWachtwoord = (TextInputLayout) findViewById(R.id.regWachtwoord);
         mRegMaakKnop = (Button) findViewById(R.id.regMaakKnop);
 
-        gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+        gebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers");
 
         mRegMaakKnop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +101,12 @@ public class Registreeractivity extends AppCompatActivity {
 
                                     HashMap<String, String> gebMap = new HashMap<>();
 
-                                    gebMap.put("Naam", gebruikersnaam);
-                                    gebMap.put("Status", "Hallo! Ik gebruik ChatApp");
-                                    gebMap.put("Afbeelding", "default");
-                                    gebMap.put("ThumbAfb", "default");
-                                    gebMap.put("AppTkn", appTkn);
-                                    gebMap.put("Online", "true");
+                                    gebMap.put("naam", gebruikersnaam);
+                                    gebMap.put("status", "Hallo! Ik gebruik ChatApp");
+                                    gebMap.put("afbeelding", "default");
+                                    gebMap.put("thumbAfb", "default");
+                                    gebMap.put("appTkn", appTkn);
+                                    gebMap.put("online", "true");
 
                                     gebDatabase.child(gebId).setValue(gebMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
@@ -116,7 +116,7 @@ public class Registreeractivity extends AppCompatActivity {
 
                                             String appTkn = FirebaseInstanceId.getInstance().getToken();
 
-                                            gebDatabase.child(huidigGebId).child("AppTkn").setValue(appTkn).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            gebDatabase.child(huidigGebId).child("appTkn").setValue(appTkn).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     Intent hoofdIntent = new Intent(Registreeractivity.this, MainActivity.class);

@@ -47,7 +47,7 @@ public class Loginactivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mLogProgress = new ProgressDialog(this);
 
-        mGebruikersDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+        mGebruikersDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers");
         mEmail = (TextInputLayout) findViewById(R.id.logEmail);
         mWachtwoord = (TextInputLayout) findViewById(R.id.logWachtwoord);
         mLoginKnop = (Button) findViewById(R.id.loginKnop);
@@ -91,7 +91,7 @@ public class Loginactivity extends AppCompatActivity {
                     String huidigeGebruikersId = mAuth.getCurrentUser().getUid();
                     String apparaatToken = FirebaseInstanceId.getInstance().getToken();
 
-                    mGebruikersDatabase.child(huidigeGebruikersId).child("AppTkn").setValue(apparaatToken).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mGebruikersDatabase.child(huidigeGebruikersId).child("appTkn").setValue(apparaatToken).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Intent hoofdIntent = new Intent(Loginactivity.this, MainActivity.class);

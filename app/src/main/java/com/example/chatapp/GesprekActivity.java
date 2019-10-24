@@ -41,6 +41,7 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class GesprekActivity extends AppCompatActivity {
     private RecyclerView mBerlijst;
     private SwipeRefreshLayout mVerversLayout;
 
-    private final List<Berichten> berichtenlist = new ArrayList<>();
+    private final List<Berichten> berichtenList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
 
     private BerichtenAdapter mAdapter;
@@ -96,7 +97,7 @@ public class GesprekActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mHuidigeGebId = mAuth.getCurrentUser().getUid();
         mGesGebruiker = getIntent().getStringExtra("GebId");
-        String naamGeb = getIntent().getStringExtra("GebNaam");
+        String naamGeb = getIntent().getStringExtra("NaamGeb");
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View actionBarView = inflater.inflate(R.layout.geprek_cus_bar, null);
 
@@ -110,7 +111,7 @@ public class GesprekActivity extends AppCompatActivity {
         mGesZendKnop =  findViewById(R.id.berichtVerzendKnop);
         mGesBerView =  findViewById(R.id.gesprek_berichten_view);
 
-        mAdapter = new BerichtenAdapter(berichtenlist);
+        mAdapter = new BerichtenAdapter(berichtenList);
 
         mBerlijst =  findViewById(R.id.berichten_lijst);
         mVerversLayout = findViewById(R.id.bericht_swipe_layout);
@@ -121,17 +122,17 @@ public class GesprekActivity extends AppCompatActivity {
         mBerlijst.setAdapter(mAdapter);
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
-        mHoofdRef.child("Gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(true);
+        mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
 
         laadBerichten();
 
         mTitelView.setText(naamGeb);
 
-        mHoofdRef.child("Gebruikers").child(mGesGebruiker).addValueEventListener(new ValueEventListener() {
+        mHoofdRef.child("gebruikers").child(mGesGebruiker).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String online = dataSnapshot.child("Online").getValue().toString();
-                final String image = dataSnapshot.child("Afbeelding").getValue().toString();
+                String online = dataSnapshot.child("online").getValue().toString();
+                final String image = dataSnapshot.child("afbeelding").getValue().toString();
 
                 if(!image.equals("default")){
                     Picasso.with(GesprekActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.ic_launcher_foreground)
@@ -149,7 +150,7 @@ public class GesprekActivity extends AppCompatActivity {
                      });           //Of StandAfb
                 }
                 if (online.equals("true")) {
-                    mLaatstGezienView.setText("Online");
+                    mLaatstGezienView.setText("online");
 
                 } else {
                     GetTimeAgo getTimeago = new GetTimeAgo();
@@ -169,18 +170,18 @@ public class GesprekActivity extends AppCompatActivity {
             }
         });
 
-        mHoofdRef.child("Gesprek").child(mHuidigeGebId).addValueEventListener(new ValueEventListener() {
+        mHoofdRef.child("gesprek").child(mHuidigeGebId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange( DataSnapshot dataSnapshot) {
 
                 if (!dataSnapshot.hasChild(mGesGebruiker)) {
                     Map gesVoegtoeMap = new HashMap();
-                    gesVoegtoeMap.put("Gezien", false);
-                    gesVoegtoeMap.put("Timestamp", ServerValue.TIMESTAMP);
+                    gesVoegtoeMap.put("gezien", false);
+                    gesVoegtoeMap.put("timestamp", ServerValue.TIMESTAMP);
 
                     Map gesGebMap = new HashMap();
-                    gesGebMap.put("Gesprek/" + mHuidigeGebId + "/" + mGesGebruiker, gesVoegtoeMap);
-                    gesGebMap.put("Gesprek/" + mGesGebruiker + "/" + mHuidigeGebId, gesVoegtoeMap);
+                    gesGebMap.put("gesprek/" + mHuidigeGebId + "/" + mGesGebruiker, gesVoegtoeMap);
+                    gesGebMap.put("gesprek/" + mGesGebruiker + "/" + mHuidigeGebId, gesVoegtoeMap);
 
                     mHoofdRef.updateChildren(gesGebMap, new DatabaseReference.CompletionListener() {
                         @Override
@@ -239,12 +240,12 @@ public class GesprekActivity extends AppCompatActivity {
             if (resultaatCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
 
-                final String huidigGebRef = "Berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
-                final String gesGebRef = "Berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
-                final DatabaseReference gebGesPush = mHoofdRef.child("Berichten")
+                final String huidigGebRef = "berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
+                final String gesGebRef = "berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
+                final DatabaseReference gebGesPush = mHoofdRef.child("berichten")
                         .child(mHuidigeGebId).child(mGesGebruiker).push();
                 final String pushId = gebGesPush.getKey();
-                StorageReference bestandpad = mAfbeeldingOplag.child("BerichtAfbeelding").child(pushId + ".jpg");
+                StorageReference bestandpad = mAfbeeldingOplag.child("berichtAfbeelding").child(pushId + ".jpg");
 
                 final UploadTask uploadTask = bestandpad.putFile(resultUri);
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -256,11 +257,11 @@ public class GesprekActivity extends AppCompatActivity {
                                 String downloadUri = uri.toString();
 
                                 Map berichtMap = new HashMap();
-                                berichtMap.put("Bericht", downloadUri);
-                                berichtMap.put("Gezien", false);
-                                berichtMap.put("Type", "Afbeelding");
-                                berichtMap.put("Tijd", ServerValue.TIMESTAMP);
-                                berichtMap.put("Van", mHuidigeGebId);
+                                berichtMap.put("bericht", downloadUri);
+                                berichtMap.put("gezien", false);
+                                berichtMap.put("type", "afbeelding");
+                                berichtMap.put("tijd", ServerValue.TIMESTAMP);
+                                berichtMap.put("van", mHuidigeGebId);
 
                                 Map berichtGebMap = new HashMap();
                                 berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
@@ -288,7 +289,7 @@ public class GesprekActivity extends AppCompatActivity {
 
 private void laadMeerBerichten()
 {
-    DatabaseReference berRef = mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker);
+    DatabaseReference berRef = mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker);
     Query berQuery = berRef.orderByKey().endAt(mLaatstKey).limitToLast(10);
     berQuery.addChildEventListener(new ChildEventListener() {
         @Override
@@ -298,7 +299,7 @@ private void laadMeerBerichten()
 
             if(!mVorigKey.equals(berichtKey))
             {
-                berichtenlist.add(itemPos++, bericht);
+                berichtenList.add(itemPos++, bericht);
             }
             else
             {
@@ -311,6 +312,7 @@ private void laadMeerBerichten()
                 mLaatstKey = berichtKey;
 
             }
+
 
             System.out.println( mLaatstKey + " | " + mVorigKey + " | " + berichtKey);
 
@@ -345,28 +347,38 @@ private void laadMeerBerichten()
     });
 }
 
-private void laadBerichten()
-{
-    DatabaseReference berRef = mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker);
+private void laadBerichten() {
+    DatabaseReference berRef = mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker);
+    Query berQuery = berRef.limitToLast(mHuidigePag * AANTAL_ITEMS_LADEN);
 
-    ValueEventListener eventListener = new ValueEventListener() {
+    berQuery.addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-             Berichten bericht = dataSnapshot.getValue(Berichten.class);
-                berichtenlist.add(bericht);
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            Berichten bericht = dataSnapshot.getValue(Berichten.class);
+
+            itemPos++;
+
+            if (itemPos == 1) {
+                String berKey = dataSnapshot.getKey();
+                mLaatstKey = berKey;
+                mVorigKey = berKey;
+            }
+
+            berichtenList.add(bericht);
             mAdapter.notifyDataSetChanged();
-            mBerlijst.scrollToPosition(berichtenlist.size());
+            mBerlijst.scrollToPosition(berichtenList.size() - 1);
             mVerversLayout.setRefreshing(false);
 
         }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
-            System.out.println(databaseError.toException());
 
         }
-    };
-    berRef.addValueEventListener(eventListener);
+
+
+    });
+
 }
 
 private void zendBericht()
@@ -374,18 +386,18 @@ private void zendBericht()
     String bericht = mGesBerView.getText().toString();
 
     if(!TextUtils.isEmpty(bericht)) {
-        String huidigGebRef = "Berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
-        String gesGebRef = "Berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
-        DatabaseReference huidigGesPush = mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).push();
+        String huidigGebRef = "berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
+        String gesGebRef = "berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
+        DatabaseReference huidigGesPush = mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).push();
 
         String pushId = huidigGesPush.getKey();
 
         Map berichtMap = new HashMap();
-        berichtMap.put("Bericht", bericht);
-        berichtMap.put("Gezien", false);
-        berichtMap.put("Type", "Tekst");
-        berichtMap.put("Tijd", ServerValue.TIMESTAMP);
-        berichtMap.put("Van", mHuidigeGebId);
+        berichtMap.put("bericht", bericht);
+        berichtMap.put("gezien", false);
+        berichtMap.put("type", "Tekst");
+        berichtMap.put("tijd", ServerValue.TIMESTAMP);
+        berichtMap.put("van", mHuidigeGebId);
 
         Map berichtGebMap = new HashMap();
         berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
@@ -393,11 +405,11 @@ private void zendBericht()
 
         mGesBerView.setText("");
 
-        mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(true);
-        mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Timestamp").setValue(ServerValue.TIMESTAMP);
+        mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
+        mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).child("timestamp").setValue(ServerValue.TIMESTAMP);
 
-        mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(false);
-        mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Timestamp").setValue(ServerValue.TIMESTAMP);
+        mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(false);
+        mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).child("timestamp").setValue(ServerValue.TIMESTAMP);
         mHoofdRef.updateChildren(berichtGebMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {

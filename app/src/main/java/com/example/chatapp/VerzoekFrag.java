@@ -93,12 +93,12 @@ public class VerzoekFrag extends Fragment {
             mGebruikerDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
-                    String gebAfbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
-                    String gebStatus = dataSnapshot.child("Status").getValue().toString();
+                    final String naamGeb = dataSnapshot.child("naam").getValue().toString();
+                    String gebAfbeelding = dataSnapshot.child("thumbAfb").getValue().toString();
+                    String gebStatus = dataSnapshot.child("status").getValue().toString();
 
-                    if (dataSnapshot.hasChild("Online")) {
-                        String gebOnline = dataSnapshot.child("Online").getValue().toString();
+                    if (dataSnapshot.hasChild("online")) {
+                        String gebOnline = dataSnapshot.child("online").getValue().toString();
                         verzoekViewHolder.setGebruikerOnline(gebOnline);
                     }
                     verzoekViewHolder.setGebruikersnaam(naamGeb);

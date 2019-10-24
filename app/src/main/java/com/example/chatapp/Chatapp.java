@@ -35,14 +35,14 @@ public class Chatapp extends Application {
         mAuth = FirebaseAuth.getInstance();
 
         if(mAuth.getCurrentUser() != null){
-            gebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(mAuth.getCurrentUser().getUid());
+            gebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(mAuth.getCurrentUser().getUid());
 
             gebDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot != null){
 
-                        gebDatabase.child("Online").onDisconnect().setValue(ServerValue.TIMESTAMP);
+                        gebDatabase.child("online").onDisconnect().setValue(ServerValue.TIMESTAMP);
                     }
                 }
 

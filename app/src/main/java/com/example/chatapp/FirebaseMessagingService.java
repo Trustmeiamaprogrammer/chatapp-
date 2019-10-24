@@ -18,7 +18,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         String notBericht = remoteMessage.getNotification().getBody();
         String notTitel = remoteMessage.getNotification().getTitle();
         String actie = remoteMessage.getNotification().getClickAction();
-        String vanGebId = remoteMessage.getData().get("vanGebId");
+        String vanGebId = remoteMessage.getData().get("from_user_id");
 
 
 

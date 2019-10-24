@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,7 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenViewHolder> {
 
-    private List<Berichten> berLijst;
+    private List<Berichten> mBerLijst;
     private DatabaseReference gebDatabase;
     private DatabaseReference berDatabase;
     private FirebaseAuth mAuth;
@@ -37,9 +38,9 @@ public ImageView berImage;
 
 
 
-    public BerichtenAdapter(List<Berichten> berLijst)
+    public BerichtenAdapter(List<Berichten> mBerLijst)
     {
-        this.berLijst = berLijst;
+        this.mBerLijst = mBerLijst;
     }
 
 
@@ -87,19 +88,23 @@ public ImageView berImage;
 
             mAuth = FirebaseAuth.getInstance();
             final String gebId = mAuth.getCurrentUser().getUid();
-            final Berichten berDN = berLijst.get(position);
+
+            final Berichten berDN = mBerLijst.get(position);
+            System.out.println(berDN);
 
             String vanGebruiker = berDN.getVan();
             final String berType = berDN.getType();
             System.out.println(vanGebruiker);
 
+
             gebDatabase = FirebaseDatabase.getInstance().getReference();
-            gebDatabase.child("Gebruikers").child(vanGebruiker).addValueEventListener(new ValueEventListener() {
+
+            gebDatabase.child("gebruikers").child(vanGebruiker).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    berDatabase = FirebaseDatabase.getInstance().getReference().child("Berichten");
-                    String naam = dataSnapshot.child("Naam").getValue().toString();
-                    String afbeelding = dataSnapshot.child("ThumbAfb").getValue().toString();
+                    berDatabase = FirebaseDatabase.getInstance().getReference().child("berichten");
+                    String naam = dataSnapshot.child("naam").getValue().toString();
+                    String afbeelding = dataSnapshot.child("thumbAfb").getValue().toString();
 
                     //viewHolder.gebruikersnaam.setText(naam);
 
@@ -134,7 +139,7 @@ public ImageView berImage;
 
     @Override
     public int getItemCount() {
-        return berLijst.size();
+        return mBerLijst.size();
     }
 }
 
