@@ -91,6 +91,7 @@ public ImageView berImage;
 
             String vanGebruiker = berDN.getVan();
             final String berType = berDN.getType();
+            System.out.println(vanGebruiker);
 
             gebDatabase = FirebaseDatabase.getInstance().getReference();
             gebDatabase.child("Gebruikers").child(vanGebruiker).addValueEventListener(new ValueEventListener() {
