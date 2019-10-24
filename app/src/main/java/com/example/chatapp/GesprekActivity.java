@@ -352,22 +352,21 @@ private void laadBerichten()
     ValueEventListener eventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            for(DataSnapshot ds : dataSnapshot.getChildren()){
-                Berichten bericht = ds.getValue(Berichten.class);
+             Berichten bericht = dataSnapshot.getValue(Berichten.class);
                 berichtenlist.add(bericht);
-            }
-
             mAdapter.notifyDataSetChanged();
             mBerlijst.scrollToPosition(berichtenlist.size());
             mVerversLayout.setRefreshing(false);
-        }
 
+        }
 
         @Override
         public void onCancelled(@NonNull DatabaseError databaseError) {
+            System.out.println(databaseError.toException());
 
         }
     };
+    berRef.addValueEventListener(eventListener);
 }
 
 private void zendBericht()

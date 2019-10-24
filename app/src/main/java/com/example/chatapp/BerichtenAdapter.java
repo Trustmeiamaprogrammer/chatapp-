@@ -93,7 +93,6 @@ public ImageView berImage;
             final String berType = berDN.getType();
 
             gebDatabase = FirebaseDatabase.getInstance().getReference();
-            System.out.println("??????????" + vanGebruiker);
             gebDatabase.child("Gebruikers").child(vanGebruiker).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
