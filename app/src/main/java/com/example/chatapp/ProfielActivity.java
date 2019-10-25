@@ -55,7 +55,7 @@ public class ProfielActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profiel);
 
-        final String gebId = getIntent().getStringExtra("GebId");
+        final String gebId = getIntent().getStringExtra("gebId");
 
         mHuidigRef = FirebaseDatabase.getInstance().getReference();
         gebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(gebId);
@@ -300,7 +300,7 @@ public class ProfielActivity extends AppCompatActivity {
         super.onStop();
 
         if (mHuidigGeb != null){
-            gebDatabase.child("Online").setValue(ServerValue.TIMESTAMP);
+            gebDatabase.child("online").setValue(ServerValue.TIMESTAMP);
         }
     }
 

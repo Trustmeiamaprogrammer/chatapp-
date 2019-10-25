@@ -122,14 +122,14 @@ public class VriendenFrag extends Fragment {
 
                                         if (i == 0) {
                                             Intent profielIntent = new Intent(getContext(), ProfielActivity.class);
-                                            profielIntent.putExtra("GebId", lijstGebId);
+                                            profielIntent.putExtra("gebId", lijstGebId);
                                             startActivity(profielIntent);
                                         }
 
                                         if (i == 1) {
                                             Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
-                                            gesIntent.putExtra("GebId", lijstGebId);
-                                            gesIntent.putExtra("NaamGeb", naamGeb);
+                                            gesIntent.putExtra("gebId", lijstGebId);
+                                            gesIntent.putExtra("naamGeb", naamGeb);
                                             startActivity(gesIntent);
                                         }
 

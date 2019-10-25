@@ -57,9 +57,9 @@ public class VerzoekFrag extends Fragment {
 
         mHuidigeGebruikerID = mAuth.getCurrentUser().getUid();
 
-        mVerzoekDatabase = FirebaseDatabase.getInstance().getReference().child("VriendVer").child(mHuidigeGebruikerID);
+        mVerzoekDatabase = FirebaseDatabase.getInstance().getReference().child("vriendVer").child(mHuidigeGebruikerID);
         mVerzoekDatabase.keepSynced(true);
-        mGebruikerDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+        mGebruikerDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers");
         mGebruikerDatabase.keepSynced(true);
 
         mVerzoeklijst.setHasFixedSize(true);
@@ -110,7 +110,7 @@ public class VerzoekFrag extends Fragment {
                         @Override
                         public void onClick(View view) {
                             Intent profielIntent = new Intent(getContext(), ProfielActivity.class);
-                            profielIntent.putExtra("GebId", lijstGebId);
+                            profielIntent.putExtra("gebId", lijstGebId);
                             startActivity(profielIntent);
                         }
 

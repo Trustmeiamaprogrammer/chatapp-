@@ -99,7 +99,7 @@ public class GebruikersActivity extends AppCompatActivity {
                 mGebruikerData.child(gebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        final String naamGeb = dataSnapshot.child("naam").getValue().toString();
+                        String naamGeb = dataSnapshot.child("naam").getValue().toString();
                         String gebAfbeelding = dataSnapshot.child("thumbAfb").getValue().toString();
                         String gebStatus = dataSnapshot.child("status").getValue().toString();
 
@@ -122,7 +122,7 @@ public class GebruikersActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent profielIntent = new Intent(GebruikersActivity.this, ProfielActivity.class);
-                        profielIntent.putExtra("GebId", gebId);
+                        profielIntent.putExtra("gebId", gebId);
                         startActivity(profielIntent);
                     }
                 });

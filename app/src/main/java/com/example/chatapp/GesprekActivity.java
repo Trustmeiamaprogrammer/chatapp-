@@ -96,8 +96,8 @@ public class GesprekActivity extends AppCompatActivity {
         mHoofdRef = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mHuidigeGebId = mAuth.getCurrentUser().getUid();
-        mGesGebruiker = getIntent().getStringExtra("GebId");
-        String naamGeb = getIntent().getStringExtra("NaamGeb");
+        mGesGebruiker = getIntent().getStringExtra("gebId");
+        String naamGeb = getIntent().getStringExtra("naamGeb");
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View actionBarView = inflater.inflate(R.layout.geprek_cus_bar, null);
 
@@ -404,7 +404,7 @@ private void zendBericht()
         Map berichtMap = new HashMap();
         berichtMap.put("bericht", bericht);
         berichtMap.put("gezien", false);
-        berichtMap.put("type", "Tekst");
+        berichtMap.put("type", "tekst");
         berichtMap.put("tijd", ServerValue.TIMESTAMP);
         berichtMap.put("van", mHuidigeGebId);
 
@@ -418,8 +418,8 @@ private void zendBericht()
         mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).child("timestamp").setValue(ServerValue.TIMESTAMP);
 
 
-        mHoofdRef.child("berichten").child(mGesGebruiker).child(mHuidigeGebId).child("Gezien").setValue(false);
-        mHoofdRef.child("berichten").child(mGesGebruiker).child(mHuidigeGebId).child("Timestamp").setValue(ServerValue.TIMESTAMP);
+        mHoofdRef.child("berichten").child(mGesGebruiker).child(mHuidigeGebId).child("gezien").setValue(false);
+        mHoofdRef.child("berichten").child(mGesGebruiker).child(mHuidigeGebId).child("timestamp").setValue(ServerValue.TIMESTAMP);
         mHoofdRef.updateChildren(berichtGebMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
