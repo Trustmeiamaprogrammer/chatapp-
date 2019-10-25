@@ -30,39 +30,41 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenViewHolder> {
 
-    private int selectItem = 0;
-    private Context c;
+    //private int selectItem = 0;
+    //private Context c;
 
-    private ArrayList<Berichten> mBerLijst;
-    private OnItemClickListener mListener;
+    private List<Berichten> mBerLijst;
+    //private OnItemClickListener mListener;
 
-
-    public interface OnItemClickListener {
-        void OnItemClick(int position);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener listener)
-    {
-        mListener = listener;
-    }
     private DatabaseReference gebDatabase;
     private DatabaseReference berDatabase;
     private FirebaseAuth mAuth;
 
-private LinearLayout layout;
-public TextView berText;
-public CircleImageView profielFoto;
-public TextView gebruikersnaam;
-public ImageView berImage;
-
-
-private static final String TAG = "LIJST";
+//    private LinearLayout layout;
+//    public TextView berText;
+//    public CircleImageView profielFoto;
+//    public TextView gebruikersnaam;
+//    public ImageView berImage;
 
 
 
-    public BerichtenAdapter( ArrayList<Berichten> mBerLijst)
+//    public interface OnItemClickListener {
+//        void OnItemClick(int position);
+//    }
+
+//    public void setOnItemClickListener(OnItemClickListener listener)
+//    {
+//        mListener = listener;
+//    }
+//
+
+// private static final String TAG = "LIJST";
+
+
+
+    public BerichtenAdapter( List<Berichten> mBerLijst)
     {
-
+        this.mBerLijst = mBerLijst;
     }
 
 
@@ -70,8 +72,8 @@ private static final String TAG = "LIJST";
     public BerichtenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.berichten_layout, parent, false);
 
-        BerichtenViewHolder bvh = new BerichtenViewHolder(v, mListener);
-        return bvh;
+        // BerichtenViewHolder bvh = new BerichtenViewHolder(v, mListener);
+        return new BerichtenViewHolder(v);
 
     }
 
@@ -86,21 +88,25 @@ private static final String TAG = "LIJST";
        public TextView vanTijd;
        public TextView naarTijd;
 
-    public BerichtenViewHolder(View view, final OnItemClickListener listener) {
-        super(view);
+       public BerichtenViewHolder(View view){
+           super(view);
 
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listener != null)
-                {
-                    int position = getAdapterPosition();
-                    if (position  != RecyclerView.NO_POSITION){
-                        listener.OnItemClick(position);
-                    }
-                }
-            }
-        });
+
+//    public BerichtenViewHolder(View view, final OnItemClickListener listener) {
+//        super(view);
+
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (listener != null)
+//                {
+//                    int position = getAdapterPosition();
+//                    if (position  != RecyclerView.NO_POSITION){
+//                        listener.OnItemClick(position);
+//                    }
+//                }
+//            }
+//        });
 
         linksBerichtLayout = itemView.findViewById(R.id.gesprek_links_bericht_layout);
         rechtsBerichtLayout = itemView.findViewById(R.id.gesprek_rechts_bericht_layout);
@@ -126,7 +132,7 @@ private static final String TAG = "LIJST";
             mAuth = FirebaseAuth.getInstance();
             final String gebId = mAuth.getCurrentUser().getUid();
             final Berichten berDN = mBerLijst.get(position);
-            Log.d(TAG, " "+ gebId );
+            //Log.d(TAG, " "+ gebId );
             String vanGebruiker = berDN.getVan();
             final String berType = berDN.getType();
             System.out.println(vanGebruiker);
@@ -147,9 +153,17 @@ private static final String TAG = "LIJST";
                     if (dataSnapshot.getKey().equals(gebId)) {
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.VISIBLE);
 
-                        if (berType.equals("Tekst")) {
+                        if (berType.equals("tekst")) {
                             viewHolder.rechtsBerichtTextview.setText(berDN.getBericht());
 
+                        }
+                        viewHolder.linksBerichtLayout.setVisibility(LinearLayout.GONE);
+                    }
+                    else{
+                        viewHolder.linksBerichtLayout.setVisibility(LinearLayout.VISIBLE);
+
+                        if(berType.equals("tekst")){
+                            viewHolder.linksBerichtTextview.setText(berDN.getBericht());
                         }
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.GONE);
                     }
@@ -173,7 +187,7 @@ private static final String TAG = "LIJST";
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mBerLijst.size();
     }
 
 

@@ -11,18 +11,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="10dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/gesprek_links_bericht_tekst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/berichtballon_layout"
             android:layout_gravity="center"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:padding="10dp" />
+            android:background="@drawable/berichtballon_layout"
+            android:padding="10dp"
+            android:textColor="#000" />
 
         <TextView
             android:id="@+id/van_tijd"

@@ -67,7 +67,7 @@ public class GesprekActivity extends AppCompatActivity {
     private RecyclerView mBerlijst;
     private SwipeRefreshLayout mVerversLayout;
 
-    private final ArrayList<Berichten> berichtenList = new ArrayList<>();
+    private final List<Berichten> berichtenList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
 
     private BerichtenAdapter mAdapter;
@@ -76,10 +76,10 @@ public class GesprekActivity extends AppCompatActivity {
     private static final int GALLERIJ_FOTO = 1;
     private StorageReference mAfbeeldingOplag;
 
-
+    private int itemPos = 0;
     private String mLaatstKey = "";
     private String mVorigKey = "";
-    private int itemPos;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,14 +121,14 @@ public class GesprekActivity extends AppCompatActivity {
 
         mBerlijst.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new BerichtenAdapter.OnItemClickListener() {
-            @Override
-            public void OnItemClick(int position) {
-                berichtenList.get(position);
-
-               // laadBerichten();
-            }
-        });
+//        mAdapter.setOnItemClickListener(new BerichtenAdapter.OnItemClickListener() {
+//            @Override
+//            public void OnItemClick(int position) {
+//                berichtenList.get(position);
+//
+//               // laadBerichten();
+//            }
+//        });
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
         mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
@@ -360,9 +360,9 @@ private void laadBerichten() {
     DatabaseReference berRef = mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker);
     Query berQuery = berRef.limitToLast(mHuidigePag * AANTAL_ITEMS_LADEN);
 
-    berQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+    berQuery.addChildEventListener(new ChildEventListener() {
         @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             Berichten bericht = dataSnapshot.getValue(Berichten.class);
 
             itemPos++;
@@ -377,6 +377,20 @@ private void laadBerichten() {
             mAdapter.notifyDataSetChanged();
             mBerlijst.scrollToPosition(berichtenList.size() - 1);
             mVerversLayout.setRefreshing(false);
+
+        }
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
         }
 
@@ -414,12 +428,12 @@ private void zendBericht()
 
         mGesBerView.setText("");
 
-        mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
-        mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).child("timestamp").setValue(ServerValue.TIMESTAMP);
+        mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
+        mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("timestamp").setValue(ServerValue.TIMESTAMP);
 
 
-        mHoofdRef.child("berichten").child(mGesGebruiker).child(mHuidigeGebId).child("gezien").setValue(false);
-        mHoofdRef.child("berichten").child(mGesGebruiker).child(mHuidigeGebId).child("timestamp").setValue(ServerValue.TIMESTAMP);
+        mHoofdRef.child("gesprek").child(mGesGebruiker).child(mHuidigeGebId).child("gezien").setValue(false);
+        mHoofdRef.child("gesprek").child(mGesGebruiker).child(mHuidigeGebId).child("timestamp").setValue(ServerValue.TIMESTAMP);
         mHoofdRef.updateChildren(berichtGebMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {

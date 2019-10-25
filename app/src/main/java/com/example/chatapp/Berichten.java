@@ -30,7 +30,7 @@ public class Berichten {
 
 
 
-    public Berichten(String bericht, String type, long tijd, boolean gezien) {
+    public Berichten(String bericht, String type, Long tijd, boolean gezien) {
         this.bericht = bericht;
         this.type = type;
         this.tijd = tijd;
