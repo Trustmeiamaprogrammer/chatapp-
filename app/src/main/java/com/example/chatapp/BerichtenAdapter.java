@@ -21,7 +21,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import android.util.Log;
@@ -140,6 +142,8 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
             String vanGebruiker = berDN.getVan();
             final String berType = berDN.getType();
             System.out.println(vanGebruiker);
+            final SimpleDateFormat sfd = new SimpleDateFormat("HH:mm");
+
 
 
             gebDatabase = FirebaseDatabase.getInstance().getReference();
@@ -160,12 +164,13 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                         if (berType.equals("tekst")) {
                             viewHolder.afbeeldingRechts.setVisibility(View.INVISIBLE);
                             viewHolder.rechtsBerichtTextview.setText(berDN.getBericht());
+                            viewHolder.vanTijd.setText(sfd.format(new Date(berDN.getTijd())));
 
                         }
                         if(berType.equals("afbeelding")){
                             viewHolder.rechtsBerichtTextview.setVisibility(View.INVISIBLE);
-
                         Picasso.with(viewHolder.afbeeldingRechts.getContext()).load(berDN.getBericht()).placeholder(R.drawable.ic_launcher_foreground).into(viewHolder.afbeeldingRechts);
+                            viewHolder.vanTijd.setText(sfd.format(new Date(berDN.getTijd())));
                         }
                         viewHolder.linksBerichtLayout.setVisibility(LinearLayout.GONE);
                     }
@@ -175,12 +180,13 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                         if(berType.equals("tekst")){
                             viewHolder.afbeeldingLinks.setVisibility(View.INVISIBLE);
                             viewHolder.linksBerichtTextview.setText(berDN.getBericht());
+                            viewHolder.naarTijd.setText(sfd.format(new Date(berDN.getTijd())));
                         }
 
                         if(berType.equals("afbeelding")){
                             viewHolder.linksBerichtTextview.setVisibility(View.INVISIBLE);
-
                             Picasso.with(viewHolder.afbeeldingLinks.getContext()).load(berDN.getBericht()).placeholder(R.drawable.ic_launcher_foreground).into(viewHolder.afbeeldingLinks);
+                            viewHolder.naarTijd.setText(sfd.format(new Date(berDN.getTijd())));
                         }
 
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.GONE);
