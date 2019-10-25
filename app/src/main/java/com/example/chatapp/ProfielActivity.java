@@ -291,7 +291,7 @@ public class ProfielActivity extends AppCompatActivity {
         if ( mHuidigGeb == null){
             sendToStart();
         } else {
-            gebDatabase.child("Online").setValue(true);
+            gebDatabase.child("online").setValue(true);
         }
     }
 

@@ -81,7 +81,7 @@ public class InstellingenActivity extends AppCompatActivity {
 
         String huidigeGebUid = mHuidigeGebruiker.getUid();
 
-        mGebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidigeGebUid);
+        mGebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigeGebUid);
         mGebDatabase.keepSynced(true);
 
         mGebDatabase.addValueEventListener(new ValueEventListener() {

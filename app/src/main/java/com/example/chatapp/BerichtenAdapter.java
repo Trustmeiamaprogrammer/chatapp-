@@ -87,6 +87,8 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
        public TextView rechtsBerichtTextview;
        public TextView vanTijd;
        public TextView naarTijd;
+       public ImageView afbeeldingLinks;
+       public ImageView afbeeldingRechts;
 
        public BerichtenViewHolder(View view){
            super(view);
@@ -114,6 +116,8 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
         rechtsBerichtTextview = itemView.findViewById(R.id.gesprek_rechts_bericht_text);
         vanTijd = itemView.findViewById(R.id.van_tijd);
         naarTijd = itemView.findViewById(R.id.naar_tijd);
+        afbeeldingLinks = itemView.findViewById(R.id.afbeeldingLinks);
+        afbeeldingRechts = itemView.findViewById(R.id.afbeeldingRechts);
 
 //        berText =  view.findViewById(R.id.berichttekst);
 //        profielFoto = view.findViewById(R.id.bericht_profiel);
@@ -154,8 +158,14 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.VISIBLE);
 
                         if (berType.equals("tekst")) {
+                            viewHolder.afbeeldingRechts.setVisibility(View.INVISIBLE);
                             viewHolder.rechtsBerichtTextview.setText(berDN.getBericht());
 
+                        }
+                        if(berType.equals("afbeelding")){
+                            viewHolder.rechtsBerichtTextview.setVisibility(View.INVISIBLE);
+
+                        Picasso.with(viewHolder.afbeeldingRechts.getContext()).load(berDN.getBericht()).placeholder(R.drawable.ic_launcher_foreground).into(viewHolder.afbeeldingRechts);
                         }
                         viewHolder.linksBerichtLayout.setVisibility(LinearLayout.GONE);
                     }
@@ -163,8 +173,16 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                         viewHolder.linksBerichtLayout.setVisibility(LinearLayout.VISIBLE);
 
                         if(berType.equals("tekst")){
+                            viewHolder.afbeeldingLinks.setVisibility(View.INVISIBLE);
                             viewHolder.linksBerichtTextview.setText(berDN.getBericht());
                         }
+
+                        if(berType.equals("afbeelding")){
+                            viewHolder.linksBerichtTextview.setVisibility(View.INVISIBLE);
+
+                            Picasso.with(viewHolder.afbeeldingLinks.getContext()).load(berDN.getBericht()).placeholder(R.drawable.ic_launcher_foreground).into(viewHolder.afbeeldingLinks);
+                        }
+
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.GONE);
                     }
                 }

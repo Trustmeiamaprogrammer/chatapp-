@@ -15,8 +15,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(RemoteMessage remoteMessage){
         super.onMessageReceived(remoteMessage);
 
-        String notBericht = remoteMessage.getNotification().getBody();
         String notTitel = remoteMessage.getNotification().getTitle();
+        String notBericht = remoteMessage.getNotification().getBody();
         String actie = remoteMessage.getNotification().getClickAction();
         String vanGebId = remoteMessage.getData().get("from_user_id");
 
@@ -30,7 +30,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("GebId", vanGebId);
+        resultIntent.putExtra("gebId", vanGebId);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0,
                 resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);

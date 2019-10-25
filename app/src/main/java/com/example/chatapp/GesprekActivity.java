@@ -240,15 +240,21 @@ public class GesprekActivity extends AppCompatActivity {
 @Override
         protected void onActivityResult(int verzoekCode, int resultaatCode, Intent data) {
     super.onActivityResult(verzoekCode, resultaatCode, data);
+
     if (verzoekCode == GALLERIJ_FOTO && resultaatCode == RESULT_OK) {
         Uri imageUri = data.getData();
+        CropImage.activity(imageUri).setAspectRatio(1, 1).start(this);
+    }
 
         if (verzoekCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
+
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultaatCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
 
+
+                Uri resultUri = result.getUri();
                 final String huidigGebRef = "berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
                 final String gesGebRef = "berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
                 final DatabaseReference gebGesPush = mHoofdRef.child("berichten")
@@ -294,7 +300,8 @@ public class GesprekActivity extends AppCompatActivity {
             }
         }
     }
-}
+
+
 
 private void laadMeerBerichten()
 {
