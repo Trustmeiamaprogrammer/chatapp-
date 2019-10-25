@@ -126,14 +126,14 @@ public class GesprekActivity extends AppCompatActivity {
             public void OnItemClick(int position) {
                 berichtenList.get(position);
 
-                laadBerichten();
+               // laadBerichten();
             }
         });
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
         mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
 
-        //laadBerichten();
+        laadBerichten();
 
         mTitelView.setText(naamGeb);
 

@@ -124,8 +124,8 @@ public class GesprekkenFrag extends Fragment {
                             public void onClick(View v) {
                                 Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
 
-                                gesIntent.putExtra("GebId", lijstGebId);
-                                gesIntent.putExtra("NaamGeb", naamGeb);
+                                gesIntent.putExtra("gebId", lijstGebId);
+                                gesIntent.putExtra("naamGeb", naamGeb);
                                 startActivity(gesIntent);
                             }
                         });
