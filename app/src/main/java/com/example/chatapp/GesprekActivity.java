@@ -67,7 +67,7 @@ public class GesprekActivity extends AppCompatActivity {
     private RecyclerView mBerlijst;
     private SwipeRefreshLayout mVerversLayout;
 
-    private final List<Berichten> berichtenList = new ArrayList<>();
+    private final ArrayList<Berichten> berichtenList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
 
     private BerichtenAdapter mAdapter;
@@ -76,10 +76,10 @@ public class GesprekActivity extends AppCompatActivity {
     private static final int GALLERIJ_FOTO = 1;
     private StorageReference mAfbeeldingOplag;
 
-    private int itemPos = 0;
 
     private String mLaatstKey = "";
     private String mVorigKey = "";
+    private int itemPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +121,19 @@ public class GesprekActivity extends AppCompatActivity {
 
         mBerlijst.setAdapter(mAdapter);
 
+        mAdapter.setOnItemClickListener(new BerichtenAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(int position) {
+                berichtenList.get(position);
+
+                laadBerichten();
+            }
+        });
+
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
         mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
 
-        laadBerichten();
+        //laadBerichten();
 
         mTitelView.setText(naamGeb);
 

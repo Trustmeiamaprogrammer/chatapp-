@@ -1,5 +1,7 @@
 package com.example.chatapp;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +21,30 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import android.util.Log;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.BerichtenViewHolder> {
 
-    private List<Berichten> mBerLijst;
+    private int selectItem = 0;
+    private Context c;
+
+    private ArrayList<Berichten> mBerLijst;
+    private OnItemClickListener mListener;
+
+
+    public interface OnItemClickListener {
+        void OnItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener)
+    {
+        mListener = listener;
+    }
     private DatabaseReference gebDatabase;
     private DatabaseReference berDatabase;
     private FirebaseAuth mAuth;
@@ -37,10 +56,13 @@ public TextView gebruikersnaam;
 public ImageView berImage;
 
 
+private static final String TAG = "LIJST";
 
-    public BerichtenAdapter(List<Berichten> mBerLijst)
+
+
+    public BerichtenAdapter( ArrayList<Berichten> mBerLijst)
     {
-        this.mBerLijst = mBerLijst;
+
     }
 
 
@@ -48,10 +70,12 @@ public ImageView berImage;
     public BerichtenViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.berichten_layout, parent, false);
 
-        return new BerichtenViewHolder(v);
+        BerichtenViewHolder bvh = new BerichtenViewHolder(v, mListener);
+        return bvh;
+
     }
 
-    public class BerichtenViewHolder extends RecyclerView.ViewHolder {
+    public static class BerichtenViewHolder extends RecyclerView.ViewHolder {
 
         public CircleImageView profielFoto;
 
@@ -62,8 +86,21 @@ public ImageView berImage;
        public TextView vanTijd;
        public TextView naarTijd;
 
-    public BerichtenViewHolder(View view) {
+    public BerichtenViewHolder(View view, final OnItemClickListener listener) {
         super(view);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null)
+                {
+                    int position = getAdapterPosition();
+                    if (position  != RecyclerView.NO_POSITION){
+                        listener.OnItemClick(position);
+                    }
+                }
+            }
+        });
 
         linksBerichtLayout = itemView.findViewById(R.id.gesprek_links_bericht_layout);
         rechtsBerichtLayout = itemView.findViewById(R.id.gesprek_rechts_bericht_layout);
@@ -88,10 +125,8 @@ public ImageView berImage;
 
             mAuth = FirebaseAuth.getInstance();
             final String gebId = mAuth.getCurrentUser().getUid();
-
             final Berichten berDN = mBerLijst.get(position);
-            System.out.println(berDN);
-
+            Log.d(TAG, " "+ gebId );
             String vanGebruiker = berDN.getVan();
             final String berType = berDN.getType();
             System.out.println(vanGebruiker);
@@ -136,11 +171,12 @@ public ImageView berImage;
 //            }
        }
 
-
     @Override
     public int getItemCount() {
-        return mBerLijst.size();
+        return 0;
     }
+
+
 }
 
 
