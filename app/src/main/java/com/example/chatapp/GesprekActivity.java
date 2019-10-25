@@ -264,7 +264,7 @@ public class GesprekActivity extends AppCompatActivity {
 
                                 Map berichtGebMap = new HashMap();
                                 berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
-                                berichtGebMap.put(gebGesPush + "/" + pushId, berichtMap);
+                                berichtGebMap.put(gesGebRef + "/" + pushId, berichtMap);
 
                                 mGesBerView.setText("");
 
@@ -306,7 +306,7 @@ private void laadMeerBerichten()
 
             }
 
-            if (itemPos ==1)
+            if (itemPos == 1)
             {
                 mLaatstKey = berichtKey;
 
@@ -396,8 +396,8 @@ private void zendBericht()
         mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(true);
         mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Timestamp").setValue(ServerValue.TIMESTAMP);
 
-        mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Gezien").setValue(false);
-        mHoofdRef.child("Berichten").child(mHuidigeGebId).child(mGesGebruiker).child("Timestamp").setValue(ServerValue.TIMESTAMP);
+        mHoofdRef.child("Berichten").child(mGesGebruiker).child(mHuidigeGebId).child("Gezien").setValue(false);
+        mHoofdRef.child("Berichten").child(mGesGebruiker).child(mHuidigeGebId).child("Timestamp").setValue(ServerValue.TIMESTAMP);
         mHoofdRef.updateChildren(berichtGebMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
