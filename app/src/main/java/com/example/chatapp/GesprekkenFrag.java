@@ -67,9 +67,9 @@ public class GesprekkenFrag extends Fragment {
         mGesLijst = (RecyclerView) mMainView.findViewById(R.id.ges_list);
         mAuth = FirebaseAuth.getInstance();
         mHuidigGebId = mAuth.getCurrentUser().getUid();
-        mGesDatabase = FirebaseDatabase.getInstance().getReference().child("Gesprek").child(mHuidigGebId);
+        mGesDatabase = FirebaseDatabase.getInstance().getReference().child("gesprek").child(mHuidigGebId);
         mGesDatabase.keepSynced(true);
-        mGebDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers");
+        mGebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers");
         mGebDatabase.keepSynced(true);
 
         mGesLijst.setHasFixedSize(true);
@@ -104,12 +104,12 @@ public class GesprekkenFrag extends Fragment {
                 mGebDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        final String naamGeb = dataSnapshot.child("Naam").getValue().toString();
-                        String gebThumb = dataSnapshot.child("ThumbAfb").getValue().toString();
-                        String gebStatus = dataSnapshot.child("Status").getValue().toString();
+                        final String naamGeb = dataSnapshot.child("naam").getValue().toString();
+                        String gebThumb = dataSnapshot.child("thumbAfb").getValue().toString();
+                        String gebStatus = dataSnapshot.child("status").getValue().toString();
 
-                        if (dataSnapshot.hasChild("Online")) {
-                            String gebOnline = dataSnapshot.child("Online").getValue().toString();
+                        if (dataSnapshot.hasChild("online")) {
+                            String gebOnline = dataSnapshot.child("online").getValue().toString();
 
                             gesprekViewHolder.setGebOnline(gebOnline);
                         }

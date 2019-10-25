@@ -36,7 +36,7 @@ public class StatusActivity extends AppCompatActivity {
         mHuidigeGebruiker = FirebaseAuth.getInstance().getCurrentUser();
         String huidige_uid = mHuidigeGebruiker.getUid();
 
-        mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("Gebruikers").child(huidige_uid);
+        mStatusDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidige_uid);
         mToolbar = (Toolbar) findViewById(R.id.status_appBar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Account Status");
@@ -58,7 +58,7 @@ public class StatusActivity extends AppCompatActivity {
 
                 String status = mStatus.getEditText().getText().toString();
 
-                mStatusDatabase.child("Status").setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
+                mStatusDatabase.child("status").setValue(status).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){

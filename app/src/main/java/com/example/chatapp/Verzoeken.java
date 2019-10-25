@@ -6,7 +6,7 @@ public class Verzoeken {
 
     public Verzoeken(){}
 
-    public Verzoeken(String datum){
+    public Verzoeken(String Datum){
         this.datum = datum;
     }
 

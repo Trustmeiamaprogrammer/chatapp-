@@ -5,23 +5,23 @@ public class Berichten {
     public final static String MSG_TYPE_SENT = "Verzonden";
     public final static String MSG_TYPE_RECEIVED = "Ontvangen";
 
-    private String Bericht, Type;
-    private long Tijd;
-    private boolean Gezien;
+    private String bericht, type;
+    private long tijd;
+    private boolean gezien;
 
-    private String Van;
+    private String van;
 
-    public Berichten(String Van)
+    public Berichten(String van)
     {
-        this.Van = Van;
+        this.van = van;
     }
 
     public String getVan() {
-        return Van;
+        return van;
     }
 
-    public void setVan(String Van) {
-        this.Van = Van;
+    public void setVan(String van) {
+        this.van = van;
     }
 
     public Berichten(){
@@ -30,46 +30,46 @@ public class Berichten {
 
 
 
-    public Berichten(String Bericht, String Type, long Tijd, boolean Gezien) {
-        this.Bericht = Bericht;
-        this.Type = Type;
-        this.Tijd = Tijd;
-        this.Gezien = Gezien;
+    public Berichten(String bericht, String type, long tijd, boolean gezien) {
+        this.bericht = bericht;
+        this.type = type;
+        this.tijd = tijd;
+        this.gezien = gezien;
     }
 
 
 
 
     public String getBericht() {
-        return Bericht;
+        return bericht;
     }
 
-    public void setBericht(String Bericht) {
-        this.Bericht = Bericht;
+    public void setBericht(String bericht) {
+        this.bericht = bericht;
     }
 
     public String getType() {
-        return Type;
+        return type;
     }
 
-    public void setType(String Type) {
-        this.Type = Type;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public long getTijd() {
-        return Tijd;
+        return tijd;
     }
 
-    public void setTijd(long Tijd) {
-        this.Tijd = Tijd;
+    public void setTijd(long tijd) {
+        this.tijd = tijd;
     }
 
     public boolean isGezien() {
-        return Gezien;
+        return gezien;
     }
 
-    public void setGezien(boolean Gezien) {
-        this.Gezien = Gezien;
+    public void setGezien(boolean gezien) {
+        this.gezien = gezien;
     }
 
 
