@@ -5,7 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 
-import androidx.core.app.NotificationCompat;
+
 
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -23,11 +23,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
 
 
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+        Notification.Builder mBuilder = new Notification.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(notTitel)
                 .setContentText(notBericht)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(Notification.PRIORITY_DEFAULT);
 
         Intent resultIntent = new Intent();
         resultIntent.putExtra("gebId", vanGebId);
@@ -40,6 +40,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         NotificationManager notMan = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notMan.notify(notId, mBuilder.build());
 
-        
+
     }
 }
