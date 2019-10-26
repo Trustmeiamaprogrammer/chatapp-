@@ -23,7 +23,7 @@ class GetTimeAgo extends Application {
         }
         final long vers = nu - tijd;
         if (vers < milliMinuut){
-            return "Online";
+            return "online";
         }
         else if (vers < 2 * milliMinuut){
             return "1 minuut geleden";

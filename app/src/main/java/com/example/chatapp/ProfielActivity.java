@@ -73,7 +73,7 @@ public class ProfielActivity extends AppCompatActivity {
         profielZendKnop = findViewById(R.id.ProfielZendKnop);
         profielWeigerKnop =  findViewById(R.id.ProfielWeigerKnop);
 
-        huidigState = "GeenVrienden";
+        huidigState = "geenVrienden";
         profielWeigerKnop.setVisibility(View.INVISIBLE);
         profielWeigerKnop.setEnabled(false);
 
@@ -114,15 +114,15 @@ public class ProfielActivity extends AppCompatActivity {
                             if (dataSnapshot.hasChild(gebId)) {
                                 String ver_type = dataSnapshot.child(gebId).child("verType").getValue().toString();
 
-                                if (ver_type.equals("Ontvangen")) {
+                                if (ver_type.equals("ontvangen")) {
 
-                                    huidigState = "VerOntvang";
+                                    huidigState = "verOntvang";
                                     profielZendKnop.setText("Accepteer verzoek");
                                     profielWeigerKnop.setVisibility(View.VISIBLE);
                                     profielWeigerKnop.setEnabled(true);
 
 
-                                } else if (ver_type.equals("Verzonden")) {
+                                } else if (ver_type.equals("verzonden")) {
                                     huidigState = "verStuurd";
                                     profielZendKnop.setText("Annuleer verzoek");
                                     profielWeigerKnop.setVisibility(View.INVISIBLE);
@@ -136,7 +136,7 @@ public class ProfielActivity extends AppCompatActivity {
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                         if (dataSnapshot.hasChild(gebId)) {
-                                            huidigState = "Vrienden";
+                                            huidigState = "vrienden";
                                             profielZendKnop.setText("Verwijder Vriend");
                                             profielWeigerKnop.setVisibility(View.INVISIBLE);
                                             profielWeigerKnop.setEnabled(false);
@@ -165,23 +165,69 @@ public class ProfielActivity extends AppCompatActivity {
 
             }
         });
+        profielWeigerKnop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                        Map weigerVriendMap = new HashMap();
+                        weigerVriendMap.put("vriendVer/"+ mHuidigGeb.getUid() + "/" + gebId, null);
+                        weigerVriendMap.put("vriendVer/"+ gebId + "/" + mHuidigGeb.getUid(), null);
 
+
+                        mHuidigRef.updateChildren(weigerVriendMap, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                if(databaseError == null){
+                                    huidigState = "geenVrienden";
+                                    profielZendKnop.setText("Vriendschap verzoek");
+
+                                    profielWeigerKnop.setVisibility(View.INVISIBLE);
+                                    profielWeigerKnop.setEnabled(false);
+
+                                } else {
+                                    String fout = databaseError.getMessage();
+                                    Toast.makeText(ProfielActivity.this, fout, Toast.LENGTH_SHORT).show();
+
+                                }
+                                profielZendKnop.setEnabled(true);
+                            }
+                        });
+
+
+
+//                if (huidigState.equals("verOntvang")) {
+//                    profielZendKnop.setText("Vriendschap verzoek");
+//
+//                    profielWeigerKnop.setVisibility(View.INVISIBLE);
+//                    profielWeigerKnop.setEnabled(false);
+//
+//                    if (huidigState.equals("verStuurd")) {
+//                        profielZendKnop.setText("Vriendschap verzoek");
+//
+//                        profielWeigerKnop.setVisibility(View.INVISIBLE);
+//                        profielWeigerKnop.setEnabled(false);
+//                    }
+
+
+          //      }
+
+            }
+        });
 
         profielZendKnop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 profielZendKnop.setEnabled(false);
-                if(huidigState.equals("GeenVrienden")) {
+                if(huidigState.equals("geenVrienden")) {
 
                     DatabaseReference nNotRef = mHuidigRef.child("notificaties").child(gebId).push();
                     String nNotId = nNotRef.getKey();
 
                     HashMap<String, String> notData = new HashMap<>();
                     notData.put("van", mHuidigGeb.getUid());
-                    notData.put("type", "Verzoek");
+                    notData.put("type", "verzoek");
                     Map verMap = new HashMap<>();
-                    verMap.put("vriendVer/" + mHuidigGeb.getUid() + "/" + gebId + "/verType", "Verzonden");
-                    verMap.put("vriendVer/" + gebId + "/" + mHuidigGeb.getUid() + "/verType", "Ontvangen");
+                    verMap.put("vriendVer/" + mHuidigGeb.getUid() + "/" + gebId + "/verType", "verzonden");
+                    verMap.put("vriendVer/" + gebId + "/" + mHuidigGeb.getUid() + "/verType", "ontvangen");
                     verMap.put("notificaties/" + gebId + "/" + nNotId, notData);
 
                     mHuidigRef.updateChildren(verMap, new DatabaseReference.CompletionListener() {
@@ -191,7 +237,7 @@ public class ProfielActivity extends AppCompatActivity {
                                 Toast.makeText(ProfielActivity.this, "Verzoek versturen niet geukt.", Toast.LENGTH_SHORT).show();
                             }
 
-                                huidigState = "VerStuurd";
+                                huidigState = "verStuurd";
                                 profielZendKnop.setText("Annuleer");
 
                                 profielZendKnop.setEnabled(true);
@@ -200,7 +246,7 @@ public class ProfielActivity extends AppCompatActivity {
                     });
                 }
 
-                if(huidigState.equals("VerStuurd")){
+                if(huidigState.equals("verStuurd")){
                     verzoekDatabase.child(mHuidigGeb.getUid()).child(gebId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
@@ -208,7 +254,7 @@ public class ProfielActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     profielZendKnop.setEnabled(true);
-                                    huidigState = "GeenVrienden";
+                                    huidigState = "geenVrienden";
                                     profielZendKnop.setText("Verzoek verstuurd");
 
                                     profielWeigerKnop.setVisibility(View.INVISIBLE);
@@ -223,7 +269,7 @@ public class ProfielActivity extends AppCompatActivity {
                     });
                 }
 
-                if(huidigState.equals("VerOntvang")){
+                if(huidigState.equals("verOntvang")){
                     final String huidigDatum = DateFormat.getDateTimeInstance().format(new Date());
 
                     Map vriendMap = new HashMap();
@@ -237,7 +283,7 @@ public class ProfielActivity extends AppCompatActivity {
                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                             if(databaseError == null){
                                 profielZendKnop.setEnabled(true);
-                                huidigState ="Vrienden";
+                                huidigState ="vrienden";
                                 profielZendKnop.setText("verwijder vriend");
 
                                 profielWeigerKnop.setVisibility(View.INVISIBLE);
@@ -253,7 +299,7 @@ public class ProfielActivity extends AppCompatActivity {
                     });
                 }
 
-                if(huidigState.equals("Vrienden")){
+                if(huidigState.equals("vrienden")){
                     Map ontvriendMap = new HashMap();
                     ontvriendMap.put("vrienden/"+ mHuidigGeb.getUid() + "/" + gebId, null);
                     ontvriendMap.put("vrienden/"+ gebId + "/" + mHuidigGeb.getUid(), null);
@@ -262,7 +308,7 @@ public class ProfielActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                             if(databaseError == null){
-                                huidigState = "GeenVrienden";
+                                huidigState = "geenVrienden";
                                 profielZendKnop.setText("Vriendschap verzoek");
 
                                 profielWeigerKnop.setVisibility(View.INVISIBLE);
