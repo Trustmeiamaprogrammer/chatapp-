@@ -53,7 +53,7 @@ public class GesprekActivity extends AppCompatActivity {
     private String mGesGebruiker;
     private Toolbar mGesToolbar;
     private DatabaseReference mHoofdRef;
-    //private DatabaseReference notDatabase;
+    private DatabaseReference notDatabase;
 
     private TextView mTitelView;
     private TextView mLaatstGezienView;
@@ -135,7 +135,7 @@ public class GesprekActivity extends AppCompatActivity {
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
         mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
-        //notDatabase = FirebaseDatabase.getInstance().getReference().child("notificaties");
+        notDatabase = FirebaseDatabase.getInstance().getReference().child("notificaties");
 
         laadBerichten();
 
@@ -278,12 +278,12 @@ public class GesprekActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String downloadUri = uri.toString();
-//                                DatabaseReference nNotRef = mHoofdRef.child("notificaties").child(mGesGebruiker).push();
-//                                String nNotId = nNotRef.getKey();
-//
-//                                HashMap<String, String> notData = new HashMap<>();
-//                                notData.put("van", mHuidigeGebId);
-//                                notData.put("type", "afbeelding");
+                                DatabaseReference nNotRef = mHoofdRef.child("notificaties").child(mGesGebruiker).push();
+                                String nNotId = nNotRef.getKey();
+
+                                HashMap<String, String> notData = new HashMap<>();
+                                notData.put("van", mHuidigeGebId);
+                                notData.put("type", "afbeelding");
 
                                 Map berichtMap = new HashMap();
                                 berichtMap.put("bericht", downloadUri);
@@ -295,7 +295,7 @@ public class GesprekActivity extends AppCompatActivity {
                                 Map berichtGebMap = new HashMap();
                                 berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
                                 berichtGebMap.put(gesGebRef + "/" + pushId, berichtMap);
-                                //berichtGebMap.put("notificaties/" + gesGebRef + "/" + nNotId, notData);
+                                berichtGebMap.put("notificaties/" + "berichten/" + mGesGebruiker + "/" + nNotId, notData);
 
                                 mGesBerView.setText("");
 
@@ -434,14 +434,14 @@ private void zendBericht()
         String huidigGebRef = "berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
         String gesGebRef = "berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
         DatabaseReference huidigGesPush = mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).push();
-//        DatabaseReference nNotRef = mHoofdRef.child("notificaties").child(mGesGebruiker).push();
-//        String nNotId = nNotRef.getKey();
+        DatabaseReference nNotRef = mHoofdRef.child("notificaties").child(mGesGebruiker).push();
+        String nNotId = nNotRef.getKey();
 
         String pushId = huidigGesPush.getKey();
-//
-//        HashMap<String, String> notData = new HashMap<>();
-//        notData.put("van", mHuidigeGebId);
-//        notData.put("type", "tekst");
+
+        HashMap<String, String> notData = new HashMap<>();
+        notData.put("van", mHuidigeGebId);
+        notData.put("type", "tekst");
 
         Map berichtMap = new HashMap();
         berichtMap.put("bericht", bericht);
@@ -453,7 +453,7 @@ private void zendBericht()
         Map berichtGebMap = new HashMap();
         berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
         berichtGebMap.put(gesGebRef + "/" + pushId, berichtMap);
-       // berichtGebMap.put("notificaties/" + gesGebRef + "/" + nNotId, notData);
+        berichtGebMap.put("notificaties/" + "berichten/" + mGesGebruiker + "/" + nNotId, notData);
 
         mGesBerView.setText("");
 
