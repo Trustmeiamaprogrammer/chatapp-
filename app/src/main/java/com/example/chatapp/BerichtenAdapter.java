@@ -164,7 +164,7 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                         if (berType.equals("tekst")) {
                             viewHolder.afbeeldingRechts.setVisibility(View.INVISIBLE);
                             viewHolder.rechtsBerichtTextview.setText(berDN.getBericht());
-                            viewHolder.vanTijd.setText(sfd.format(new Date(berDN.getTijd())));
+                            viewHolder.naarTijd.setText(sfd.format(new Date(berDN.getTijd())));
 
                         }
                         if(berType.equals("afbeelding")){
@@ -180,7 +180,7 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                         if(berType.equals("tekst")){
                             viewHolder.afbeeldingLinks.setVisibility(View.INVISIBLE);
                             viewHolder.linksBerichtTextview.setText(berDN.getBericht());
-                            viewHolder.naarTijd.setText(sfd.format(new Date(berDN.getTijd())));
+                            viewHolder.vanTijd.setText(sfd.format(new Date(berDN.getTijd())));
                         }
 
                         if(berType.equals("afbeelding")){

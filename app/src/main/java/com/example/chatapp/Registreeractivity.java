@@ -106,7 +106,7 @@ public class Registreeractivity extends AppCompatActivity {
                                     gebMap.put("afbeelding", "default");
                                     gebMap.put("thumbAfb", "default");
                                     gebMap.put("appTkn", appTkn);
-                                    gebMap.put("online", "true");
+                                    //gebMap.put("online", "true");
 
                                     gebDatabase.child(gebId).setValue(gebMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override

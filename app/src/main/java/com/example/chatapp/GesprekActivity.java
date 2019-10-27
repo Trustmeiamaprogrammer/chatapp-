@@ -53,6 +53,7 @@ public class GesprekActivity extends AppCompatActivity {
     private String mGesGebruiker;
     private Toolbar mGesToolbar;
     private DatabaseReference mHoofdRef;
+    //private DatabaseReference notDatabase;
 
     private TextView mTitelView;
     private TextView mLaatstGezienView;
@@ -69,6 +70,7 @@ public class GesprekActivity extends AppCompatActivity {
 
     private final List<Berichten> berichtenList = new ArrayList<>();
     private LinearLayoutManager mLinearLayout;
+
 
     private BerichtenAdapter mAdapter;
     private static final int AANTAL_ITEMS_LADEN = 10;
@@ -101,6 +103,7 @@ public class GesprekActivity extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View actionBarView = inflater.inflate(R.layout.geprek_cus_bar, null);
 
+
         actionBar.setCustomView(actionBarView);
 
         mTitelView = findViewById(R.id.cus_bar_titel);
@@ -132,6 +135,7 @@ public class GesprekActivity extends AppCompatActivity {
 
         mAfbeeldingOplag = FirebaseStorage.getInstance().getReference();
         mHoofdRef.child("gesprek").child(mHuidigeGebId).child(mGesGebruiker).child("gezien").setValue(true);
+        //notDatabase = FirebaseDatabase.getInstance().getReference().child("notificaties");
 
         laadBerichten();
 
@@ -184,6 +188,8 @@ public class GesprekActivity extends AppCompatActivity {
             public void onDataChange( DataSnapshot dataSnapshot) {
 
                 if (!dataSnapshot.hasChild(mGesGebruiker)) {
+
+
                     Map gesVoegtoeMap = new HashMap();
                     gesVoegtoeMap.put("gezien", false);
                     gesVoegtoeMap.put("timestamp", ServerValue.TIMESTAMP);
@@ -191,6 +197,7 @@ public class GesprekActivity extends AppCompatActivity {
                     Map gesGebMap = new HashMap();
                     gesGebMap.put("gesprek/" + mHuidigeGebId + "/" + mGesGebruiker, gesVoegtoeMap);
                     gesGebMap.put("gesprek/" + mGesGebruiker + "/" + mHuidigeGebId, gesVoegtoeMap);
+
 
                     mHoofdRef.updateChildren(gesGebMap, new DatabaseReference.CompletionListener() {
                         @Override
@@ -262,6 +269,7 @@ public class GesprekActivity extends AppCompatActivity {
                 final String pushId = gebGesPush.getKey();
                 StorageReference bestandpad = mAfbeeldingOplag.child("berichtAfbeelding").child(pushId + ".jpg");
 
+
                 final UploadTask uploadTask = bestandpad.putFile(resultUri);
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -270,6 +278,12 @@ public class GesprekActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String downloadUri = uri.toString();
+//                                DatabaseReference nNotRef = mHoofdRef.child("notificaties").child(mGesGebruiker).push();
+//                                String nNotId = nNotRef.getKey();
+//
+//                                HashMap<String, String> notData = new HashMap<>();
+//                                notData.put("van", mHuidigeGebId);
+//                                notData.put("type", "afbeelding");
 
                                 Map berichtMap = new HashMap();
                                 berichtMap.put("bericht", downloadUri);
@@ -281,6 +295,7 @@ public class GesprekActivity extends AppCompatActivity {
                                 Map berichtGebMap = new HashMap();
                                 berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
                                 berichtGebMap.put(gesGebRef + "/" + pushId, berichtMap);
+                                //berichtGebMap.put("notificaties/" + gesGebRef + "/" + nNotId, notData);
 
                                 mGesBerView.setText("");
 
@@ -419,8 +434,14 @@ private void zendBericht()
         String huidigGebRef = "berichten/" + mHuidigeGebId + "/" + mGesGebruiker;
         String gesGebRef = "berichten/" + mGesGebruiker + "/" + mHuidigeGebId;
         DatabaseReference huidigGesPush = mHoofdRef.child("berichten").child(mHuidigeGebId).child(mGesGebruiker).push();
+//        DatabaseReference nNotRef = mHoofdRef.child("notificaties").child(mGesGebruiker).push();
+//        String nNotId = nNotRef.getKey();
 
         String pushId = huidigGesPush.getKey();
+//
+//        HashMap<String, String> notData = new HashMap<>();
+//        notData.put("van", mHuidigeGebId);
+//        notData.put("type", "tekst");
 
         Map berichtMap = new HashMap();
         berichtMap.put("bericht", bericht);
@@ -432,6 +453,7 @@ private void zendBericht()
         Map berichtGebMap = new HashMap();
         berichtGebMap.put(huidigGebRef + "/" + pushId, berichtMap);
         berichtGebMap.put(gesGebRef + "/" + pushId, berichtMap);
+       // berichtGebMap.put("notificaties/" + gesGebRef + "/" + nNotId, notData);
 
         mGesBerView.setText("");
 
