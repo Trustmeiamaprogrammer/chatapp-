@@ -90,7 +90,6 @@ public class VriendenFrag extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull final VriendenViewHolder vriendenViewHolder, int position, @NonNull final Vrienden vrienden) {
-
                 final String lijstGebId = getRef(position).getKey();
                 gebruikersRef.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
@@ -157,12 +156,13 @@ public class VriendenFrag extends Fragment {
     }
 
     public interface OnFragmentInteractionListener {
+
     }
 
 
 
     public static class VriendenViewHolder extends RecyclerView.ViewHolder {
-        static View mView;
+        View mView;
 
         public VriendenViewHolder(@NonNull View itemView) {
             super(itemView);

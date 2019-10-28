@@ -64,7 +64,7 @@ public class GesprekkenFrag extends Fragment {
 
 
         mMainView = inflater.inflate(R.layout.fragment_berichten, container, false);
-        mGesLijst = (RecyclerView) mMainView.findViewById(R.id.ges_list);
+        mGesLijst =  mMainView.findViewById(R.id.ges_list);
         mAuth = FirebaseAuth.getInstance();
         mHuidigGebId = mAuth.getCurrentUser().getUid();
         mGesDatabase = FirebaseDatabase.getInstance().getReference().child("gesprek").child(mHuidigGebId);
@@ -148,8 +148,8 @@ public class GesprekkenFrag extends Fragment {
     }
 
     public static class GesprekViewHolder extends RecyclerView.ViewHolder {
-        private static View mView;
-        public GesprekViewHolder(@NonNull View itemView) {
+        View mView;
+        public GesprekViewHolder( View itemView) {
             super(itemView);
 
             mView = itemView;
@@ -161,17 +161,17 @@ public class GesprekkenFrag extends Fragment {
         }
 
 
-        public static void setNaam(String naam) {
+        public void setNaam(String naam) {
             TextView gebNaamView = (TextView) mView.findViewById(R.id.naamGebruiker);
             gebNaamView.setText(naam);
         }
 
-        public static void setGebAfbeelding(String thumbImage, Context ctx) {
+        public void setGebAfbeelding(String thumbImage, Context ctx) {
             CircleImageView gebAfbeeldingView = mView.findViewById(R.id.GebruikerAfbeelding);
-            Picasso.with(ctx).load(thumbImage).placeholder(R.mipmap.ic_launcher_round).into(gebAfbeeldingView);
+            Picasso.with(ctx).load(thumbImage).placeholder(R.drawable.ic_launcher_background).into(gebAfbeeldingView);
         }
 
-        public static void setGebOnline(String onlineStatus) {
+        public void setGebOnline(String onlineStatus) {
             ImageView gebOnlineView = mView.findViewById(R.id.online_icon);
 
             if (onlineStatus.equals("true")) {

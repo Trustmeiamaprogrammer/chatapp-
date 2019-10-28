@@ -18,7 +18,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements VerzoekFrag.OnFragmentInteractionListener,GesprekkenFrag.OnFragmentInteractionListener,VriendenFrag.OnFragmentInteractionListener{
+
+    @Override
+    public void onFragmentInteraction() {
+
+
+    }
 
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
@@ -131,4 +138,6 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+
+
 }
