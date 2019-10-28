@@ -76,6 +76,8 @@ public class InstellingenActivity extends AppCompatActivity {
 
     private int aantalVrienden = 0;
 
+    private int aantalGebruikers = 0;
+
 
 
 
@@ -143,30 +145,33 @@ public class InstellingenActivity extends AppCompatActivity {
 
         vriendenRef = FirebaseDatabase.getInstance().getReference().child("vrienden");
 
+        mGebDatabase = FirebaseDatabase.getInstance().getReference();
         vriendenRef.child(huidigeGebUid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     aantalVrienden = (int) dataSnapshot.getChildrenCount();
                     System.out.println(aantalVrienden);
-                    PieChart pieChart = findViewById(R.id.taartGrafiek);
-                    pieChart.setUsePercentValues(false);
-                    List<PieEntry> pieEntries = new ArrayList<>();
-                    pieEntries.add(new PieEntry( aantalVrienden, "vrienden"));
-                    PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
-                    PieData data = new PieData(set);
-                    set.setColors(ColorTemplate.COLORFUL_COLORS);
-                    pieChart.getLegend().setEnabled(false);
-                    pieChart.setDescription(null);
-                    data.setValueTextSize(12f);
-                    pieChart.setData(data);
-                    pieChart.invalidate();
                 } }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { } });
 
+mGebDatabase.child("gebruikers").addValueEventListener(new ValueEventListener() {
+    @Override
+    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if(dataSnapshot.exists()){
+            aantalGebruikers = (int) dataSnapshot.getChildrenCount();
+            System.out.println(aantalGebruikers);
+        }
+    }
 
+
+
+    @Override
+    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+    }
+});
         mStatusKnop.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
