@@ -75,18 +75,12 @@ public class GebruikersActivity extends AppCompatActivity {
         mGebruikerslijst.setLayoutManager(new LinearLayoutManager(this));
 
 
-        PieChart pieChart = findViewById(R.id.taartGrafiek);
-        pieChart.setUsePercentValues(false);
-        List<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry( "vrienden"));
-        PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
-        PieData data = new PieData(set);
-        set.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.getLegend().setEnabled(false);
-        pieChart.setDescription(null);
-        data.setValueTextSize(12f);
-        pieChart.setData(data);
-        pieChart.invalidate();
+
+
+
+
+
+
 
     }
     @Override
