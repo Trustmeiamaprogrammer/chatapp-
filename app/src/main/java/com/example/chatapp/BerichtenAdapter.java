@@ -155,7 +155,7 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                     String naam = dataSnapshot.child("naam").getValue().toString();
                     String afbeelding = dataSnapshot.child("thumbAfb").getValue().toString();
 
-                    //viewHolder.gebruikersnaam.setText(naam);
+                   // viewHolder.naam.setText(naam);
 
                     //Picasso.with(viewHolder.profielFoto.getContext()).load(afbeelding).placeholder(R.drawable.ic_launcher_foreground).into(viewHolder.profielFoto);
                     if (dataSnapshot.getKey().equals(gebId)) {

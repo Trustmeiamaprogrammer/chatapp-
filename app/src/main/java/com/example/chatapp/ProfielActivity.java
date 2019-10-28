@@ -13,6 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,8 +30,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProfielActivity extends AppCompatActivity {
@@ -45,10 +52,17 @@ public class ProfielActivity extends AppCompatActivity {
 
     private DatabaseReference mHuidigRef;
     private FirebaseUser mHuidigGeb;
+    private FirebaseUser mHuidigeGebruiker;
 
     private String huidigState;
 
     private ProgressDialog mProcessDialog;
+    private DatabaseReference vriendenRef;
+    private DatabaseReference mGebDatabase;
+
+    private int aantalVrienden = 0;
+
+    private int aantalGebruikers = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +83,7 @@ public class ProfielActivity extends AppCompatActivity {
         profielFoto = findViewById(R.id.profielAfbeelding);
         profielNaam = findViewById(R.id.profielnaam);
         profielStatus =  findViewById(R.id.profielStatus);
-        profielVriendenCount = findViewById(R.id.profielAantal);
+        //profielVriendenCount = findViewById(R.id.profielAantal);
         profielZendKnop = findViewById(R.id.ProfielZendKnop);
         profielWeigerKnop =  findViewById(R.id.ProfielWeigerKnop);
 
@@ -83,6 +97,58 @@ public class ProfielActivity extends AppCompatActivity {
         mProcessDialog.setMessage("Even geduld...");
         mProcessDialog.setCanceledOnTouchOutside(false);
         mProcessDialog.show();
+
+        vriendenRef = FirebaseDatabase.getInstance().getReference().child("vrienden");
+        mHuidigeGebruiker = FirebaseAuth.getInstance().getCurrentUser();
+
+        String huidigeGebUid = mHuidigeGebruiker.getUid();
+
+        mGebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigeGebUid);
+        mGebDatabase.keepSynced(true);
+
+        mGebDatabase = FirebaseDatabase.getInstance().getReference();
+        vriendenRef.child(huidigeGebUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    aantalVrienden = (int) dataSnapshot.getChildrenCount();
+                    System.out.println(aantalVrienden);
+                } }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { } });
+
+        mGebDatabase.child("gebruikers").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    aantalGebruikers = (int) dataSnapshot.getChildrenCount();
+                    System.out.println(aantalGebruikers);
+                }
+            }
+
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        PieChart pieChart = findViewById(R.id.taartGrafiek);
+        pieChart.setUsePercentValues(false);
+        List<PieEntry> pieEntries = new ArrayList<>();
+        pieEntries.add(new PieEntry( aantalVrienden, "Vrienden"));
+        pieEntries.add(new PieEntry( aantalGebruikers, "Gebruikers"));
+        PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
+        PieData data = new PieData(set);
+        set.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.getLegend().setEnabled(false);
+        pieChart.setDescription(null);
+        data.setValueTextSize(12f);
+        pieChart.setHoleRadius(00);
+        pieChart.setData(data);
+        pieChart.invalidate();
+
 
 
         gebDatabase.addValueEventListener(new ValueEventListener() {
