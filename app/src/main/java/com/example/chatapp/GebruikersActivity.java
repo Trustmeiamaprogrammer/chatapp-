@@ -17,6 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +34,8 @@ import com.squareup.picasso.Picasso;
 
 
 import java.security.AccessControlContext;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,6 +73,20 @@ public class GebruikersActivity extends AppCompatActivity {
         mGebruikerslijst = findViewById(R.id.gebruikersLijst);
         mGebruikerslijst.setHasFixedSize(true);
         mGebruikerslijst.setLayoutManager(new LinearLayoutManager(this));
+
+
+        PieChart pieChart = findViewById(R.id.taartGrafiek);
+        pieChart.setUsePercentValues(false);
+        List<PieEntry> pieEntries = new ArrayList<>();
+        pieEntries.add(new PieEntry( "vrienden"));
+        PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
+        PieData data = new PieData(set);
+        set.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieChart.getLegend().setEnabled(false);
+        pieChart.setDescription(null);
+        data.setValueTextSize(12f);
+        pieChart.setData(data);
+        pieChart.invalidate();
 
     }
     @Override

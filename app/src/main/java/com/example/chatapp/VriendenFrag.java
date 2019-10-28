@@ -55,7 +55,7 @@ public class VriendenFrag extends Fragment {
                              Bundle savedInstanceState) {
 
         mMainView = inflater.inflate(R.layout.fragment_vrienden, container, false);
-        mVriendenLijst = (RecyclerView) mMainView.findViewById(R.id.vriendenLijst);
+        mVriendenLijst =  mMainView.findViewById(R.id.vriendenLijst);
         mAuth = FirebaseAuth.getInstance();
         huidigeGebruikerId = mAuth.getCurrentUser().getUid();
         vriendenDatabase = FirebaseDatabase.getInstance().getReference()
