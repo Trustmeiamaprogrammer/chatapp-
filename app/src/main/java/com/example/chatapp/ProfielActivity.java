@@ -101,10 +101,14 @@ public class ProfielActivity extends AppCompatActivity {
         vriendenRef = FirebaseDatabase.getInstance().getReference().child("vrienden");
         mHuidigeGebruiker = FirebaseAuth.getInstance().getCurrentUser();
 
-        String huidigeGebUid = mHuidigeGebruiker.getUid();
+        final String huidigeGebUid = mHuidigeGebruiker.getUid();
 
         mGebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigeGebUid);
         mGebDatabase.keepSynced(true);
+
+        final PieChart pieChart = findViewById(R.id.taartGrafiek);
+        pieChart.setUsePercentValues(false);
+        final List<PieEntry> pieEntries = new ArrayList<>();
 
         mGebDatabase = FirebaseDatabase.getInstance().getReference();
         vriendenRef.child(huidigeGebUid).addValueEventListener(new ValueEventListener() {
@@ -120,10 +124,11 @@ public class ProfielActivity extends AppCompatActivity {
         mGebDatabase.child("gebruikers").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
+                if (dataSnapshot.exists()) {
                     aantalGebruikers = (int) dataSnapshot.getChildrenCount();
                     System.out.println(aantalGebruikers);
                 }
+
             }
 
 
@@ -133,21 +138,31 @@ public class ProfielActivity extends AppCompatActivity {
 
             }
         });
+        vriendenRef.child(huidigeGebUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    aantalVrienden = (int) dataSnapshot.getChildrenCount();
+                    System.out.println(aantalVrienden);
 
-        PieChart pieChart = findViewById(R.id.taartGrafiek);
-        pieChart.setUsePercentValues(false);
-        List<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry( aantalVrienden, "Vrienden"));
-        pieEntries.add(new PieEntry( aantalGebruikers, "Gebruikers"));
-        PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
-        PieData data = new PieData(set);
-        set.setColors(ColorTemplate.COLORFUL_COLORS);
-        pieChart.getLegend().setEnabled(false);
-        pieChart.setDescription(null);
-        data.setValueTextSize(12f);
-        pieChart.setHoleRadius(00);
-        pieChart.setData(data);
-        pieChart.invalidate();
+                }
+                pieEntries.add(new PieEntry( aantalVrienden,  "Vrienden"));
+                pieEntries.add(new PieEntry( aantalGebruikers, "Gebruikers"));
+                PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
+                PieData data = new PieData(set);
+                set.setColors(ColorTemplate.COLORFUL_COLORS);
+                pieChart.getLegend().setEnabled(false);
+                pieChart.setDescription(null);
+                data.setValueTextSize(12f);
+                pieChart.setHoleRadius(00);
+                pieChart.setData(data);
+                pieChart.invalidate();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { } });
+
+
+
 
 
 
