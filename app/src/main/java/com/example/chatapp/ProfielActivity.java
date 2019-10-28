@@ -60,9 +60,9 @@ public class ProfielActivity extends AppCompatActivity {
     private DatabaseReference vriendenRef;
     private DatabaseReference mGebDatabase;
 
-    private int aantalVrienden = 0;
+    AantalGebruikers ag = new AantalGebruikers();
 
-    private int aantalGebruikers = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,40 +105,17 @@ public class ProfielActivity extends AppCompatActivity {
 
         mGebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigeGebUid);
         mGebDatabase.keepSynced(true);
-
         mGebDatabase = FirebaseDatabase.getInstance().getReference();
-        vriendenRef.child(huidigeGebUid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    aantalVrienden = (int) dataSnapshot.getChildrenCount();
-                    System.out.println(aantalVrienden);
-                } }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { } });
 
-        mGebDatabase.child("gebruikers").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    aantalGebruikers = (int) dataSnapshot.getChildrenCount();
-                    System.out.println(aantalGebruikers);
-                }
-            }
+        aantalGebruikers();
 
 
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         PieChart pieChart = findViewById(R.id.taartGrafiek);
         pieChart.setUsePercentValues(false);
         List<PieEntry> pieEntries = new ArrayList<>();
-        pieEntries.add(new PieEntry( aantalVrienden, "Vrienden"));
-        pieEntries.add(new PieEntry( aantalGebruikers, "Gebruikers"));
+        //pieEntries.add(new PieEntry( ag.getAantalGebruikers(), "Vrienden"));
+        pieEntries.add(new PieEntry( ag.getAantalGebruikers(), "Gebruikers"));
         PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
         PieData data = new PieData(set);
         set.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -422,4 +399,29 @@ public class ProfielActivity extends AppCompatActivity {
         finish();
     }
 
+
+    private void aantalVrienden(){
+        String huidigeGebUid = mHuidigeGebruiker.getUid();
+        vriendenRef.child(huidigeGebUid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                } }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { } });}
+
+
+
+    private void aantalGebruikers() {
+        final AantalGebruikers ag = new AantalGebruikers();
+        mGebDatabase.child("gebruikers").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                   ag.setAantalGebruikers((int) dataSnapshot.getChildrenCount());
+                }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 }
