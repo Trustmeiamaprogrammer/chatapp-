@@ -1,10 +1,10 @@
 package com.example.chatapp;
 
 import android.view.View;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+// Abstracte klasse voor het scrollen in de RecyclerView
 public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
     public static String TAG = EndlessRecyclerOnScrollListener.class.getSimpleName();
@@ -20,14 +20,11 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
         this.linearLayoutManager = linearLayoutManager;
 
     }
-
     @Override
     public void onScrolled(RecyclerView Recyclerview, int dx, int dy){
         super.onScrolled(Recyclerview, dx, dy);
-
         zichtbaarItemCount = Recyclerview.getChildCount();
         totaalItemCount = linearLayoutManager.getItemCount();
-
         eersteZichtbaarItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
 
         if(laden){

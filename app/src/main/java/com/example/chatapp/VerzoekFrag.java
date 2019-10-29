@@ -165,26 +165,4 @@ public static class VerzoekViewHolder extends RecyclerView.ViewHolder{
     }
 }
 
-//            @Override
-//            protected void populateViewHolder(VerzoekViewHolder verzoekViewHolder, Verzoeken verzoeken, int position) {
-//                verzoekViewHolder.setDatum(verzoeken.getDatum());
-//
-//                final String gebId = getRef(position).getKey();
-//            }
-//
-//        };
-//        mVerzoeklijst.setAdapter(firebaseRecyclerAdapter);
-//    }
-//
-//
-//    public static class VerzoekViewHolder extends RecyclerView.ViewHolder{
-//        View mView;
-//
-//        public VerzoekViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            mView = itemView;
-//        }
-//
-//    }
-
 }

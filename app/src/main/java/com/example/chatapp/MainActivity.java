@@ -1,14 +1,12 @@
 package com.example.chatapp;
-
+// Importeer
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,51 +20,38 @@ public class MainActivity extends AppCompatActivity
     implements VerzoekFrag.OnFragmentInteractionListener,GesprekkenFrag.OnFragmentInteractionListener,VriendenFrag.OnFragmentInteractionListener{
 
     @Override
-    public void onFragmentInteraction() {
+    public void onFragmentInteraction() { }
 
-
-    }
-
+    // Variabelen
     private FirebaseAuth mAuth;
     private Toolbar mToolbar;
-
     private FirebaseUser huidigGeb;
     private ViewPager mViewpager;
     private SectiePagerAdapter mSectiePagerAdapter;
     private TabLayout mTabLayout;
     private DatabaseReference mGebruikerRef;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
-
         mToolbar =  findViewById(R.id.mainAppBar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Chat app");
 
         huidigGeb = mAuth.getCurrentUser();
-
-
-
         if (mAuth.getCurrentUser() != null)
         {
             String huidigGebId = huidigGeb.getUid();
             mGebruikerRef = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigGebId);
         }
-
-
-
         // Tabbladen
         mViewpager =  findViewById(R.id.main_view);
         mSectiePagerAdapter = new SectiePagerAdapter(getSupportFragmentManager());
         mViewpager.setAdapter(mSectiePagerAdapter);
-
         mTabLayout =  findViewById(R.id.tabs);
         mTabLayout.setupWithViewPager(mViewpager);
     }
@@ -135,9 +120,7 @@ public class MainActivity extends AppCompatActivity
             Intent gebruikersIntent = new Intent(MainActivity.this, GebruikersActivity.class);
             startActivity(gebruikersIntent);
         }
-
         return true;
     }
-
 
 }

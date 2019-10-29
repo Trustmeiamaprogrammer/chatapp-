@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 class SectiePagerAdapter extends FragmentPagerAdapter {
+    // Adapter voor de frags.
 
     public SectiePagerAdapter(FragmentManager fm) {
         super(fm);
@@ -12,6 +13,8 @@ class SectiePagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+
+        // Tel de positie waar op is getikt...
 
         switch (position)
         {

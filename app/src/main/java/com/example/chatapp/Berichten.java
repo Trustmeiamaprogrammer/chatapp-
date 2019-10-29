@@ -2,15 +2,17 @@ package com.example.chatapp;
 
 public class Berichten {
 
+    // Status van bericht wordt gedeclareerd in strings
     public final static String MSG_TYPE_SENT = "Verzonden";
     public final static String MSG_TYPE_RECEIVED = "Ontvangen";
 
+    // Variabelen die overeenkomen met de database
     private String bericht, type;
     private long tijd;
     private boolean gezien;
-
     private String van;
 
+    // Constructor, Getters en Setters
     public Berichten(String van)
     {
         this.van = van;

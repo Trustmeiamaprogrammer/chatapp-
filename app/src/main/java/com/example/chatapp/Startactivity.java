@@ -1,7 +1,6 @@
 package com.example.chatapp;
-
+// Importeer
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +8,7 @@ import android.widget.Button;
 
 public class Startactivity extends AppCompatActivity {
 
-
+    // Variabelen
     private Button regKnop;
     private Button loginKnop;
 

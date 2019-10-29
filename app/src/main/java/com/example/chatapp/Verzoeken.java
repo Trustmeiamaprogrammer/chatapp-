@@ -1,6 +1,7 @@
 package com.example.chatapp;
 
 public class Verzoeken {
+    // Klasse voor database
 
     public String datum;
 

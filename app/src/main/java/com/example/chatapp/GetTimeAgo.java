@@ -5,6 +5,8 @@ import android.content.Context;
 
 class GetTimeAgo extends Application {
 
+    // Deze klasse zet tijd om in milliseconden en bepaalt hoe lang geleden de gebruiker online was
+
     private static final int milliSeconden = 1000;
     private static final int milliMinuut = 60 * milliSeconden;
     private static final int milliUur = 60 * milliMinuut;

@@ -1,12 +1,13 @@
 package com.example.chatapp;
 
 public class Gebruikers {
-
+// Variabelen die overeenkomenn in de database
     public String naam;
     public String afbeelding;
     public String status;
     public String thumbAfb;
 
+    // Constructor, getters en setters
     public Gebruikers() {
     }
 

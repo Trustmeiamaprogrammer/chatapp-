@@ -1,8 +1,8 @@
 package com.example.chatapp;
 
+// Importeer
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,12 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -37,7 +31,6 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import id.zelory.compressor.Compressor;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -46,58 +39,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InstellingenActivity extends AppCompatActivity {
 
+    // Variabelen
     private FirebaseAuth mAuth;
     private DatabaseReference mGebDatabase;
     private FirebaseUser mHuidigeGebruiker;
-
-
     // CircleImageView
     private CircleImageView mToonAfbeelding;
-
     // 2 TextView maken
     private TextView mNaam;
     private TextView mStatus;
-
     // 2 Knoppen maken
     private Button mStatusKnop;
     private Button mAfbeeldingKnop;
-
+    // Storage
     private static final int GALLERY_PICK = 1;
     private StorageReference mAfbeeldingOpslag;
-
     private ProgressDialog mProcessDialog;
-
-    private DatabaseReference vriendenRef;
-
-//    private int aantalVrienden = 0;
-//
-//    private int aantalGebruikers = 0;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Layout
         setContentView(R.layout.activity_instellingen);
         mToonAfbeelding = (CircleImageView) findViewById(R.id.instelling_afbeelding);
         mNaam = (TextView) findViewById(R.id.instellingenNaam);
         mStatus = (TextView) findViewById(R.id.intellingenStatus);
-
         mStatusKnop = (Button) findViewById(R.id.instellingenStatusKnop);
         mAfbeeldingKnop = (Button) findViewById(R.id.instellingenAfbeeldingKnop);
 
+        // Database gegevens
         mAfbeeldingOpslag = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         mHuidigeGebruiker = FirebaseAuth.getInstance().getCurrentUser();
-
         String huidigeGebUid = mHuidigeGebruiker.getUid();
-
         mGebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers").child(huidigeGebUid);
         mGebDatabase.keepSynced(true);
 
@@ -105,6 +83,7 @@ public class InstellingenActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                // Haal data op van de huidige gebruiker
                 String naam = dataSnapshot.child("naam").getValue().toString();
                 final String afbeelding = dataSnapshot.child("afbeelding").getValue().toString();
                 String status = dataSnapshot.child("status").getValue().toString();
@@ -114,64 +93,19 @@ public class InstellingenActivity extends AppCompatActivity {
                mStatus.setText(status);
                 if(!afbeelding.equals("default")) {
 
-                    //Picasso.with(InstellingenActivity.this).load(afbeelding).placeholder(R.mipmap.ic_launcher_round).into(mToonAfbeelding);
-
                     Picasso.with(InstellingenActivity.this).load(afbeelding).networkPolicy(NetworkPolicy.OFFLINE)
                             .placeholder(R.mipmap.ic_launcher_round).into(mToonAfbeelding, new Callback() {
                         @Override
-                        public void onSuccess() {
-
-                        }
-
+                        public void onSuccess() { }
                         @Override
                         public void onError() {
-
-                            Picasso.with(InstellingenActivity.this).load(afbeelding).placeholder(R.mipmap.ic_launcher_round).into(mToonAfbeelding);
-
-                        }
-                    });
-
-                }
-
-
-            }
+                            Picasso.with(InstellingenActivity.this).load(afbeelding)
+                                    .placeholder(R.mipmap.ic_launcher_round).into(mToonAfbeelding);}
+                    }); } }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-//        vriendenRef = FirebaseDatabase.getInstance().getReference().child("vrienden");
-//
-//        mGebDatabase = FirebaseDatabase.getInstance().getReference();
-//        vriendenRef.child(huidigeGebUid).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()){
-//                    aantalVrienden = (int) dataSnapshot.getChildrenCount();
-//                    System.out.println(aantalVrienden);
-//                } }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) { } });
-//
-//mGebDatabase.child("gebruikers").addValueEventListener(new ValueEventListener() {
-//    @Override
-//    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//        if(dataSnapshot.exists()){
-//            aantalGebruikers = (int) dataSnapshot.getChildrenCount();
-//            System.out.println(aantalGebruikers);
-//        }
-//    }
-//
-//
-//
-//    @Override
-//    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//    }
-//});
+            public void onCancelled(@NonNull DatabaseError databaseError) { }});
+        // Statusknop leidt naar de status activity
         mStatusKnop.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -181,18 +115,15 @@ public class InstellingenActivity extends AppCompatActivity {
             startActivity(statusIntent);
         }
     });
-
+        // Knop of afbeelding te selecteren voor profielfoto
     mAfbeeldingKnop.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent gallerijIntet = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            //gallerijIntet.setType("Afbeelding/*");
             gallerijIntet.setAction(Intent.ACTION_GET_CONTENT);
-
             startActivityForResult(Intent.createChooser(gallerijIntet, "Selecteer afbeelding"), GALLERY_PICK);
         }
-    });
-    }
+    }); }
 
     @Override
     protected void onStart(){
@@ -316,21 +247,4 @@ public class InstellingenActivity extends AppCompatActivity {
                 Exception fout = resultaat.getError();
             }
 
-        }}
-
-
-
-    public static String random(){
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLengte = generator.nextInt(20);
-        char tempChar;
-        for (int i = 0; i < randomLengte; i++ ){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-
-        }
-        return randomStringBuilder.toString();
-    }
-
-}
+        }}}

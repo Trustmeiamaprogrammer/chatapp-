@@ -1,24 +1,20 @@
 package com.example.chatapp;
-
-
+// Importeer
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,8 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -39,17 +33,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * A simple {@link Fragment} subclass.
  */
 public class GesprekkenFrag extends Fragment {
-
+    // Variabelen
     private RecyclerView mGesLijst;
-
     private DatabaseReference mGesDatabase;
     private DatabaseReference mBerDatabase;
     private DatabaseReference mGebDatabase;
-
     private FirebaseAuth mAuth;
-
     private String mHuidigGebId;
-
     private View mMainView;
 
 
@@ -61,22 +51,23 @@ public class GesprekkenFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
+        // Layout
         mMainView = inflater.inflate(R.layout.fragment_berichten, container, false);
         mGesLijst =  mMainView.findViewById(R.id.ges_list);
+        // Database gegevens
         mAuth = FirebaseAuth.getInstance();
         mHuidigGebId = mAuth.getCurrentUser().getUid();
         mGesDatabase = FirebaseDatabase.getInstance().getReference().child("gesprek").child(mHuidigGebId);
         mGesDatabase.keepSynced(true);
         mGebDatabase = FirebaseDatabase.getInstance().getReference().child("gebruikers");
         mGebDatabase.keepSynced(true);
-
+        // Layout
         mGesLijst.setHasFixedSize(true);
         mGesLijst.setLayoutManager(new LinearLayoutManager(getContext()));
         return mMainView;
     }
 
+    // Wanneer het wordt gestart..
     public void onStart() {
         super.onStart();
 
@@ -85,8 +76,6 @@ public class GesprekkenFrag extends Fragment {
                         .setQuery(mGesDatabase, Gesprek.class)
                         .setLifecycleOwner(this)
                         .build();
-
-
         FirebaseRecyclerAdapter gespAdapter = new FirebaseRecyclerAdapter<Gesprek, GesprekViewHolder>(options) {
             @NonNull
             @Override
@@ -98,32 +87,25 @@ public class GesprekkenFrag extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final GesprekViewHolder gesprekViewHolder, int position, @NonNull final Gesprek gesprek) {
 
-
                 final String lijstGebId = getRef(position).getKey();
-
                 mGebDatabase.child(lijstGebId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         final String naamGeb = dataSnapshot.child("naam").getValue().toString();
                         String gebThumb = dataSnapshot.child("thumbAfb").getValue().toString();
                         String gebStatus = dataSnapshot.child("status").getValue().toString();
-
                         if (dataSnapshot.hasChild("online")) {
                             String gebOnline = dataSnapshot.child("online").getValue().toString();
-
                             gesprekViewHolder.setGebOnline(gebOnline);
                         }
 
                         gesprekViewHolder.setNaam(naamGeb);
                         gesprekViewHolder.setGebAfbeelding(gebThumb, getContext());
                         gesprekViewHolder.setStatus(gebStatus);
-
-
                         gesprekViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent gesIntent = new Intent(getContext(), GesprekActivity.class);
-
                                 gesIntent.putExtra("gebId", lijstGebId);
                                 gesIntent.putExtra("naamGeb", naamGeb);
                                 startActivity(gesIntent);
@@ -151,10 +133,8 @@ public class GesprekkenFrag extends Fragment {
         View mView;
         public GesprekViewHolder( View itemView) {
             super(itemView);
-
             mView = itemView;
         }
-
         public void setStatus(String status) {
             TextView gebStatusView = mView.findViewById(R.id.gebruikerStatus);
             gebStatusView.setText(status);

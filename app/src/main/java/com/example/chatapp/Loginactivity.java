@@ -1,18 +1,16 @@
 package com.example.chatapp;
 
+
+// Importeer
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -25,11 +23,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 public class Loginactivity extends AppCompatActivity {
 
+    // Variabelen
     private TextInputLayout mEmail;
     private TextInputLayout mWachtwoord;
     private Button mLoginKnop;
     private Toolbar mToolbar;
-
     private ProgressDialog mLogProgress;
     private FirebaseAuth mAuth;
     private DatabaseReference mGebruikersDatabase;
@@ -38,7 +36,6 @@ public class Loginactivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginactivity);
-
         mAuth = FirebaseAuth.getInstance();
 
         mToolbar = (Toolbar) findViewById(R.id.login_toolbar) ;
@@ -79,13 +76,10 @@ public class Loginactivity extends AppCompatActivity {
 
     // Gebruik E-mail en password als variabelen om daarmee in te loggen.
     private void loginGebruiker (String email, String password) {
-
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(Task<AuthResult> task) {
-
                 if (task.isSuccessful())
-
                 {
                     mLogProgress.dismiss();
                     String huidigeGebruikersId = mAuth.getCurrentUser().getUid();
@@ -98,16 +92,12 @@ public class Loginactivity extends AppCompatActivity {
                             hoofdIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(hoofdIntent);
                             finish();
-
                         }
                     });
 
                 }
-
                 else
-                {
-                    System.out.println( "DE FOUT IS: >>>>>>>>> " + task.getException());
-                    mLogProgress.hide();
+                { mLogProgress.hide();
                     Toast.makeText(Loginactivity.this, "Het inloggen is mislukt", Toast.LENGTH_LONG).show();
                 }
             }
