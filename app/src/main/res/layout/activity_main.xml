@@ -24,6 +24,7 @@
 
             app:tabMode="scrollable"
             app:tabRippleColor="@android:color/white"
+            app:tabSelectedTextColor="@color/detail"
             app:tabTextColor="@android:color/white">
 
         </com.google.android.material.tabs.TabLayout>

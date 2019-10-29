@@ -24,7 +24,7 @@
         android:layout_marginStart="20dp"
         android:layout_toEndOf="@+id/GebruikerAfbeelding"
         android:text="@string/gebruikersnaam"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp" />
 
     <TextView

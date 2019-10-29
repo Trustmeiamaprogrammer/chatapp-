@@ -28,7 +28,7 @@
         android:layout_marginTop="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regTxtvak">
+        app:layout_constraintTop_toBottomOf="@+id/registreer_toolbar" >
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -88,17 +88,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/regWachtwoord" />
 
-    <TextView
-        android:id="@+id/regTxtvak"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="35dp"
-        android:text="@string/maak_nieuw_account"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/regGebruikersnaam"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registreer_toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
