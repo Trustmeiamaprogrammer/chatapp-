@@ -148,7 +148,7 @@ public class GesprekkenFrag extends Fragment {
 
         public void setGebAfbeelding(String thumbImage, Context ctx) {
             CircleImageView gebAfbeeldingView = mView.findViewById(R.id.GebruikerAfbeelding);
-            Picasso.with(ctx).load(thumbImage).placeholder(R.drawable.ic_launcher_background).into(gebAfbeeldingView);
+            Picasso.with(ctx).load(thumbImage).placeholder(R.drawable.ic_launcher_foreground).into(gebAfbeeldingView);
         }
 
         public void setGebOnline(String onlineStatus) {

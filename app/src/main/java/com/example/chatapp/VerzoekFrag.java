@@ -151,7 +151,7 @@ public static class VerzoekViewHolder extends RecyclerView.ViewHolder{
 
     public void setAfbeelding(String afbeelding, Context ctx){
         CircleImageView gebAfbeeldingView = mView.findViewById(R.id.GebruikerAfbeelding);
-        Picasso.with(ctx).load(afbeelding).placeholder(R.drawable.ic_launcher_background).into(gebAfbeeldingView);
+        Picasso.with(ctx).load(afbeelding).placeholder(R.drawable.ic_launcher_foreground).into(gebAfbeeldingView);
     }
 
     public void setGebruikerOnline(String online){

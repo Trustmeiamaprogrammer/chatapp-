@@ -181,7 +181,7 @@ public class VriendenFrag extends Fragment {
 
         public void setGebAfbeelding (String thumbAfb, Context ctx) {
             CircleImageView gebImageView =  mView.findViewById(R.id.GebruikerAfbeelding);
-            Picasso.with(ctx).load(thumbAfb).placeholder(R.drawable.ic_launcher_background).into(gebImageView);
+            Picasso.with(ctx).load(thumbAfb).placeholder(R.drawable.ic_launcher_foreground).into(gebImageView);
         }
 
         public void setGebOnline(String onlineStatus){
