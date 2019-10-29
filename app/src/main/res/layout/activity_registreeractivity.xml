@@ -12,13 +12,11 @@
         layout="@layout/app_bar_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@android:color/white" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -27,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/regTxtvak">
@@ -78,18 +76,17 @@
         android:id="@+id/regMaakKnop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="20dp"
+        android:layout_alignParentBottom="true"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/colorAccent"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="@string/maak_account"
-        android:backgroundTint="@color/colorPrimary"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regWachtwoord"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/regWachtwoord" />
 
     <TextView
         android:id="@+id/regTxtvak"
@@ -98,11 +95,10 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="35dp"
         android:text="@string/maak_nieuw_account"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/regGebruikersnaam"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registreer_toolbar"
-        tools:layout_editor_absoluteX="26dp"
-        tools:layout_editor_absoluteY="104dp" />
+        app:layout_constraintTop_toBottomOf="@+id/registreer_toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

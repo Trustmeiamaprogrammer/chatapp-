@@ -116,7 +116,7 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                                 .placeholder(R.drawable.ic_launcher_foreground)
                                 .into(viewHolder.afbeeldingRechts);
 
-                            viewHolder.vanTijd.setText(sfd.format(new Date(berDN.getTijd())));
+                            viewHolder.naarTijd.setText(sfd.format(new Date(berDN.getTijd())));
                         }
                         viewHolder.linksBerichtLayout.setVisibility(LinearLayout.GONE);
                     }
@@ -133,7 +133,7 @@ public class BerichtenAdapter extends RecyclerView.Adapter<BerichtenAdapter.Beri
                             Picasso.with(viewHolder.afbeeldingLinks.getContext()).load(berDN.getBericht())
                                     .placeholder(R.drawable.ic_launcher_foreground)
                                     .into(viewHolder.afbeeldingLinks);
-                            viewHolder.naarTijd.setText(sfd.format(new Date(berDN.getTijd())));
+                            viewHolder.vanTijd.setText(sfd.format(new Date(berDN.getTijd())));
                         }
                         viewHolder.rechtsBerichtLayout.setVisibility(LinearLayout.GONE);
                     }

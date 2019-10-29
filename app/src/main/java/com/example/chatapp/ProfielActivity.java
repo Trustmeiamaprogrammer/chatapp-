@@ -2,6 +2,7 @@ package com.example.chatapp;
 // Importeer
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -130,8 +131,11 @@ public class ProfielActivity extends AppCompatActivity {
                 pieEntries.add(new PieEntry( aantalGebruikers, "Gebruikers"));
                 PieDataSet set = new PieDataSet(pieEntries, "Verhouding");
                 PieData data = new PieData(set);
-                set.setColors(ColorTemplate.COLORFUL_COLORS);
+                set.setColors(new int[]{Color.parseColor("#ef6e72"),
+                        Color.parseColor("#129490")});
+                //set.setColors(ColorTemplate.COLORFUL_COLORS);
                 pieChart.getLegend().setEnabled(false);
+                data.setValueTextColor(Color.WHITE);
                 pieChart.setDescription(null);
                 data.setValueTextSize(12f);
                 pieChart.setHoleRadius(00);

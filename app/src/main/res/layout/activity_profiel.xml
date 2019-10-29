@@ -39,7 +39,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:text="@string/status"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:textSize="16sp" />
 
     <com.github.mikephil.charting.charts.PieChart
@@ -68,7 +68,7 @@
         android:layout_above="@+id/ProfielWeigerKnop"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="12dp"
-        android:backgroundTint="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimary"
         android:text="@string/verstuurVerzoek"
         android:textColor="@android:color/white" />
 

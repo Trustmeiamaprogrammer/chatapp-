@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:text="@string/gebruikersnaam"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="24sp" />
 
     <Button
@@ -33,10 +33,11 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"
+        android:background="@color/colorAccent"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:text="@string/verander_status"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@android:color/white" />
 
     <Button
         android:id="@+id/instellingenAfbeeldingKnop"
@@ -45,10 +46,11 @@
         android:layout_above="@+id/instellingenStatusKnop"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
+        android:background="@color/colorAccent"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         android:text="@string/verander_afbeelding"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@android:color/white" />
 
     <TextView
         android:id="@+id/intellingenStatus"
