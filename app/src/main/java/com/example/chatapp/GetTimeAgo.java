@@ -32,13 +32,13 @@ class GetTimeAgo extends Application {
         }
 
         else if (vers < 50 * milliMinuut){
-            return vers / milliMinuut + "minuten geleden";
+            return vers / milliMinuut + " minuten geleden";
         }
         else if (vers < 90 * milliMinuut){
             return "1 uur geleden";
         }
         else if (vers < 24 * milliUur){
-            return vers /milliUur + "uur geleden";
+            return vers /milliUur + " uur geleden";
         }
         else if (vers < 48 * milliUur){
             return "Gisteren";
